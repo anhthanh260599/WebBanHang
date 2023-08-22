@@ -108,3 +108,5 @@ D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj
 D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.CopyComplete
 D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.dll
 D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.pdb
+D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateCategory.resources
+D:\Workspace\Project\WebBanHang\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateData.resources
