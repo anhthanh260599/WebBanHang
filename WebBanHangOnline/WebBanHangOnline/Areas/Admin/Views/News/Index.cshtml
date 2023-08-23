@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Danh sách tin tức";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var Message = new WebBanHangOnline.Models.Common.Message();
 }
 
 @section naviheader {
@@ -56,7 +57,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-hover" id="dataTable">
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="SelectAll" /></th>
@@ -75,17 +76,27 @@
                         foreach (var item in Model)
                         {
 
-                            var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
+                            //var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
 
                             <tr id="trow_@item.Id">
-                                <td><input type="checkbox"  class="cbkItem" value="@item.Id"/></td>
-                                <td>@i</td>
+                                <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                <td class="stt-cell" >@i</td>
                                 <td><img src="@item.Image" width="100px" /></td>
                                 <td>@item.Title</td>
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
-                                <td class="text-center">
-                                    <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-                                 </td>
+
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+
+                                @*<td class="text-center">
+                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                    </td>*@
+
+
 
                                 <td>
                                     <a href="/admin/news/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
@@ -95,12 +106,12 @@
                             i++;
                         }
                     }
-                    else
+                    @*else
                     {
                         <tr>
-                            <td colspan="4">Không có bản ghi nào!!!</td>
+                            <td colspan="4">@Message.NoRecord</td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
 
             </table>
@@ -125,12 +136,14 @@
             $('body').on('click', '#btnDeleteSelected', function (e) { // Hàm dùng để Xoá các mục đã chọn
                 e.preventDefault();
                 var str = "";
-                var checkbox = $(this).parents('.card').find('tr td input:checkbox');
+                var checkbox = $(this).parents('.card').find('tr td input:checkbox.cbkItem');
                 var i = 0;
+                var deletedIds = []; // Mảng lưu ID các mục đã xóa
                 checkbox.each(function () {
                     if (this.checked) {
                         checkbox.attr('selected', 'checked');
                         var _id = $(this).val();
+                        deletedIds.push(_id); // Thêm ID vào mảng
                         if (i === 0) {
                             str += _id;
                         }
@@ -138,15 +151,13 @@
                             str += "," + _id;
                         }
                         i++;
-
                     }
                     else {
                         checkbox.attr('selected', '');
                     }
                 });
-
                 if (str.length > 0) {
-                    var confirmMessage = confirm("Bạn có thật sự muốn xoá các bản ghi này??");
+                    var confirmMessage = confirm('@Message.ConfirmDeleteSelected');
                     if (confirmMessage === true) {
                         $.ajax({
                             url: '/admin/news/deleteSelected',
@@ -155,16 +166,29 @@
                             success: function (rs) {
                                 if (rs.success) {
                                     location.reload();
+
+                                    // Xóa các hàng trong bảng
+                                    deletedIds.forEach(function (id) {
+                                        $('#trow_' + id).remove();
+                                    });
+
+                                    // Cập nhật lại số thứ tự
+                                    $('.stt-cell').each(function (index) {
+                                        $(this).text(index + 1);
+                                    });
                                 }
                             }
                         });
                     }
                 }
+                else {
+                    alert("@Message.RecordNotChecked")
+                }
             });
 
             $('body').on('change', '#SelectAll', function () {  // Hàm dùng để check all
                 var checkStatus = this.checked;
-                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox.cbkItem');
                 checkbox.each(function () {
                     this.checked = checkStatus;
                     if (this.checked) {
@@ -175,11 +199,11 @@
                     }
                 })
             });
-            
+
 
             $('body').on('click', '.btnDelete', function () { // Hàm dùng để xoá item
                 var id = $(this).data("id");
-                var confirmMessage = confirm("Bạn có muốn xoá bản ghi này không?");
+                var confirmMessage = confirm("@Message.ConfirmDelete");
                 if (confirmMessage === true)
                 {
                     $.ajax({
@@ -190,33 +214,63 @@
                         {
                             if (rs.success)
                             {
+                                location.reload();
+
                                 $('#trow_' + id).remove();
+                                // Cập nhật lại STT
+                                $('.stt-cell').each(function (index) {
+                                    $(this).text(index + 1);
+                                });
                             }
                         }
                     });
                 }
             });
 
-            $('body').on('click', '.btnActive', function (e) { // Hàm dùng để thay đổi trạng thái hiển thị
-                e.preventDefault();
-                var button = $(this); // Lưu giữ đối tượng button trong biến
-                var id = button.data("id");
-                    $.ajax({
-                        url: '/admin/news/IsActive',
-                        type: 'POST',
-                        data: { id: id },
-                        success: function (rs) {
-                            if (rs.success) {
-                                if (rs.IsActive) {
-                                    button.html("<i class = 'fa fa-check text-success'></i>");
-                                }
-                                else {
-                                    button.html("<i class = 'fa fa-times text-danger'></i>");
-                                }
+            //$('body').on('click', '.btnActive', function (e) { // Hàm dùng để thay đổi trạng thái hiển thị
+            //    e.preventDefault();
+            //    var button = $(this); // Lưu giữ đối tượng button trong biến
+            //    var id = button.data("id");
+            //        $.ajax({
+            //            url: '/admin/news/IsActive',
+            //            type: 'POST',
+            //            data: { id: id },
+            //            success: function (rs) {
+            //                if (rs.success) {
+            //                    if (rs.IsActive) {
+            //                        button.html("<i class = 'fa fa-check text-success'></i>");
+            //                    }
+            //                    else {
+            //                        button.html("<i class = 'fa fa-times text-danger'></i>");
+            //                    }
+            //                }
+            //            }
+            //        });
+            //});
+
+            $('body').on('change', '.btnActive', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/news/IsActive',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsActive) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
                             }
                         }
-                    });
+                    }
+                });
             });
+
+
 
         });
     </script>

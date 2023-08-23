@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Danh mục";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var Message = new WebBanHangOnline.Models.Common.Message();
 }
 
 @section naviheader {
@@ -55,7 +56,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-hover" id="dataTable">
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -82,12 +83,12 @@
                             i++;
                         }
                     }
-                    else
+                    @*else
                     {
                         <tr>
                             <td colspan="4">Không có bản ghi nào!!!</td>
                         </tr>
-                    }
+                    }*@
                 </tbody>
 
             </table>
@@ -110,7 +111,7 @@
         $(document).ready(function () {
             $('body').on('click', '.btnDelete', function () {
                 var id = $(this).data("id");
-                var confirmMessage = confirm("Bạn có muốn xoá bản ghi này không?");
+                var confirmMessage = confirm("@Message.ConfirmDelete");
                 if (confirmMessage === true)
                 {
                     $.ajax({
