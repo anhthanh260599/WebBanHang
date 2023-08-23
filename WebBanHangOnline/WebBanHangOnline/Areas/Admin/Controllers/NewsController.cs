@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,7 +15,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/News
         public ActionResult Index()
         {
-            var items = db.News.ToList();
+            var items = db.News.OrderByDescending(x=>x.Id).ToList();
             return View(items);
         }
 
