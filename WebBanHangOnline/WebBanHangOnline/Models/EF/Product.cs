@@ -5,12 +5,20 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Collections;
 
 namespace WebBanHangOnline.Models.EF
 {
     [Table("tb_Product")]
     public class Product : CommonAbstract
     {
+
+        public Product() 
+        {
+            this.ProductImage = new HashSet<ProductImage>();
+            this.OrderDetails = new HashSet<OrderDetail>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
@@ -27,7 +35,7 @@ namespace WebBanHangOnline.Models.EF
         public string Detail { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
-        public decimal PriceSale { get; set; }
+        public decimal? PriceSale { get; set; }
         public bool IsHome { get; set; }
         public bool IsSale { get; set; }
         public bool IsFeature { get; set; }
@@ -39,5 +47,8 @@ namespace WebBanHangOnline.Models.EF
         public string SeoDescription { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
+        public virtual ICollection<ProductImage> ProductImage { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+
     }
 }
