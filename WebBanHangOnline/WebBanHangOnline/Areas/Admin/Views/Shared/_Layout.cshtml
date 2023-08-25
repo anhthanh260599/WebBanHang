@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hệ thống quản lý bán hàng</title>
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -30,6 +29,9 @@
     <link rel="stylesheet" href="~/Content/clients/dist/css/adminlte.min.css">
     <!-- DataTable -->
     <link href="https://cdn.datatables.net/v/dt/dt-1.13.6/datatables.min.css" rel="stylesheet">
+    <!-- Search Dropdownlist -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css" integrity="sha512-0nkKORjFgcyxv3HbE4rzFUlENUMNqic/EzDIeYCgsKa/nwqr2B91Vu/tNAu4Q0cBuG4Xe/D1f/freEci/7GDRA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
 </head>
 
 
@@ -413,11 +415,16 @@
         document.querySelector("#actions .cancel").onclick = function () {
             myDropzone.removeAllFiles(true)
         }
-                      // DropzoneJS Demo Code End</script>
+        // DropzoneJS Demo Code End</script>
 
     <script src="~/Content/ckeditor/ckeditor.js"></script>
     <script src="~/Content/ckfinder/ckfinder.js"></script>
+    <script src="~/Scripts/autoNumeric-1.9.45.js"></script>
+    <!-- DataTable -->
     <script src="https://cdn.datatables.net/v/dt/dt-1.13.6/datatables.min.js"></script>
+    <!-- Searchable DropdownList -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha512-rMGGF4wg1R73ehtnxXBt5mbUfN9JUJwbk21KMlnLZDJh7BkPmeovBuddZCENJddHYYMkCh9hPFnPmS9sspki8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         $(document).ready(function () {
             $('#dataTable').DataTable({
@@ -425,6 +432,7 @@
                     "lengthMenu": "Hiển thị _MENU_ bản ghi mỗi trang",
                     "zeroRecords": "Không tìm thấy bản ghi nào",
                     "info": "Trang _PAGE_ / _PAGES_",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
                     "search": "Tìm kiếm:",
                     "paginate": {
                         "first": "Đầu tiên",
@@ -434,7 +442,12 @@
                     }
                 }
             });
+            $(function () {
+                $('.searchable-dropdown-list').chosen();
+            });
         });
+
+
 
     </script>
     @RenderSection("scripts", required: false)

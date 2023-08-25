@@ -10,7 +10,8 @@ namespace WebBanHangOnline.Models.Common
         public IHtmlString NoRecord { get; } = new HtmlString("Không có bản ghi nào!");
         public IHtmlString RecordNotChecked { get; } = new HtmlString("Vui lòng chọn bản ghi");
         public IHtmlString ConfirmDelete { get; } = new HtmlString("Bạn có muốn xoá bản ghi này không?");
-
         public IHtmlString ConfirmDeleteSelected { get; } = new HtmlString("Bạn có thật sự muốn xoá các bản ghi này??");
+        public IHtmlString ConfirmDeleteProductImage { get; } = new HtmlString("Bạn có muốn xoá ảnh này không?");
+
     }
 }

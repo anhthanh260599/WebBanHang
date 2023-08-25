@@ -1,0 +1,319 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var Message = new WebBanHangOnline.Models.Common.Message();
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+
+@section naviheader {
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/products" class="nav-link">Sản phẩm</a>
+        </li>
+    </ul>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý Sản phẩm</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Sản phẩm</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@ViewBag.Title</h3>
+
+            <div class="card-tools">
+                <a href="/admin/products/add" class="btn btn-primary">Thêm mới</a>
+                <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
+
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="SelectAll" /></th>
+                        <th>STT</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng</th>
+                        <th>Giá (VND)</th>
+                        <th>Ngày tạo</th>
+                        <th>Hiển thị</th>
+
+                        <th style="width:150px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+
+                            //var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
+
+                            <tr id="trow_@item.Id">
+                                <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                <td class="stt-cell">@i</td>
+                                <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
+                                <td>@item.Title</td>
+                                <td>@item.ProductCategory.Title</td>
+                                <td>@item.Quantity</td>
+                                <td class="auto">@item.Price</td>
+                                <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+
+                                @*<td class="text-center">
+                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                    </td>*@
+
+
+
+                                <td>
+                                    <a href="/admin/products/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    @*else
+                        {
+                            <tr>
+                                <td colspan="4">@Message.NoRecord</td>
+                            </tr>
+                        }*@
+                </tbody>
+
+            </table>
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+<div id="dialog">
+    <iframe id="myIframe" style="border:0; width: 100%; height: 100%"></iframe>
+</div>
+
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#dialog').dialog({ // Hàm hiển thị popup ảnh
+                autoOpen: false,
+                show: "fade",
+                hide: "fade",
+                modal: true,
+                height: '600',
+                width: '700',
+                resizeable: true,
+                title: 'Quản lý ảnh sản phẩm',
+                close: function () {
+                    windows.location.reload();
+                }
+            });
+
+            $('body').on("click", ".imgproduct", function () { // Popup lấy ảnh của sản phẩm
+                var productId = $(this).attr("data-id");
+                $("#dialog #myIframe").attr("src", "/admin/ProductImage/Index?id=" + productId);
+                $("#dialog").dialog('open');
+                return false;
+            })
+
+            $('body').on('click', '#btnDeleteSelected', function (e) { // Hàm dùng để Xoá các mục đã chọn
+                e.preventDefault();
+                var str = "";
+                var checkbox = $(this).parents('.card').find('tr td input:checkbox.cbkItem');
+                var i = 0;
+                var deletedIds = []; // Mảng lưu ID các mục đã xóa
+                checkbox.each(function () {
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                        var _id = $(this).val();
+                        deletedIds.push(_id); // Thêm ID vào mảng
+                        if (i === 0) {
+                            str += _id;
+                        }
+                        else {
+                            str += "," + _id;
+                        }
+                        i++;
+                    }
+                    else {
+                        checkbox.attr('selected', '');
+                    }
+                });
+                if (str.length > 0) {
+                    var confirmMessage = confirm('@Message.ConfirmDeleteSelected');
+                    if (confirmMessage === true) {
+                        $.ajax({
+                            url: '/admin/products/deleteSelected',
+                            type: 'POST',
+                            data: { ids: str },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    location.reload();
+
+                                    // Xóa các hàng trong bảng
+                                    deletedIds.forEach(function (id) {
+                                        $('#trow_' + id).remove();
+                                    });
+
+                                    // Cập nhật lại số thứ tự
+                                    $('.stt-cell').each(function (index) {
+                                        $(this).text(index + 1);
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+                else {
+                    alert("@Message.RecordNotChecked")
+                }
+            });
+
+            $('body').on('change', '#SelectAll', function () {  // Hàm dùng để check all
+                var checkStatus = this.checked;
+                var checkbox = $(this).parents('.card-body').find('tr td input:checkbox.cbkItem');
+                checkbox.each(function () {
+                    this.checked = checkStatus;
+                    if (this.checked) {
+                        checkbox.attr('selected', 'checked');
+                    }
+                    else {
+                        checkbox.attr('selected', '');
+                    }
+                })
+            });
+
+
+            $('body').on('click', '.btnDelete', function () { // Hàm dùng để xoá item
+                var id = $(this).data("id");
+                var confirmMessage = confirm("@Message.ConfirmDelete");
+                if (confirmMessage === true)
+                {
+                    $.ajax({
+                        url: '/admin/products/delete',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (rs)
+                        {
+                            if (rs.success)
+                            {
+                                location.reload();
+
+                                $('#trow_' + id).remove();
+                                // Cập nhật lại STT
+                                $('.stt-cell').each(function (index) {
+                                    $(this).text(index + 1);
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            //$('body').on('click', '.btnActive', function (e) { // Hàm dùng để thay đổi trạng thái hiển thị
+            //    e.preventDefault();
+            //    var button = $(this); // Lưu giữ đối tượng button trong biến
+            //    var id = button.data("id");
+            //        $.ajax({
+            //            url: '/admin/products/IsActive',
+            //            type: 'POST',
+            //            data: { id: id },
+            //            success: function (rs) {
+            //                if (rs.success) {
+            //                    if (rs.IsActive) {
+            //                        button.html("<i class = 'fa fa-check text-success'></i>");
+            //                    }
+            //                    else {
+            //                        button.html("<i class = 'fa fa-times text-danger'></i>");
+            //                    }
+            //                }
+            //            }
+            //        });
+            //});
+
+            $('body').on('change', '.btnActive', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/products/IsActive',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsActive) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('.auto').autoNumeric('init', {
+                aDec: '.',
+                aSep: ',',
+                vMin: '0',
+                mDec: 0,
+                aPad: false,    // không cho nhập số 0 ở đầu
+                vMax: '1000000000' // giá trị tối đa
+            });
+        });
+    </script>
+}

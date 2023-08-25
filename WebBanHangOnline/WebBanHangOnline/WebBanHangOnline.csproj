@@ -183,6 +183,9 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductImageController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -208,6 +211,22 @@
     <Compile Include="Migrations\202308230423379_ChangeLenghModels.cs" />
     <Compile Include="Migrations\202308230423379_ChangeLenghModels.designer.cs">
       <DependentUpon>202308230423379_ChangeLenghModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308231044220_UpdateProductCategory.cs" />
+    <Compile Include="Migrations\202308231044220_UpdateProductCategory.designer.cs">
+      <DependentUpon>202308231044220_UpdateProductCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308241153123_UpdateModel.cs" />
+    <Compile Include="Migrations\202308241153123_UpdateModel.designer.cs">
+      <DependentUpon>202308241153123_UpdateModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308241240482_UpdateModel1.cs" />
+    <Compile Include="Migrations\202308241240482_UpdateModel1.designer.cs">
+      <DependentUpon>202308241240482_UpdateModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308241259594_UpdateModel2.cs" />
+    <Compile Include="Migrations\202308241259594_UpdateModel2.designer.cs">
+      <DependentUpon>202308241259594_UpdateModel2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -3030,6 +3049,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\autoNumeric-1.9.45.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -3137,6 +3157,14 @@
     <Content Include="Areas\Admin\Views\Posts\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Posts\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Posts\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductImage\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutEmpty.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3148,6 +3176,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Uploads\images\e12c07089e6070061ac62f1d65702193.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -3187,6 +3216,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Content\ckfinder\userfiles\" />
+    <Folder Include="Uploads\_thumbs\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -3230,6 +3260,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308230423379_ChangeLenghModels.resx">
       <DependentUpon>202308230423379_ChangeLenghModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308231044220_UpdateProductCategory.resx">
+      <DependentUpon>202308231044220_UpdateProductCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308241153123_UpdateModel.resx">
+      <DependentUpon>202308241153123_UpdateModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308241240482_UpdateModel1.resx">
+      <DependentUpon>202308241240482_UpdateModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308241259594_UpdateModel2.resx">
+      <DependentUpon>202308241259594_UpdateModel2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
