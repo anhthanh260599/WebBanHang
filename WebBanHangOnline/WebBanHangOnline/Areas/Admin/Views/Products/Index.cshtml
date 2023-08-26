@@ -72,6 +72,11 @@
                         <th>Giá (VND)</th>
                         <th>Ngày tạo</th>
                         <th>Hiển thị</th>
+                        <th>Trang chủ</th>
+                        <th>Hot</th>
+                        <th>Nổi bật</th>
+                        <th>Khuyến mãi</th>
+
 
                         <th style="width:150px;"></th>
                     </tr>
@@ -102,10 +107,39 @@
                                     </label>
                                 </td>
 
-                                @*<td class="text-center">
-                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-                                    </td>*@
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnHome" @(item.IsHome ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
 
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnHot" @(item.IsHot ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnFeature" @(item.IsFeature ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+
+                                <td>
+                                    @if (item.IsSale == true)
+                                    {
+                                        <button style="cursor:text;" class="btn btn-success">Đang khuyến mãi</button>
+                                    }
+                              
+                                </td>
+                         
+
+                                @*<td class="text-center">
+           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+        </td>*@
 
 
                                 <td>
@@ -305,6 +339,73 @@
                     }
                 });
             });
+
+            $('body').on('change', '.btnHome', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/products/IsHome',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsHome) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('body').on('change', '.btnHot', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/products/IsHot',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsHot) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('body').on('change', '.btnFeature', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/products/IsFeature',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsFeature) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
+                            }
+                        }
+                    }
+                });
+            });
+
 
             $('.auto').autoNumeric('init', {
                 aDec: '.',

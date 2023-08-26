@@ -125,6 +125,48 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public ActionResult IsHome(int id)
+        {
+            var item = db.Products.Find(id);
+            if (item != null)
+            {
+                item.IsHome = !item.IsHome;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, IsHome = item.IsHome });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public ActionResult IsHot(int id)
+        {
+            var item = db.Products.Find(id);
+            if (item != null)
+            {
+                item.IsHot = !item.IsHot;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, IsHot = item.IsHot });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public ActionResult IsFeature(int id)
+        {
+            var item = db.Products.Find(id);
+            if (item != null)
+            {
+                item.IsFeature = !item.IsFeature;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, IsFeature = item.IsFeature });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
         public ActionResult DeleteSelected(string ids)
         {
             if(!string.IsNullOrEmpty(ids))
