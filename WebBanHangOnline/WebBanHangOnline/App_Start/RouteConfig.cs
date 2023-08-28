@@ -7,11 +7,43 @@ using System.Web.Routing;
 
 namespace WebBanHangOnline
 {
+    /// <summary>
+    /// Tạo route để chuyển trang, link ấy, thay vì hiển thị Product/Index là san-pham
+    /// </summary>
     public class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+               name: "Products",
+               url: "san-pham",
+               defaults: new { controller = "Product", action = "Index", alias = UrlParameter.Optional },
+               namespaces: new[] { "WebBanHangOnline.Controllers" }
+           );
+
+            routes.MapRoute( // Danh mục sản phẩm theo hãng
+             name: "CategoryProduct",
+             url: "san-pham/{alias}-{id}",
+             defaults: new { controller = "Product", action = "ProductCategory", id = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
+
+            routes.MapRoute(
+             name: "News",
+             url: "tin-tuc",
+             defaults: new { controller = "News", action = "Index", alias = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
+            routes.MapRoute(
+              name: "Contact",
+              url: "lien-he",
+              defaults: new { controller = "Contact", action = "Index", alias = UrlParameter.Optional },
+              namespaces: new[] { "WebBanHangOnline.Controllers" }
+          );
 
             routes.MapRoute(
                 name: "Default",
