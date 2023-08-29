@@ -14,12 +14,13 @@ namespace WebBanHangOnline.Controllers
         public ActionResult Index(int? id)
         {
             var items = db.Products.ToList();
-
-            if (id != null)
-            {
-                items = items.Where(x => x.ProductCategory.Id == id).ToList();
-            }
             return View(items);
+        }
+
+        public ActionResult Detail(string alias, int id)
+        {
+            var item = db.Products.Find(id);
+            return View(item);
         }
 
         public ActionResult ProductCategory( string alias, int id)
