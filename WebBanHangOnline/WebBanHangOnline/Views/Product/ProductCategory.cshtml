@@ -117,7 +117,7 @@
                                         <div class="product-item @item.ProductCategory.Alias">
                                             <div class="product discount product_filter">
                                                 <div class="product_image">
-                                                    <img src="@strImage" alt="@item.Title">
+                                                    <img height="200px" src="@strImage" alt="@item.Title">
                                                 </div>
                                                 <div class="favorite favorite_left"></div>
                                                 @if (item.PriceSale > 0)
@@ -128,7 +128,7 @@
 
 
                                             <div class="product_info">
-                                                <h6 class="product_name"><a href="@item.Alias">@item.Title</a></h6>
+                                                <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
                                                 @if (item.PriceSale > 0)
                                                 {
 

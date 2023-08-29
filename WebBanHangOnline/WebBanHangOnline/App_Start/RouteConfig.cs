@@ -16,10 +16,24 @@ namespace WebBanHangOnline
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
+            routes.MapRoute( // Trang chủ
+             name: "Home",
+             url: "trang-chu",
+             defaults: new { controller = "Home", action = "Index", alias = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
+            routes.MapRoute( // Trang danh mục sản phẩm
                name: "Products",
                url: "san-pham",
                defaults: new { controller = "Product", action = "Index", alias = UrlParameter.Optional },
+               namespaces: new[] { "WebBanHangOnline.Controllers" }
+           );
+
+            routes.MapRoute( // Trang danh mục sản phẩm
+               name: "DetailProduct",
+               url: "chi-tiet/{alias}-p{id}",
+               defaults: new { controller = "Product", action = "Detail", alias = UrlParameter.Optional },
                namespaces: new[] { "WebBanHangOnline.Controllers" }
            );
 
@@ -31,14 +45,14 @@ namespace WebBanHangOnline
          );
 
 
-            routes.MapRoute(
+            routes.MapRoute( // Trang tin tức
              name: "News",
              url: "tin-tuc",
              defaults: new { controller = "News", action = "Index", alias = UrlParameter.Optional },
              namespaces: new[] { "WebBanHangOnline.Controllers" }
          );
 
-            routes.MapRoute(
+            routes.MapRoute( // Trang liên hệ
               name: "Contact",
               url: "lien-he",
               defaults: new { controller = "Contact", action = "Index", alias = UrlParameter.Optional },
