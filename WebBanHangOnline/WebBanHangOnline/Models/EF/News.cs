@@ -24,6 +24,7 @@ namespace WebBanHangOnline.Models.EF
         [AllowHtml]
         public string Detail { get; set; }
         public string Image { get; set; }
+        public int ViewCount { get; set; }
         public string SeoTitle { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
