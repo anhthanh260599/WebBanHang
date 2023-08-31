@@ -30,8 +30,9 @@ namespace WebBanHangOnline.Models.EF
         public decimal TotalAmount { get; set; }
         public int Quantity { get; set; }
         public int TypePayment { get; set; }
+        public bool Status { get; set; }
 
-        public ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
 
     }
 }
