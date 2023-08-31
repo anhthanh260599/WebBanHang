@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.Common;
 using WebBanHangOnline.Models.EF;
+using System.IO;
+using System.Configuration;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -74,17 +76,14 @@ namespace WebBanHangOnline.Controllers
                     //Random rd = new Random();
                     //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
 
-                    // Tạo mã đơn hàng với Ngày/Tháng/Năm
-                     
+                    ////////// Tạo mã đơn hàng với Ngày/Tháng/Năm //////////////
                     // Lấy ngày hiện tại dưới dạng ddMMyy
                     string currentDate = DateTime.Now.ToString("ddMMyy");
-
                     // Lấy ra tất cả các mã đơn hàng trong ngày hiện tại
                     var orderCodes = db.Orders
                         .Where(o => o.Code.StartsWith("DH" + currentDate))
                         .Select(o => o.Code)
                         .ToList();
-
                     // Tìm số đơn hàng cuối cùng trong ngày
                     int lastOrderNumber = 0;
                     foreach (var newCode in orderCodes)
@@ -98,14 +97,61 @@ namespace WebBanHangOnline.Controllers
                             }
                         }
                     }
-
                     // Tạo mã đơn hàng mới
                     string newOrderCode = $"DH{currentDate}{(lastOrderNumber + 1).ToString("D5")}"; // D5 có nghĩa là 5 số 0 cuối, rồi + lên
+                    ////////// End Tạo mã đơn hàng với Ngày/Tháng/Năm //////////////
+                    
 
                     // Gán mã đơn hàng và lưu vào cơ sở dữ liệu
                     order.Code = newOrderCode;
                     db.Orders.Add(order);
                     db.SaveChanges();
+
+                    //// Send Mail cho Khách hàng ////
+
+                    var strSanPham = "";
+                    var thanhTien = decimal.Zero;
+                    var tongTien = decimal.Zero;
+
+                    foreach (var sp in cart.Items)
+                    {
+                        strSanPham += "<tr>";
+                        strSanPham += "<td>" + sp.ProductName + "</td>";
+                        strSanPham += "<td>" + sp.Quantity + "</td>";
+                        strSanPham += "<td>" + Common.FormatNumber(sp.Price,0) + "</td>";
+                        strSanPham += "</tr>";
+
+                        thanhTien += sp.Price * sp.Quantity;
+
+                    }
+                    tongTien = thanhTien;
+                    string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
+                    contentCustomer = contentCustomer.Replace("{{MaDon}}",order.Code);
+                    contentCustomer = contentCustomer.Replace("{{NgayDat}}", order.CreateDate.ToString());
+                    contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
+                    contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
+                    contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
+                    contentCustomer = contentCustomer.Replace("{{Email}}", request.Email);
+                    contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
+                    contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien,0));
+                    contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien,0));
+                    Common.SendMail("Cà phê Nhóm 4", "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
+
+                    string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailCuaHang.html"));
+                    contentAdmin = contentAdmin.Replace("{{MaDon}}", order.Code);
+                    contentAdmin = contentAdmin.Replace("{{NgayDat}}", order.CreateDate.ToString());
+                    contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", order.CustomerName);
+                    contentAdmin = contentAdmin.Replace("{{Phone}}", order.Phone);
+                    contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", order.Address);
+                    contentAdmin = contentAdmin.Replace("{{Email}}", request.Email);
+                    contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
+                    contentAdmin = contentAdmin.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                    contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
+                    Common.SendMail("Cà phê Nhóm 4", "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
+
+                    //// End Mail ////
+
+
                     cart.ClearCart();
                     return RedirectToAction("CheckoutSuccess");
                 }
