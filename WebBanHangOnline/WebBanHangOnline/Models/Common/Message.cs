@@ -28,6 +28,7 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString InvalidEmail { get; } = new HtmlString("Email không hợp lệ");
         public static IHtmlString OrderSuccess { get; } = new HtmlString("Đặt hàng thành công");
         public static IHtmlString OrderFailure { get; } = new HtmlString("Đặt hàng thất bại");
+        public static IHtmlString SuccessLogin { get; } = new HtmlString("Đăng nhập thành công");
 
 
     }
