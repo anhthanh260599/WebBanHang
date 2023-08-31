@@ -192,6 +192,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -231,12 +232,17 @@
     <Compile Include="Migrations\202308241259594_UpdateModel2.designer.cs">
       <DependentUpon>202308241259594_UpdateModel2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202308310311157_UpdatePayment.cs" />
+    <Compile Include="Migrations\202308310311157_UpdatePayment.designer.cs">
+      <DependentUpon>202308310311157_UpdatePayment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
     <Compile Include="Models\Common\Common.cs" />
     <Compile Include="Models\Common\Filter.cs" />
     <Compile Include="Models\Common\Message.cs" />
+    <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EF\Adv.cs" />
     <Compile Include="Models\EF\Category.cs" />
     <Compile Include="Models\EF\Contact.cs" />
@@ -251,6 +257,8 @@
     <Compile Include="Models\EF\SystemSetting.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\OrderViewModel.cs" />
+    <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -3275,6 +3283,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jsShopping.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Uploads\images\e12c07089e6070061ac62f1d65702193.jpg" />
     <Content Include="Web.config" />
@@ -3321,6 +3330,12 @@
     <Content Include="Views\Menu\_MenuLeft.cshtml" />
     <Content Include="Views\Product\ProductCategory.cshtml" />
     <Content Include="Views\Product\Detail.cshtml" />
+    <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\ShoppingCart\Partial_Item_Cart.cshtml" />
+    <Content Include="Views\ShoppingCart\Checkout.cshtml" />
+    <Content Include="Views\ShoppingCart\Partial_Item_ThanhToan.cshtml" />
+    <Content Include="Views\ShoppingCart\Partial_Checkout.cshtml" />
+    <Content Include="Views\ShoppingCart\CheckoutSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3382,6 +3397,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308241259594_UpdateModel2.resx">
       <DependentUpon>202308241259594_UpdateModel2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308310311157_UpdatePayment.resx">
+      <DependentUpon>202308310311157_UpdatePayment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

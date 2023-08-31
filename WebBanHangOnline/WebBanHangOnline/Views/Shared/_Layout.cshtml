@@ -14,6 +14,11 @@
 
 
     <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/responsive.css">
+    <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jqueryval") <!--Render validate Thanh toán-->
+
 </head>
 <body>
 
@@ -93,9 +98,9 @@
                                     <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
                                     <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                                     <li class="checkout">
-                                        <a href="#">
+                                        <a href="/gio-hang">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                            <span id="checkout_items" class="checkout_items">2</span>
+                                            <span id="checkout_items" class="checkout_items">0</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -202,7 +207,6 @@
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
 
-    <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
     <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
     <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
     <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
@@ -210,6 +214,9 @@
     <script src="~/Content/assets/plugins/easing/easing.js"></script>
     <script src="~/Content/assets/js/custom.js"></script>
     <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script src="~/Scripts/jsShopping.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

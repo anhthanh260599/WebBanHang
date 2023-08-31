@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebBanHangOnline.Models.Common;
 
 namespace WebBanHangOnline.Models.EF
 {
@@ -19,14 +20,15 @@ namespace WebBanHangOnline.Models.EF
         public int Id { get; set; }
         [Required]
         public string Code { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập tên khách hàng" )]
         public string CustomerName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         public string Phone { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Vui lòng nhập địa chỉ")]
         public string Address { get; set; }
         public decimal TotalAmount { get; set; }
         public int Quantity { get; set; }
+        public int TypePayment { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
 

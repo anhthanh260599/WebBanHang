@@ -23,6 +23,24 @@ namespace WebBanHangOnline
              namespaces: new[] { "WebBanHangOnline.Controllers" }
          );
 
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute( // Giỏ hàng
+             name: "ShoppingCart",
+             url: "gio-hang",
+             defaults: new { controller = "ShoppingCart", action = "Index", alias = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute( // Thanh toán
+             name: "Checkout",
+             url: "thanh-toan",
+             defaults: new { controller = "ShoppingCart", action = "Checkout", alias = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
             routes.MapRoute( // Trang danh mục sản phẩm
                name: "Products",
                url: "san-pham",

@@ -122,3 +122,4 @@ D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnli
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.CopyComplete
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.dll
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.pdb
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdatePayment.resources

@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div class="container product_section_container">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li class="active"><a href="3"><i class="fa fa-angle-right" aria-hidden="true"></i>Giỏ hàng</a></li>
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            @*<div class="sidebar">
+
+                </div>*@
+
+            <!-- Main Content -->
+
+            <div class="row">
+                <div class="col-md-12 mb-5">
+                    <a class="btn btn-danger" href="/san-pham">Tiếp tục mua hàng</a>
+                </div>
+
+                <div class="col-md-12">
+                    <h4>Đặt hàng thành công, cám ơn bạn đã ủng hộ </h4>
+                </div>
+       
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+    <script src="~/Content/assets/js/categories_custom.js"></script>
+}
+
