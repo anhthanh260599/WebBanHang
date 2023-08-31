@@ -62,6 +62,7 @@
             DeleteAll();
             ShowCount();
             LoadCart();
+            location.reload();
         }
 
     });

@@ -42,6 +42,7 @@ namespace WebBanHangOnline.Models.EF
         public bool IsHot { get; set; }
         public bool IsActive { get; set; }
         public int Quantity { get; set; }
+        public int ViewCount { get; set; }
         public string SeoTitle { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
