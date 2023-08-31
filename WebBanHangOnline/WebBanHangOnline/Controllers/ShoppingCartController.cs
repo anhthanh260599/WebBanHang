@@ -67,6 +67,7 @@ namespace WebBanHangOnline.Controllers
 
                     }));
                     order.Quantity = cart.Items.Sum(x=>x.Quantity);
+                    order.Email = request.Email;
                     order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
@@ -131,7 +132,7 @@ namespace WebBanHangOnline.Controllers
                     contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
                     contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
                     contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
-                    contentCustomer = contentCustomer.Replace("{{Email}}", request.Email);
+                    contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
                     contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
                     contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien,0));
                     contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien,0));
@@ -143,7 +144,7 @@ namespace WebBanHangOnline.Controllers
                     contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", order.CustomerName);
                     contentAdmin = contentAdmin.Replace("{{Phone}}", order.Phone);
                     contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", order.Address);
-                    contentAdmin = contentAdmin.Replace("{{Email}}", request.Email);
+                    contentAdmin = contentAdmin.Replace("{{Email}}", order.Email);
                     contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
                     contentAdmin = contentAdmin.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
                     contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));

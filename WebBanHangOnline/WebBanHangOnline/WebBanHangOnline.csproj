@@ -185,6 +185,7 @@
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductImageController.cs" />
@@ -246,6 +247,22 @@
     <Compile Include="Migrations\202308311300036_AddEmailOrder.cs" />
     <Compile Include="Migrations\202308311300036_AddEmailOrder.designer.cs">
       <DependentUpon>202308311300036_AddEmailOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308311445398_AddStatusOrder.cs" />
+    <Compile Include="Migrations\202308311445398_AddStatusOrder.designer.cs">
+      <DependentUpon>202308311445398_AddStatusOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308311447273_UpdateStatusOrder2.cs" />
+    <Compile Include="Migrations\202308311447273_UpdateStatusOrder2.designer.cs">
+      <DependentUpon>202308311447273_UpdateStatusOrder2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308311527205_UpdateKeyOrderDetail.cs" />
+    <Compile Include="Migrations\202308311527205_UpdateKeyOrderDetail.designer.cs">
+      <DependentUpon>202308311527205_UpdateKeyOrderDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202308311529291_UpdateKeyOrderDetail2.cs" />
+    <Compile Include="Migrations\202308311529291_UpdateKeyOrderDetail2.designer.cs">
+      <DependentUpon>202308311529291_UpdateKeyOrderDetail2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -3290,6 +3307,9 @@
     <Content Include="Content\assets\plugins\themify-icons\fonts\themify.eot" />
     <Content Include="Content\assets\plugins\themify-icons\fonts\themify.ttf" />
     <Content Include="Content\assets\plugins\themify-icons\fonts\themify.woff" />
+    <Content Include="Areas\Admin\Views\Order\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Partial_Detail.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3424,6 +3444,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308311300036_AddEmailOrder.resx">
       <DependentUpon>202308311300036_AddEmailOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308311445398_AddStatusOrder.resx">
+      <DependentUpon>202308311445398_AddStatusOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308311447273_UpdateStatusOrder2.resx">
+      <DependentUpon>202308311447273_UpdateStatusOrder2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308311527205_UpdateKeyOrderDetail.resx">
+      <DependentUpon>202308311527205_UpdateKeyOrderDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308311529291_UpdateKeyOrderDetail2.resx">
+      <DependentUpon>202308311529291_UpdateKeyOrderDetail2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

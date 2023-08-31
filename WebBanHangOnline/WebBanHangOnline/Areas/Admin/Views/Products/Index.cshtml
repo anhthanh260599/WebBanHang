@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+@using WebBanHangOnline.Models.Common
 
 @{
     ViewBag.Title = "Danh sách sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-    var Message = new WebBanHangOnline.Models.Common.Message();
 }
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -133,13 +133,13 @@
                                     {
                                         <button style="cursor:text;" class="btn btn-success">Đang khuyến mãi</button>
                                     }
-                              
+
                                 </td>
-                         
+
 
                                 @*<td class="text-center">
-           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-        </td>*@
+                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                    </td>*@
 
 
                                 <td>
