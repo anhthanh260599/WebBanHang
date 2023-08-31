@@ -243,6 +243,10 @@
     <Compile Include="Migrations\202308311004053_CreateThongKe.designer.cs">
       <DependentUpon>202308311004053_CreateThongKe.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202308311300036_AddEmailOrder.cs" />
+    <Compile Include="Migrations\202308311300036_AddEmailOrder.designer.cs">
+      <DependentUpon>202308311300036_AddEmailOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -3128,6 +3132,8 @@
     <Content Include="Content\clients\plugins\uplot\uPlot.iife.min.js" />
     <Content Include="Content\clients\plugins\uplot\uPlot.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\template\sendMailCuaHang.html" />
+    <Content Include="Content\template\sendMailKhachHang.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -3415,6 +3421,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202308311004053_CreateThongKe.resx">
       <DependentUpon>202308311004053_CreateThongKe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202308311300036_AddEmailOrder.resx">
+      <DependentUpon>202308311300036_AddEmailOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
