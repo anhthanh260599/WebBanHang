@@ -40,8 +40,10 @@
                                                 <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
                                                 <div class="product_price">@Common.FormatNumber(item.PriceSale)<span>@Common.FormatNumber(item.Price)</span></div>
                                             </div>
+                                            <p style="font-size:12px;padding-right:24px;padding-top:24px;" class="text-md-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
+
                                         </div>
-                                        <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">Thêm vào giỏ hàng</a></div>
+                                        @*<div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">Thêm vào giỏ hàng</a></div>*@
                                     </div>
                                 </div>
                             }

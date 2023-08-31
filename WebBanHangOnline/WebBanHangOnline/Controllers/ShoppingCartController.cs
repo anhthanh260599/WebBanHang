@@ -64,14 +64,46 @@ namespace WebBanHangOnline.Controllers
                         Quantity = x.Quantity
 
                     }));
+                    order.Quantity = cart.Items.Sum(x=>x.Quantity);
                     order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
+                    order.ModifierDate = DateTime.Now;
                     // Tạo mã đơn hàng
                     order.CreateDate = DateTime.Now;
-                    order.ModifierDate = DateTime.Now;
-                    Random rd = new Random();
-                    order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
+                    //Random rd = new Random();
+                    //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
+
+                    // Tạo mã đơn hàng với Ngày/Tháng/Năm
+                     
+                    // Lấy ngày hiện tại dưới dạng ddMMyy
+                    string currentDate = DateTime.Now.ToString("ddMMyy");
+
+                    // Lấy ra tất cả các mã đơn hàng trong ngày hiện tại
+                    var orderCodes = db.Orders
+                        .Where(o => o.Code.StartsWith("DH" + currentDate))
+                        .Select(o => o.Code)
+                        .ToList();
+
+                    // Tìm số đơn hàng cuối cùng trong ngày
+                    int lastOrderNumber = 0;
+                    foreach (var newCode in orderCodes)
+                    {
+                        int orderNumber;
+                        if (int.TryParse(newCode.Substring(8), out orderNumber))
+                        {
+                            if (orderNumber > lastOrderNumber)
+                            {
+                                lastOrderNumber = orderNumber;
+                            }
+                        }
+                    }
+
+                    // Tạo mã đơn hàng mới
+                    string newOrderCode = $"DH{currentDate}{(lastOrderNumber + 1).ToString("D5")}"; // D5 có nghĩa là 5 số 0 cuối, rồi + lên
+
+                    // Gán mã đơn hàng và lưu vào cơ sở dữ liệu
+                    order.Code = newOrderCode;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     cart.ClearCart();
