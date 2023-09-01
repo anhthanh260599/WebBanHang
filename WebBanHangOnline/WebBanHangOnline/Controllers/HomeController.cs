@@ -10,9 +10,32 @@ namespace WebBanHangOnline.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Partial_Subscribe()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Subscribe(Subscribe request)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Subscribes.Add(new Subscribe
+                {
+                    Email = request.Email,
+                    CreateDate = DateTime.Now,
+                });
+                db.SaveChanges();
+                return Json(new {success = true});
+            }
+            return View("Partial_Subscribe",request);
         }
 
         // Hàm dùng để thống kê số lượt truy cập
@@ -30,20 +53,6 @@ namespace WebBanHangOnline.Controllers
             item.ThangTruoc = HttpContext.Application["ThangTruoc"].ToString();
             item.TatCa = HttpContext.Application["TatCa"].ToString();
             return PartialView(item);
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }
