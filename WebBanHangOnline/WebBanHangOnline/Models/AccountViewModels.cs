@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebBanHangOnline.Models
 {
-
+   
     public class CreateAccountrViewModel
     {
         [Required]
@@ -96,6 +96,13 @@ namespace WebBanHangOnline.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        public string UserName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+        [Required]
+        public string Phone { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
