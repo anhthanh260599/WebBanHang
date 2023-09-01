@@ -111,10 +111,40 @@
             </li>
 
             <li class="nav-item">
+                <a href="/admin/role" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Phân quyền
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/admin/account" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Tài khoản
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a href="/news" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
                         Cấu hình hệ thống
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="javascript:document.getElementById('logOffForm').submit()" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Đăng xuất
                         @*<span class="right badge badge-danger">New</span>*@
                     </p>
                 </a>
@@ -126,3 +156,13 @@
     <!-- /.sidebar-menu -->
 </div>
 <!-- /.sidebar -->
+
+@if(Request.IsAuthenticated)
+{
+ <div style="display:none;">
+     @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logOffForm" }))
+     {
+         @Html.AntiForgeryToken()
+     }
+ </div>         
+}

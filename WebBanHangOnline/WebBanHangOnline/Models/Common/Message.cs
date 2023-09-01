@@ -29,6 +29,8 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString OrderSuccess { get; } = new HtmlString("Đặt hàng thành công");
         public static IHtmlString OrderFailure { get; } = new HtmlString("Đặt hàng thất bại");
         public static IHtmlString SuccessLogin { get; } = new HtmlString("Đăng nhập thành công");
+        public static IHtmlString WrongUserNameOrPassword { get; } = new HtmlString("Sai tên tài khoản hoặc mật khẩu");
+
 
 
     }
