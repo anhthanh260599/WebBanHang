@@ -280,6 +280,10 @@
     <Compile Include="Migrations\202309011030447_UpdateSubsUpdateSystemSetting.designer.cs">
       <DependentUpon>202309011030447_UpdateSubsUpdateSystemSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202309020229179_update.cs" />
+    <Compile Include="Migrations\202309020229179_update.designer.cs">
+      <DependentUpon>202309020229179_update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -3559,6 +3563,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202309011030447_UpdateSubsUpdateSystemSetting.resx">
       <DependentUpon>202309011030447_UpdateSubsUpdateSystemSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309020229179_update.resx">
+      <DependentUpon>202309020229179_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
