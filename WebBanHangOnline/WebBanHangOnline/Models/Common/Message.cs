@@ -9,6 +9,7 @@ namespace WebBanHangOnline.Models.Common
 {
     public class Message
     {
+        public static IHtmlString Brand { get; } = new HtmlString("Cà phê nhóm 4");
         public static IHtmlString NoMessage { get; } = new HtmlString("");
         public static IHtmlString SuccessSaveChange { get; } = new HtmlString("Thay đổi thành công");
         public static IHtmlString FailureSaveChange { get; } = new HtmlString("Thay đổi thất bại, vui lòng kiểm tra lại thông tin");
