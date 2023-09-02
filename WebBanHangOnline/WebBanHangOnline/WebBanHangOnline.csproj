@@ -276,6 +276,10 @@
     <Compile Include="Migrations\202309010537099_RemoveCreateDateField.designer.cs">
       <DependentUpon>202309010537099_RemoveCreateDateField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202309020211211_Update.cs" />
+    <Compile Include="Migrations\202309020211211_Update.designer.cs">
+      <DependentUpon>202309020211211_Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -3551,6 +3555,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202309010537099_RemoveCreateDateField.resx">
       <DependentUpon>202309010537099_RemoveCreateDateField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309020211211_Update.resx">
+      <DependentUpon>202309020211211_Update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
