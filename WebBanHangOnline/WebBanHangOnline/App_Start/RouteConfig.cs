@@ -84,6 +84,13 @@ namespace WebBanHangOnline
               namespaces: new[] { "WebBanHangOnline.Controllers" }
           );
 
+            routes.MapRoute( // Trang bài viết khuyến mãi
+           name: "Posts",
+           url: "post/{alias}",
+           defaults: new { controller = "Artical", action = "Index", alias = UrlParameter.Optional },
+           namespaces: new[] { "WebBanHangOnline.Controllers" }
+       );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
