@@ -1,6 +1,6 @@
 ﻿@using WebBanHangOnline.Models.Common
 @{
-    ViewBag.Title = "Thanh toán";
+    ViewBag.Title = "Thanh toán VNPAY Thành công";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -25,51 +25,29 @@
             <div class="breadcrumbs d-flex flex-row align-items-center">
                 <ul>
                     <li><a href="index.html">Trang chủ</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Thanh toán</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Thanh toán</a></li>
                 </ul>
             </div>
 
             <!-- Sidebar -->
             @*<div class="sidebar">
 
-        </div>*@
+                </div>*@
 
             <!-- Main Content -->
 
             <div class="row">
 
                 <div class="col-md-12 text-center">
-                    <h3>Thanh toán</h3>
-                    <p class="text-info">@Message.PleaseCheckYourOrderInformationAgain</p>
+                    <h3>@ViewBag.Title</h3>
 
+                    @if (ViewBag.ThanhToanThanhCong!= null)
+                     {
+                        <p class="text-info">Bạn đã thanh toán thành công với @ViewBag.ThanhToanThanhCong</p>
+                     }
+                    <p> @ViewBag.InnerText </p>
                 </div>
-
             </div>
-
-            <hr />
-
-            @if (ViewBag.CheckCart != null)
-            {
-                <div class="row">
-
-                    <div style="display:none" id="show_success"></div>
-
-                    <div class="col-md-6">
-                       @Html.Action("Partial_Checkout", "ShoppingCart")
-                    </div>
-
-                    <div class="col-md-6">
-                        @Html.Action("Partial_Item_ThanhToan", "ShoppingCart")
-                    </div>
-                </div>
-            }
-            
-            else
-            {
-                <p>Chưa có sản phẩm trong giỏ hàng, vui lòng <a href="/san-pham">Quay lại mua hàng</a></p>
-            }
-
-
         </div>
 
     </div>

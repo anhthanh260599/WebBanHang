@@ -5,11 +5,30 @@
 {
     HttpMethod = "POST",
     UpdateTargetId = "load_data",
-    OnComplete = "OnSuccess",
-    OnFailure = "OnFailure"
+    OnSuccess = "OnSuccessCO",
+    OnFailure = "OnFailure",
+    OnBegin = "OnBeginCO"
 
 }, new { @Id = "formThanhToan" }))
 {
+
+    <script>
+        function OnBeginCO() {
+            $('#btnCheckOut').attr("disabled", "disabled");
+            $('#load_send').html('<h2>Đang gửi....</h2>');
+        }
+        function OnSuccessCO(res) {
+            if (res.Success) {
+                if (res.Code == 1) {
+                    location.href = 'ShoppingCart/CheckoutSuccess';
+                }
+                else {
+                    location.href = res.Url;
+                }
+            }
+        }
+    </script>
+
     @Html.AntiForgeryToken()
     <h4>Thông tin khách hàng</h4>
     <div class="form-group">
@@ -24,7 +43,7 @@
 
     <div class="form-group">
         <label>Địa chỉ</label>
-        <input type="text" name="Address"  class="form-control" autocomplete="off" />
+        <input type="text" name="Address" class="form-control" autocomplete="off" />
     </div>
 
     <div class="form-group">
@@ -34,14 +53,29 @@
 
     <div class="form-group">
         <label>Hình thức thanh toán</label>
-        <select class="form-control" name="TypePayment">
+        <select class="form-control" name="TypePayment" id="drTypePayment">
             <option value="1" selected>Ship COD</option>
-            <option value="2">Chuyển khoản</option>
+            <option value="2">Thanh toán VNPAY</option>
 
         </select>
     </div>
 
+    <div class="form-group" id="load_form_payment" style="display:none;">
+        <h4> <label>Chọn phương thực thanh toán: </label></h4>
+        <h5>Cách 1: Chuyén hướng sang VNPAY chọn phương thức thanh toán</h5>
+        <label><input type="radio" name="TypePaymentVN" value="0" checked /> Cổng thanh toán VNPAYQR </label>
+        <h5>Cách 2: Tách phương thực thanh toán tại site cua Merchant</h5>
+        <label><input type="radio" name="TypePaymentVN" value="1" /> Thanh toán qua ứng dụng hỗ trợ VNPAY </label> <br />
+        <label><input type="radio" name="TypePaymentVN" value="2" /> ATM-Tài khoản thanh toán nội địa </label> <br />
+        <label><input type="radio" name="TypePaymentVN" value="3" /> Thanh toán thẻ quốc tế </label>
+
+    </div>
+
+    <div class="form-group" id="load_send"> </div>
+
     <div class="form-group">
-        <button type="submit" class="btn btn-block btn-danger">Đặt hàng</button>
+        <button type="submit" class="btn btn-block btn-danger" id="btnCheckOut">Đặt hàng</button>
     </div>
 }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
