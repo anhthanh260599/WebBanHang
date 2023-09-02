@@ -1,8 +1,8 @@
 ﻿@model WebBanHangOnline.Models.EF.Product
+@using WebBanHangOnline.Models.Common
 @{
     ViewBag.Title = "Thêm mới";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
-    var Message = new WebBanHangOnline.Models.Common.Message();
 }
 
 @section naviheader{
@@ -121,7 +121,15 @@
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
-             
+
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Giá nhập</label>
+                                                    <input type="text" name="demoOriginalPrice" id="demoOriginalPrice" value="0" class="form-control auto text-right">
+                                                    @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
+                                                    @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-3">
