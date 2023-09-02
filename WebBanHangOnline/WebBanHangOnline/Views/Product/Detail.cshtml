@@ -1,7 +1,10 @@
 ﻿@model WebBanHangOnline.Models.EF.Product
 @using WebBanHangOnline.Models.Common
 @{
-    ViewBag.Title = "Chi tiết sản phẩm";
+    ViewBag.Title = Model.Title;
+    ViewBag.SeoDescription = Model.SeoDescription;
+    ViewBag.SeoTitle = Model.SeoTitle;
+    ViewBag.SeoKeywords = Model.SeoKeywords;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_styles.css">

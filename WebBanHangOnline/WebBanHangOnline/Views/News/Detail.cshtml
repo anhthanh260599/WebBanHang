@@ -1,6 +1,9 @@
 ﻿@model WebBanHangOnline.Models.EF.News
 @{
-    ViewBag.Title = "Chi tiết tin tức";
+    ViewBag.Title = Model.Title;
+    ViewBag.SeoDescription = Model.SeoDescription;
+    ViewBag.SeoTitle = Model.SeoTitle;
+    ViewBag.SeoKeywords = Model.SeoKeywords;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">

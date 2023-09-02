@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.Common;
 using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Controllers
