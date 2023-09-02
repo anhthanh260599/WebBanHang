@@ -64,9 +64,16 @@ namespace WebBanHangOnline
 
 
             routes.MapRoute( // Trang tin tức
-             name: "News",
+             name: "ListNews",
              url: "tin-tuc",
              defaults: new { controller = "News", action = "Index", alias = UrlParameter.Optional },
+             namespaces: new[] { "WebBanHangOnline.Controllers" }
+         );
+
+            routes.MapRoute( // Trang chi tiết tin tức
+             name: "DetailNews",
+             url: "tin-tuc/chi-tiet/{alias}-n{id}",
+             defaults: new { controller = "News", action = "Detail", id = UrlParameter.Optional },
              namespaces: new[] { "WebBanHangOnline.Controllers" }
          );
 
