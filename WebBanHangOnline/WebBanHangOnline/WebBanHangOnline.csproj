@@ -195,6 +195,7 @@
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -288,6 +289,10 @@
     <Compile Include="Migrations\202309020436014_AddFieldsOriginalPrice.cs" />
     <Compile Include="Migrations\202309020436014_AddFieldsOriginalPrice.designer.cs">
       <DependentUpon>202309020436014_AddFieldsOriginalPrice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309020752568_AddFieldCategory.cs" />
+    <Compile Include="Migrations\202309020752568_AddFieldCategory.designer.cs">
+      <DependentUpon>202309020752568_AddFieldCategory.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -3629,6 +3634,7 @@
     <Content Include="Views\Home\Partial_Subscribe.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\Detail.cshtml" />
+    <Content Include="Views\Artical\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3726,6 +3732,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202309020436014_AddFieldsOriginalPrice.resx">
       <DependentUpon>202309020436014_AddFieldsOriginalPrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309020752568_AddFieldCategory.resx">
+      <DependentUpon>202309020752568_AddFieldCategory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
