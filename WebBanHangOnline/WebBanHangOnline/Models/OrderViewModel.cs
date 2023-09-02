@@ -8,6 +8,7 @@ namespace WebBanHangOnline.Models
 {
     public class OrderViewModel
     {
+        [Required(ErrorMessage = "Vui lòng nhập tên khách hàng")]
         public string CustomerName { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
         public string Phone { get; set; }
@@ -15,6 +16,6 @@ namespace WebBanHangOnline.Models
         public string Address { get; set; }
         public string Email { get; set; }
         public int TypePayment { get; set; }
-
+        public int TypePaymentVN { get; set; }
     }
 }
