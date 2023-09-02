@@ -5,25 +5,11 @@
 {
     HttpMethod = "POST",
     UpdateTargetId = "load_data",
-    OnSuccess = "OnSuccessCO",
+    OnComplete = "OnSuccess",
     OnFailure = "OnFailure"
 
 }, new { @Id = "formThanhToan" }))
 {
-
-    <script>
-        function OnSuccessCO(res) {
-            if (res.Success) {
-                if (res.Code == 1) {
-                    location.href = "/ShoppingCart/CheckoutSuccess";
-                }
-                else {
-                    location.href = res.Url;
-                }
-            }
-        }
-    </script>
-
     @Html.AntiForgeryToken()
     <h4>Thông tin khách hàng</h4>
     <div class="form-group">
@@ -38,7 +24,7 @@
 
     <div class="form-group">
         <label>Địa chỉ</label>
-        <input type="text" name="Address" class="form-control" autocomplete="off" />
+        <input type="text" name="Address"  class="form-control" autocomplete="off" />
     </div>
 
     <div class="form-group">
@@ -48,21 +34,11 @@
 
     <div class="form-group">
         <label>Hình thức thanh toán</label>
-        <select class="form-control" name="TypePayment" id="drTypePayment">
+        <select class="form-control" name="TypePayment">
             <option value="1" selected>Ship COD</option>
-            <option value="2">Thanh toán VNPAY</option>
+            <option value="2">Chuyển khoản</option>
 
         </select>
-    </div>
-
-    <div class="form-group" id="load_form_payment" style="display:none">
-        <h4><label>Chọn phương thức thanh toán:</label><br /></h4>
-        <h5>Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>
-        <input type="radio" name="TypePaymentVN" value="0" checked /><label style="padding-left:8px;">Cổng thanh toán VNPAY</label>
-        <h5>Cách 2: Tách phương thức thanh toán tại site của Merchant</h5>
-        <input type="radio" name="TypePaymentVN" value="1" checked /><label style="padding-left:8px;">Thanh toán qua ứng dụng hỗ trợ VNQR</label><br />
-        <input type="radio" name="TypePaymentVN" value="2" checked /><label style="padding-left:8px;">ATM Tài khoản ngân hàng nội địa</label> <br />
-        <input type="radio" name="TypePaymentVN" value="3" checked /><label style="padding-left:8px;">Thanh toán qua thẻ quốc tế</label>
     </div>
 
     <div class="form-group">
