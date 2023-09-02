@@ -41,6 +41,13 @@ namespace WebBanHangOnline
              namespaces: new[] { "WebBanHangOnline.Controllers" }
          );
 
+            routes.MapRoute( // Thanh toán vnpay
+              name: "vnpay_return",
+              url: "vnpay_return",
+              defaults: new { controller = "ShoppingCart", action = "VnPay_Return", alias = UrlParameter.Optional },
+              namespaces: new[] { "WebBanHangOnline.Controllers" }
+          );
+
             routes.MapRoute( // Trang danh mục sản phẩm
                name: "Products",
                url: "san-pham",

@@ -62,6 +62,7 @@
                         <th>Tên khách hàng</th>
                         <th>Số điện thoại</th>
                         <th>Tổng tiền</th>
+                        <th>Phương thức</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
 
@@ -80,37 +81,60 @@
                                 <td>@item.CustomerName</td>
                                 <td>@item.Phone</td>
                                 <td>@Common.FormatNumber(item.TotalAmount, 0)</td>
-                                @if (item.TypePayment == 1)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-danger">Chưa thanh toán</td>
-                                }
-                                else
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-success">Đã thanh toán</td>
-                                }
-                                @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
-                                <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
-
                                 <td>
-                                    <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
-                                    @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
-
                                     @if (item.TypePayment == 1)
                                     {
-                                        <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                                            Cập nhật
-                                        </button>
+                                        <span>COD</span>
                                     }
                                     else
                                     {
-                                        <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                        <span>VNPAY</span>
                                     }
-                                    @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                                                    Cập nhật
-                                                </button>*@
+                                 </td>
 
 
-                                </td>
+                                    @if (item.Status == 1)
+                                    {
+                                        <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                                    }
+                                    @if (item.Status == 2)
+                                    {
+                                        <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                    }
+                                    @if (item.Status == 3)
+                                    {
+                                        <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                    }
+                                    @if (item.Status == 4)
+                                    {
+                                        <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
+                                    }
+
+                                    @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
+                                    <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+
+                                    <td>
+                                        <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
+                                        @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
+
+                                    @if (item.Status != 3)
+                                    {
+
+                                            <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
+                                                Cập nhật
+                                            </button>
+                                     }
+                                    else
+                                    {
+                                            <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                    }
+
+                                        @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
+                    Cập nhật
+                </button>*@
+
+
+                                    </td>
                                 </tr>
                             i++;
                         }
@@ -148,6 +172,9 @@
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
                         <option value="2">Đã thanh toán</option>
+                        <option value="3">Giao hàng thành công</option>
+                        <option value="4">Huỷ</option>
+
                     </select>
                 </div>
             </div>
