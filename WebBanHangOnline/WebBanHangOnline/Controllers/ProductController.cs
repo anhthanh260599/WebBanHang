@@ -1,10 +1,13 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -12,10 +15,53 @@ namespace WebBanHangOnline.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Product
-        public ActionResult Index(int? id)
+        public ActionResult Index(int? id, int? page, int? pageSize)
         {
-            var items = db.Products.ToList();
+            int defaultPageSize = 5; // Giá trị mặc định
+
+            if (Session["pageSize"] != null)
+            {
+                defaultPageSize = (int)Session["pageSize"];
+            }
+            else
+            {
+                // Nếu không có giá trị trong Session, lưu giá trị mặc định vào Session
+                Session["pageSize"] = defaultPageSize;
+            }
+
+            var pageIndex = page ?? 1;
+            IEnumerable<News> items = db.News.OrderByDescending(x => x.Id).Where(x => x.IsActive).ToList();
+
+            // Tính toán số lượng trang tối đa dựa trên số lượng items và pageSize
+            int maxPageIndex = (int)Math.Ceiling((double)items.Count() / defaultPageSize);
+
+            // Kiểm tra và cập nhật lại số trang nếu cần
+            if (pageIndex > maxPageIndex)
+            {
+                pageIndex = maxPageIndex;
+            }
+
+            items = items.ToPagedList(pageIndex, defaultPageSize);
+
+            ViewBag.PageSize = defaultPageSize;
+            ViewBag.Page = pageIndex;
+
             return View(items);
+
+        }
+
+        [HttpPost]
+        public ActionResult SavePageSize(int pageSize)
+        {
+            Session["pageSize"] = pageSize;
+            return Json(new { success = true });
+        }
+
+
+        public ActionResult Detail(int id)
+        {
+            var item = db.News.Find(id);
+            return View(item);
         }
 
         public ActionResult Detail(string alias, int id)
