@@ -30,7 +30,7 @@ namespace WebBanHangOnline.Controllers
             }
 
             var pageIndex = page ?? 1;
-            IEnumerable<News> items = db.News.OrderByDescending(x => x.Id).Where(x => x.IsActive).ToList();
+            IEnumerable<Product> items = db.Products.ToList();
 
             // Tính toán số lượng trang tối đa dựa trên số lượng items và pageSize
             int maxPageIndex = (int)Math.Ceiling((double)items.Count() / defaultPageSize);
