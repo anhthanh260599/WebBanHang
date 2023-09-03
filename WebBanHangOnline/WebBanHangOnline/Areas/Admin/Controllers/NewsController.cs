@@ -31,7 +31,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 model.CreateDate = DateTime.Now;
-                model.CategoryID = 18;
+                model.CategoryID = 18; // CategoryID của Tin tức (check trong DB)
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.News.Add(model);

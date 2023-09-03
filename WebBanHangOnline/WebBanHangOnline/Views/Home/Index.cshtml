@@ -7,14 +7,14 @@
 
 <!-- Slider -->
 
-<div class="main_slider" style="background-image:url(Content/assets/images/slider_1.jpg)">
+<div class="main_slider" style="background-image:url(Content/assets/images/slider.jpg)">
     <div class="container fill_height">
         <div class="row align-items-center fill_height">
             <div class="col">
                 <div class="main_slider_content">
-                    <h6>Spring / Summer Collection 2017</h6>
-                    <h1>Get up to 30% Off New Arrivals</h1>
-                    <div class="red_button shop_now_button"><a href="#">shop now</a></div>
+                    @*<h6>Spring / Summer Collection 2017</h6>*@
+                    <h1>Mình cà phê nhé</h1>
+                    <div class="red_button shop_now_button"><a href="/san-pham">Mua ngay</a></div>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
 </div>
 
 <!-- Banner -->
-@*@Html.Action("MenuProductCategory", "Menu")*@
+@Html.Action("MenuProductCategory", "Menu")
 
 
 <!-- New Arrivals -->
@@ -36,15 +36,18 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="deal_ofthe_week_img">
-                    <img src="Content/assets/images/deal_ofthe_week.png" alt="">
+                    <img src="Content/assets/images/san-pham-moi-home.jpg" alt="">
                 </div>
             </div>
             <div class="col-lg-6 text-right deal_ofthe_week_col">
                 <div class="deal_ofthe_week_content d-flex flex-column align-items-center float-right">
                     <div class="section_title">
-                        <h2>Deal Of The Week</h2>
+                        <h2>Sản phẩm mới</h2>
                     </div>
-                    <ul class="timer">
+                    <div style="margin-top: 32px" class="section_description">
+                        <p class="text-left"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                    </div>
+                    @*<ul class="timer">
                         <li class="d-inline-flex flex-column justify-content-center align-items-center">
                             <div id="day" class="timer_num">03</div>
                             <div class="timer_unit">Day</div>
@@ -61,8 +64,8 @@
                             <div id="second" class="timer_num">23</div>
                             <div class="timer_unit">Sec</div>
                         </li>
-                    </ul>
-                    <div class="red_button deal_ofthe_week_button"><a href="#">shop now</a></div>
+                    </ul>*@
+                    <div class="red_button deal_ofthe_week_button"><a href="/san-pham">Mua ngay</a></div>
                 </div>
             </div>
         </div>
@@ -80,10 +83,10 @@
         <div class="row benefit_row">
             <div class="col-lg-3 benefit_col">
                 <div class="benefit_item d-flex flex-row align-items-center">
-                    <div class="benefit_icon"><i class="fa fa-truck" aria-hidden="true"></i></div>
+                    <div class="benefit_icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div>
                     <div class="benefit_content">
-                        <h6>free shipping</h6>
-                        <p>Suffered Alteration in Some Form</p>
+                        <h6>Thanh toán trực tuyến</h6>
+                        <p>Thanh toán ví điện tử</p>
                     </div>
                 </div>
             </div>
@@ -91,17 +94,17 @@
                 <div class="benefit_item d-flex flex-row align-items-center">
                     <div class="benefit_icon"><i class="fa fa-money" aria-hidden="true"></i></div>
                     <div class="benefit_content">
-                        <h6>cach on delivery</h6>
-                        <p>The Internet Tend To Repeat</p>
+                        <h6>Thanh toán trực tiếp</h6>
+                        <p>Thanh toán tiền mặt</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 benefit_col">
                 <div class="benefit_item d-flex flex-row align-items-center">
-                    <div class="benefit_icon"><i class="fa fa-undo" aria-hidden="true"></i></div>
+                    <div class="benefit_icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
                     <div class="benefit_content">
-                        <h6>45 days return</h6>
-                        <p>Making it Look Like Readable</p>
+                        <h6>Chat trực tuyến</h6>
+                        <p>Dịch vụ chat trực tuyến</p>
                     </div>
                 </div>
             </div>
@@ -109,8 +112,8 @@
                 <div class="benefit_item d-flex flex-row align-items-center">
                     <div class="benefit_icon"><i class="fa fa-clock-o" aria-hidden="true"></i></div>
                     <div class="benefit_content">
-                        <h6>opening all week</h6>
-                        <p>8AM - 09PM</p>
+                        <h6>Mở cửa cả tuần</h6>
+                        <p>6:30 AM - 10:00 PM</p>
                     </div>
                 </div>
             </div>
