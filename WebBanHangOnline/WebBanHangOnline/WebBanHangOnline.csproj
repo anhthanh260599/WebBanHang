@@ -298,6 +298,14 @@
     <Compile Include="Migrations\202309021514373_UpdateModel3.designer.cs">
       <DependentUpon>202309021514373_UpdateModel3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202309031403001_AddLogoContactSliderMXHModels.cs" />
+    <Compile Include="Migrations\202309031403001_AddLogoContactSliderMXHModels.designer.cs">
+      <DependentUpon>202309031403001_AddLogoContactSliderMXHModels.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309031415038_AddModelsManagement.cs" />
+    <Compile Include="Migrations\202309031415038_AddModelsManagement.designer.cs">
+      <DependentUpon>202309031415038_AddModelsManagement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -310,6 +318,8 @@
     <Compile Include="Models\EF\Adv.cs" />
     <Compile Include="Models\EF\Category.cs" />
     <Compile Include="Models\EF\Contact.cs" />
+    <Compile Include="Models\EF\ContactInfo.cs" />
+    <Compile Include="Models\EF\Logo.cs" />
     <Compile Include="Models\EF\News.cs" />
     <Compile Include="Models\EF\Order.cs" />
     <Compile Include="Models\EF\OrderDetail.cs" />
@@ -317,6 +327,8 @@
     <Compile Include="Models\EF\Product.cs" />
     <Compile Include="Models\EF\ProductCategory.cs" />
     <Compile Include="Models\EF\ProductImage.cs" />
+    <Compile Include="Models\EF\Slider.cs" />
+    <Compile Include="Models\EF\SocialMediaProfiles.cs" />
     <Compile Include="Models\EF\Subscribe.cs" />
     <Compile Include="Models\EF\SystemSetting.cs" />
     <Compile Include="Models\EF\ThongKe.cs" />
@@ -3744,6 +3756,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202309021514373_UpdateModel3.resx">
       <DependentUpon>202309021514373_UpdateModel3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309031403001_AddLogoContactSliderMXHModels.resx">
+      <DependentUpon>202309031403001_AddLogoContactSliderMXHModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309031415038_AddModelsManagement.resx">
+      <DependentUpon>202309031415038_AddModelsManagement.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
