@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.EF.ProductCategory>
 
 
+
 @if (Model != null && Model.Any())
 {
     <div class="sidebar_section">
@@ -32,6 +33,14 @@
     </div>
 
 
+    <div class="sidebar_section">
+        <div class="sidebar_title">
+            <h5>Tìm kiếm sản phẩm</h5>
+        </div>
+        <div>
+           <input type="text" name="searchString" id="search" class="form-control" placeholder="Nhập tên sản phẩm">
+        </div>
+    </div>
 
     <!-- Price Range Filtering -->
     <div class="sidebar_section">

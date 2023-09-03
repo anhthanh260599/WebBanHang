@@ -27,8 +27,8 @@
                     <li><a href="index.html">Trang chủ</a></li>
                     <li class="active"><a href="/"><i class="fa fa-angle-right" aria-hidden="true"></i>Tất cả</a></li>
                 </ul>
+              
             </div>
-
             <!-- Sidebar -->
 
             <div class="sidebar">
@@ -188,7 +188,6 @@
                                         <div class="page_total"><span>of</span> 3</div>
                                         <div id="next_page_1" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
                                     </div>*@
-
                             </div>
 
                         </div>
@@ -208,4 +207,24 @@
     <script src="~/Content/assets/plugins/easing/easing.js"></script>
     <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
     <script src="~/Content/assets/js/categories_custom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.1/fuse.min.js"></script>
+
+    <script>
+    // Đợi cho trang web được tải hoàn toàn
+    $(document).ready(function () {
+        // Lắng nghe sự kiện khi người dùng nhập dữ liệu vào ô tìm kiếm
+        $('#search').on('input', function () {
+            var searchString = $(this).val().toLowerCase(); // Lấy nội dung của ô tìm kiếm và chuyển đổi thành chữ thường
+            $('.product-item').each(function () {
+                var productName = $(this).find('.product_name a').text().toLowerCase(); // Lấy tên sản phẩm và chuyển đổi thành chữ thường
+                // Kiểm tra xem tên sản phẩm có chứa chuỗi tìm kiếm không
+                if (productName.indexOf(searchString) === -1) {
+                    $(this).hide(); // Ẩn sản phẩm nếu không khớp
+                } else {
+                    $(this).show(); // Hiển thị sản phẩm nếu khớp
+                }
+            });
+        });
+    });
+    </script>
 }
