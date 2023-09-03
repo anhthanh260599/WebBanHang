@@ -28,7 +28,10 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
-
+        public DbSet<Logo> Logos { get; set; }
+        public DbSet<ContactInfo> ContactInfos { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
+        public DbSet<SocialMediaProfiles> SocialMediaProfiles { get; set; }
         public DbSet<ThongKe> ThongKes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Adv> Advs { get; set; }
