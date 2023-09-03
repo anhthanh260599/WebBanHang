@@ -8,6 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Colo Shop Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bỏ caching hoàn toàn -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
     <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/bootstrap4/bootstrap.min.css">
     <link href="~/Content/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
@@ -65,7 +68,7 @@
 
                                     <!-- Currency / Language / My Account -->
 
-                                    <li class="currency">
+                                    @*<li class="currency">
                                         <a href="#">
                                             usd
                                             <i class="fa fa-angle-down"></i>
@@ -88,7 +91,7 @@
                                             <li><a href="#">German</a></li>
                                             <li><a href="#">Spanish</a></li>
                                         </ul>
-                                    </li>
+                                    </li>*@
                                     <li style="min-width:150px;" class="account">
 
                                         @if (!Request.IsAuthenticated)
@@ -140,7 +143,7 @@
                     <div class="row">
                         <div class="col-lg-12 text-right">
                             <div class="logo_container">
-                                <a href="/">Bán<span> Điện thoại</span></a>
+                                <a href="/">Cà phê<span> Nhóm 4</span></a>
                             </div>
                             <nav class="navbar">
                                 @Html.Action("MenuTop", "Menu")
@@ -170,7 +173,7 @@
             <div class="hamburger_close"><i class="fa fa-times" aria-hidden="true"></i></div>
             <div class="hamburger_menu_content text-right">
                 <ul class="menu_top_nav">
-                    <li class="menu_item has-children">
+                    @*<li class="menu_item has-children">
                         <a href="#">
                             usd
                             <i class="fa fa-angle-down"></i>
@@ -193,7 +196,7 @@
                             <li><a href="#">German</a></li>
                             <li><a href="#">Spanish</a></li>
                         </ul>
-                    </li>
+                    </li>*@
                     <li class="menu_item has-children">
                         <a href="#">
                             My Account
@@ -204,12 +207,12 @@
                             <li><a href="/account/register"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
                         </ul>
                     </li>
-                    <li class="menu_item"><a href="#">home</a></li>
-                    <li class="menu_item"><a href="#">shop</a></li>
-                    <li class="menu_item"><a href="#">promotion</a></li>
-                    <li class="menu_item"><a href="#">pages</a></li>
-                    <li class="menu_item"><a href="#">blog</a></li>
-                    <li class="menu_item"><a href="#">contact</a></li>
+                    <li class="menu_item"><a href="/trang-chu">Trang chủ</a></li>
+                    <li class="menu_item"><a href="/post/gioi-thieu">Giới thiệu</a></li>
+                    <li class="menu_item"><a href="/san-pham">Sản phẩm</a></li>
+                    <li class="menu_item"><a href="/lien-he">Liên hệ</a></li>
+                    <li class="menu_item"><a href="/tin-tuc">Tin tức</a></li>
+                    <li class="menu_item"><a href="/post/khuyen-mai">Khuyến mãi</a></li>
                 </ul>
             </div>
         </div>
@@ -224,20 +227,20 @@
                     <div class="col-lg-6">
                         <div class="footer_nav_container d-flex flex-sm-row flex-column align-items-center justify-content-lg-start justify-content-center text-center">
                             <ul class="footer_nav">
-                                <li><a href="#">Blog</a></li>
+                                <li><a href="/tin-tuc">Tin tức</a></li>
                                 <li><a href="#">FAQs</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="/lien-he">Liên hệ</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="footer_social d-flex flex-row align-items-center justify-content-lg-end justify-content-center">
                             <ul>
-                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-skype" aria-hidden="true"></i></a></li>
-                                <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-skype" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-pinterest" aria-hidden="true"></i></a></li>
                             </ul>
                         </div>
                     </div>
