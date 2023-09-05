@@ -22,7 +22,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult GetStatistical (string fromDate, string toDate)
         {
-            var query = from o in db.Orders where o.TypePayment == 2
+            var query = from o in db.Orders where o.Status == 3
                         join od in db.OrderDetails on o.Id equals od.OrderID
                         join p in db.Products on od.ProductID equals p.Id
                         select new
