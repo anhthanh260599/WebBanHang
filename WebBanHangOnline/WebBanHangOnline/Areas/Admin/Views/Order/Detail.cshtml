@@ -115,12 +115,42 @@
                     </div>
                 </div>
 
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>Trạng thái thanh toán</label>
-                        <input type="text" readonly class="form-control" value="@(Model.TypePayment == 1? "Chưa thanh toán":"Đã thanh toán")" />
+                @if (Model.Status == 1)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                        </div>
                     </div>
-                </div>
+                }
+                @if (Model.Status == 2)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == 3)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Giao hàng thành công" />
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == 4)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Huỷ" />
+                        </div>
+                    </div>
+                }
             </div>
 
             <div class="row">
