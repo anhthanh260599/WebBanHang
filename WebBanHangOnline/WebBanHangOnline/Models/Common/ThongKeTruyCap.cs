@@ -6,6 +6,8 @@ using System.Web;
 using System.Data.SqlClient;
 using Dapper;
 using System.Data;
+using WebBanHangOnline.Models.EF;
+using System.Threading;
 
 namespace WebBanHangOnline.Models.Common
 {

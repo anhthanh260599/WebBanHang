@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using WebBanHangOnline.Models.Common;
 
 namespace WebBanHangOnline
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static Timer timer;
+
         protected void Application_Start()
         {
+            timer = new Timer(ExecuteStoredProcedure, null, 0, 6000); // 1 phút thực hiện stored 1 lần
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -55,6 +61,20 @@ namespace WebBanHangOnline
             Application.Lock();
             Application["visitors_online"] = Convert.ToInt32(Application["visitors_online"]) - 1; // đếm lượt truy cập số người online
             Application.UnLock();
+        }
+
+        private void ExecuteStoredProcedure(object state)
+        {
+            try
+            {
+                // Gọi stored procedure ở đây
+                WebBanHangOnline.Models.Common.ExecuteStoredProcedure.UpdateStatusIfNoChange();
+                HttpContext.Current.Application["LastStoredProcedureExecution"] = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
+            }
         }
     }
 }

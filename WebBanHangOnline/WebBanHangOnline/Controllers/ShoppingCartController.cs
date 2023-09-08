@@ -9,6 +9,8 @@ using WebBanHangOnline.Models.EF;
 using System.IO;
 using System.Configuration;
 using WebBanHangOnline.Models.Payment;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -65,13 +67,14 @@ namespace WebBanHangOnline.Controllers
                             db.SaveChanges();
                         }
                         //Thanh toan thanh cong
-                        ViewBag.InnerText = "Giao dịch được thực hiện thành công. Cảm ơn quý khách đã sử dụng dịch vụ";
+                        ViewBag.InnerText = "Giao dịch được thực hiện thành công. Cảm ơn quý khách đã sử dụng dịch vụ. Vui lòng kiểm tra thông tin đơn hàng tại email: " + itemOrder.Email;
                         //log.InfoFormat("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", orderId, vnpayTranId);
                     }
                     else
                     {
                         //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
                         ViewBag.InnerText = "Có lỗi xảy ra trong quá trình xử lý.Mã lỗi: " + vnp_ResponseCode;
+                        ViewBag.ThanhToanThatBai = "Thanh toán thất bại, vui lòng kiểm tra lại giao dịch";
                         //log.InfoFormat("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", orderId, vnpayTranId, vnp_ResponseCode);
                     }
                     //displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;

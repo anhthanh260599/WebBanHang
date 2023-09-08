@@ -1,6 +1,6 @@
 ﻿@using WebBanHangOnline.Models.Common
 @{
-    ViewBag.Title = "Thanh toán VNPAY Thành công";
+    ViewBag.Title = "Thanh toán VNPAY";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -41,10 +41,14 @@
                 <div class="col-md-12 text-center">
                     <h3>@ViewBag.Title</h3>
 
-                    @if (ViewBag.ThanhToanThanhCong!= null)
-                     {
-                        <p class="text-info">Bạn đã thanh toán thành công với @ViewBag.ThanhToanThanhCong</p>
-                     }
+                    @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThanhCong))
+                    {
+                        <p class="text-info">@ViewBag.ThanhToanThanhCong</p>
+                    }
+                    @if  (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
+                    {
+                        <p class="text-danger">@ViewBag.ThanhToanThatBai</p>
+                    }
                     <p> @ViewBag.InnerText </p>
                 </div>
             </div>
