@@ -185,6 +185,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
@@ -3487,6 +3488,9 @@
     <Content Include="Content\assets\plugins\moment\locales.min.js.map" />
     <Content Include="Content\assets\plugins\moment\moment-with-locales.min.js.map" />
     <Content Include="Content\assets\plugins\moment\moment.min.js.map" />
+    <Content Include="Areas\Admin\Views\HomeSlider\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\HomeSlider\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\HomeSlider\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3555,6 +3559,7 @@
     <Content Include="Views\News\Detail.cshtml" />
     <Content Include="Views\Artical\Index.cshtml" />
     <Content Include="Views\ShoppingCart\VnPay_Return.cshtml" />
+    <Content Include="Views\Home\Partial_HomeSlider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
