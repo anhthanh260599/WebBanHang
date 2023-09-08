@@ -17,6 +17,12 @@ namespace WebBanHangOnline.Controllers
             return View();
         }
 
+        public ActionResult Partial_HomeSlider()
+        {
+            var items = db.Sliders.ToList();
+            return PartialView(items);
+        }
+
         public ActionResult Partial_Subscribe()
         {
             return PartialView();

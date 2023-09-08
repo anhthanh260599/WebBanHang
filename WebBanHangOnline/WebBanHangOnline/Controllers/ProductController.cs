@@ -57,13 +57,6 @@ namespace WebBanHangOnline.Controllers
             return Json(new { success = true });
         }
 
-
-        public ActionResult Detail(int id)
-        {
-            var item = db.News.Find(id);
-            return View(item);
-        }
-
         public ActionResult Detail(string alias, int id)
         {
             var item = db.Products.Find(id);
