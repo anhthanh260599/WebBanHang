@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebBanHangOnline</RootNamespace>
     <AssemblyName>WebBanHangOnline</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -26,6 +26,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -207,6 +208,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202309090131021_CreateDB.cs" />
+    <Compile Include="Migrations\202309090131021_CreateDB.designer.cs">
+      <DependentUpon>202309090131021_CreateDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309090137559_UpdateDB.cs" />
+    <Compile Include="Migrations\202309090137559_UpdateDB.designer.cs">
+      <DependentUpon>202309090137559_UpdateDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309090139471_ABC.cs" />
+    <Compile Include="Migrations\202309090139471_ABC.designer.cs">
+      <DependentUpon>202309090139471_ABC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -231,6 +244,7 @@
     <Compile Include="Models\EF\ProductImage.cs" />
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaProfiles.cs" />
+    <Compile Include="Models\EF\Store.cs" />
     <Compile Include="Models\EF\Subscribe.cs" />
     <Compile Include="Models\EF\SystemSetting.cs" />
     <Compile Include="Models\EF\ThongKe.cs" />
@@ -3593,6 +3607,17 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202309090131021_CreateDB.resx">
+      <DependentUpon>202309090131021_CreateDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309090137559_UpdateDB.resx">
+      <DependentUpon>202309090137559_UpdateDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309090139471_ABC.resx">
+      <DependentUpon>202309090139471_ABC.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

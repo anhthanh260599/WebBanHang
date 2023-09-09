@@ -28,6 +28,8 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<Store> Stores { get; set; }
         public DbSet<Logo> Logos { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
         public DbSet<Slider> Sliders { get; set; }
