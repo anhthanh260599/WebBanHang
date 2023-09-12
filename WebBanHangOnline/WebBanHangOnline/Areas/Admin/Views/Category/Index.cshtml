@@ -62,6 +62,7 @@
                         <th>STT</th>
                         <th>Tên danh mục</th>
                         <th>Thứ tự</th>
+                        <th>Hiển thị</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -75,6 +76,12 @@
                                 <td>@i</td>
                                 <td>@item.Title</td>
                                 <td>@item.Position</td>
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
                                 <td>
                                     <a href="/admin/category/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
@@ -127,6 +134,28 @@
                         }
                     });
                 }
+            });
+
+            $('body').on('change', '.btnActive', function () {
+                //e.preventDefault();
+                var checkbox = $(this);
+                var id = checkbox.data("id");
+
+                $.ajax({
+                    url: '/admin/category/IsActive',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.IsActive) {
+                                checkbox.prop('checked', true);
+                            } else {
+
+                                checkbox.prop('checked', false);
+                            }
+                        }
+                    }
+                });
             });
         });
     </script>

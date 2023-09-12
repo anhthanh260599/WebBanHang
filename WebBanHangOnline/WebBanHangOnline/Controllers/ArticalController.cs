@@ -13,7 +13,7 @@ namespace WebBanHangOnline.Controllers
         // GET: Artical
         public ActionResult Index(string alias)
         {
-            var item = db.Posts.FirstOrDefault(x=>x.Alias == alias);
+            var item = db.Posts.Where(x=>x.IsActive).FirstOrDefault(x=>x.Alias == alias);
             return View(item);
         }
     }

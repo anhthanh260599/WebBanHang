@@ -23,6 +23,12 @@ namespace WebBanHangOnline.Controllers
             return PartialView(items);
         }
 
+        public ActionResult Partial_NewItem()
+        {
+            var item = db.Posts.Where(x=>x.Alias == "san-pham-moi" && x.IsActive).FirstOrDefault();
+            return PartialView(item);
+        }
+
         public ActionResult Partial_Subscribe()
         {
             return PartialView();
