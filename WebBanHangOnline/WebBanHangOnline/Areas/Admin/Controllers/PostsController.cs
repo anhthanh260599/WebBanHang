@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,6 +31,26 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Lấy thông tin người dùng hiện tại
+                var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
+
+                // Sử dụng DbContext để tìm ApplicationUser có UserId tương ứng
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                var currentUser = userManager.FindById(currentUserId);
+
+                if (currentUser != null)
+                {
+                    // Gán giá trị FullName của người dùng hiện tại cho CreateBy của đối tượng News
+                    model.CreateBy = currentUser.FullName;
+                }
+                else
+                {
+                    // Xử lý trường hợp không tìm thấy người dùng
+                    // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
+                    model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
+                }
+
+
                 model.CreateDate = DateTime.Now;
                 model.CategoryID = 18;
                 model.ModifierDate = DateTime.Now;
@@ -53,6 +75,27 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 db.Posts.Attach(model);
+
+                // Lấy thông tin người dùng hiện tại
+                var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
+
+                // Sử dụng DbContext để tìm ApplicationUser có UserId tương ứng
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                var currentUser = userManager.FindById(currentUserId);
+
+                if (currentUser != null)
+                {
+                    // Gán giá trị FullName của người dùng hiện tại cho CreateBy của đối tượng News
+                    model.CreateBy = currentUser.FullName;
+                }
+                else
+                {
+                    // Xử lý trường hợp không tìm thấy người dùng
+                    // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
+                    model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
+                }
+
+
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;

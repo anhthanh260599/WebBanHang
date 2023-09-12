@@ -15,8 +15,23 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/Category
         public ActionResult Index()
         {
-            var items = db.Categories;
+            var items = db.Categories.OrderBy(x=>x.Position).ToList();
             return View(items);
+        }
+
+        [HttpPost]
+        public ActionResult IsActive(int id)
+        {
+
+            var item = db.Categories.Find(id);
+            if (item != null)
+            {
+                item.IsActive = !item.IsActive;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, IsActive = item.IsActive });
+            }
+            return Json(new { success = false });
         }
 
         public ActionResult Add() 
@@ -63,6 +78,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 db.Entry(model).Property(x => x.SeoDescription).IsModified = true;
                 db.Entry(model).Property(x => x.SeoTitle).IsModified = true;
                 db.Entry(model).Property(x => x.Position).IsModified = true;
+                db.Entry(model).Property(x => x.IsActive).IsModified = true;
                 db.Entry(model).Property(x => x.ModifierDate).IsModified = true;
                 db.Entry(model).Property(x => x.ModifierBy).IsModified = true;
 
