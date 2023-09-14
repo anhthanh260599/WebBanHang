@@ -169,7 +169,12 @@
                     <div class="row">
                         <div class="col-lg-12 text-right">
                             <div class="logo_container">
-                                <a href="/">Cà phê<span> Nhóm 4</span></a>
+                                @*<a href="/">Cà phê<span> Nhóm 4</span></a>*@
+                                <a href="/">
+                                    @*<img src="~/Content/assets/images/blog_1.jpg" width="50px;" height="50px" />*@
+                                    @Html.Action("Partial_Logo", "Logo")
+
+                                </a>
                             </div>
                             <nav class="navbar">
                                 @Html.Action("MenuTop", "Menu")

@@ -188,6 +188,7 @@
     <Compile Include="Areas\Admin\Controllers\ContactInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LogoController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\FooterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
@@ -3512,6 +3514,9 @@
     <Content Include="Areas\Admin\Views\SocialMediaPlugin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SocialMediaPlugin\Add.cshtml" />
     <Content Include="Areas\Admin\Views\SocialMediaPlugin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Logo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Logo\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Logo\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3587,6 +3592,7 @@
     <Content Include="Views\Footer\Partial_FooterSocialMedia.cshtml" />
     <Content Include="Views\Footer\Partial_FooterSocialMediaPlugin.cshtml" />
     <Content Include="Views\Footer\Partial_FooterContactInfo.cshtml" />
+    <Content Include="Views\Logo\Partial_Logo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
