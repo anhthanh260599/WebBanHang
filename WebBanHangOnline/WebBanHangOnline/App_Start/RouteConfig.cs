@@ -91,6 +91,20 @@ namespace WebBanHangOnline
               namespaces: new[] { "WebBanHangOnline.Controllers" }
           );
 
+            routes.MapRoute( // Trang cửa hàng
+           name: "Store",
+           url: "cua-hang",
+           defaults: new { controller = "Store", action = "Index", alias = UrlParameter.Optional },
+           namespaces: new[] { "WebBanHangOnline.Controllers" }
+       );
+
+            routes.MapRoute( // Trang chi tiết cửa hàng
+          name: "DetailStore",
+          url: "cua-hang/chi-tiet/{alias}-s{id}",
+          defaults: new { controller = "Store", action = "Detail", id = UrlParameter.Optional },
+          namespaces: new[] { "WebBanHangOnline.Controllers" }
+        );
+
             routes.MapRoute( // Trang bài viết khuyến mãi
            name: "Posts",
            url: "post/{alias}",

@@ -196,6 +196,7 @@
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -3493,6 +3495,9 @@
     <Content Include="Areas\Admin\Views\HomeSlider\Index.cshtml" />
     <Content Include="Areas\Admin\Views\HomeSlider\Add.cshtml" />
     <Content Include="Areas\Admin\Views\HomeSlider\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Store\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Store\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Store\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3563,6 +3568,8 @@
     <Content Include="Views\ShoppingCart\VnPay_Return.cshtml" />
     <Content Include="Views\Home\Partial_HomeSlider.cshtml" />
     <Content Include="Views\Home\Partial_NewItem.cshtml" />
+    <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Store\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
