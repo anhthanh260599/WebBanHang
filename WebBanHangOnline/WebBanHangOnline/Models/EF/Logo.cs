@@ -14,5 +14,8 @@ namespace WebBanHangOnline.Models.EF
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
         public string LogoImage{ get; set; }
+        public string Width { get; set; }
+        public string Height { get; set; }
+
     }
 }

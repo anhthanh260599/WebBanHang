@@ -352,11 +352,5 @@ E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.GenerateResource.cache
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB.resources
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.ABC.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB.resources
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.AddFeildLogo.resources
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.GenerateResource.cache
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB1.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB23.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB13.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.UpdateDB88.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.AddModel.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.AddModell.resources
