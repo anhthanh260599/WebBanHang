@@ -29,6 +29,7 @@ namespace WebBanHangOnline.Models
         {
         }
 
+        public DbSet<SocialMediaPlugin> SocialMediaPlugins { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Logo> Logos { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }

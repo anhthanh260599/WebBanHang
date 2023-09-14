@@ -13,10 +13,8 @@ namespace WebBanHangOnline.Models.EF
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        [StringLength(15)]
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
+        public string InfoName { get; set; }
+        public string InfoValue { get; set; }
+        public string Image { get; set; }
     }
 }

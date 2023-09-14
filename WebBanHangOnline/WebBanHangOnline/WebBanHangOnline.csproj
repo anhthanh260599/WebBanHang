@@ -185,6 +185,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ContactInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
@@ -196,10 +197,13 @@
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SocialMediaController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SocialMediaPluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\FooterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -233,6 +237,7 @@
     <Compile Include="Models\EF\ProductCategory.cs" />
     <Compile Include="Models\EF\ProductImage.cs" />
     <Compile Include="Models\EF\Slider.cs" />
+    <Compile Include="Models\EF\SocialMediaPlugin.cs" />
     <Compile Include="Models\EF\SocialMediaProfiles.cs" />
     <Compile Include="Models\EF\Store.cs" />
     <Compile Include="Models\EF\Subscribe.cs" />
@@ -3498,6 +3503,15 @@
     <Content Include="Areas\Admin\Views\Store\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Store\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Store\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMedia\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMedia\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMedia\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ContactInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ContactInfo\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ContactInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMediaPlugin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMediaPlugin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\SocialMediaPlugin\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -3570,6 +3584,9 @@
     <Content Include="Views\Home\Partial_NewItem.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\Store\Detail.cshtml" />
+    <Content Include="Views\Footer\Partial_FooterSocialMedia.cshtml" />
+    <Content Include="Views\Footer\Partial_FooterSocialMediaPlugin.cshtml" />
+    <Content Include="Views\Footer\Partial_FooterContactInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
