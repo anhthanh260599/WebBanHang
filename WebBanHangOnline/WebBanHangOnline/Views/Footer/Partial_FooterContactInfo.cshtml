@@ -1,0 +1,13 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.ContactInfo>
+
+@{
+    ViewBag.Title = "Partial_FooterContactInfo";
+}
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <li class="footer-item"> <img src="@item.Image" style="width: 15px; height: 100%; margin-right: 12px;" />@item.InfoName: @item.InfoValue</li>
+    }
+}
