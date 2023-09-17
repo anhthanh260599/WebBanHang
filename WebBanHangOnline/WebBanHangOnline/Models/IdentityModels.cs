@@ -31,6 +31,10 @@ namespace WebBanHangOnline.Models
         {
         }
 
+        public DbSet<Matterial> Matterials { get; set; }
+        public DbSet<OrderMatts> OrderMatts { get; set; }
+        public DbSet<OrderDetailMatts> OrderDetailMatts { get; set; }
+
         public DbSet<SocialMediaPlugin> SocialMediaPlugins { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Logo> Logos { get; set; }
