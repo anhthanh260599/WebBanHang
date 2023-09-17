@@ -189,6 +189,7 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MatterialsController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Areas\Admin\Controllers\SocialMediaController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaPluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StoreOrderController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -231,9 +233,12 @@
     <Compile Include="Models\EF\Contact.cs" />
     <Compile Include="Models\EF\ContactInfo.cs" />
     <Compile Include="Models\EF\Logo.cs" />
+    <Compile Include="Models\EF\Matterial.cs" />
     <Compile Include="Models\EF\News.cs" />
     <Compile Include="Models\EF\Order.cs" />
     <Compile Include="Models\EF\OrderDetail.cs" />
+    <Compile Include="Models\EF\OrderDetailMatts.cs" />
+    <Compile Include="Models\EF\OrderMatts.cs" />
     <Compile Include="Models\EF\Posts.cs" />
     <Compile Include="Models\EF\Product.cs" />
     <Compile Include="Models\EF\ProductCategory.cs" />
@@ -3517,6 +3522,10 @@
     <Content Include="Areas\Admin\Views\Logo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Logo\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Logo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Matterials\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Matterials\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Matterials\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\StoreOrder\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
