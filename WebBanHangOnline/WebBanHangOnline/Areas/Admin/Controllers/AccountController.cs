@@ -60,7 +60,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/Account
         public ActionResult Index()
         {
-            var items = db.Users.ToList();
+            var items = db.Users.OrderByDescending(x=>x.CreatedDate).ToList();
             return View(items);
         }
 
@@ -133,6 +133,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     UserName = model.UserName, 
                     Email = model.Email, 
                     FullName = model.FullName, 
+                    CreatedDate = DateTime.Now,
                     Phone = model.Phone 
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);

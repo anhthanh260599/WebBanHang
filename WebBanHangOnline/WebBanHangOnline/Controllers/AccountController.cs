@@ -53,6 +53,35 @@ namespace WebBanHangOnline.Controllers
             }
         }
 
+        public async Task<ActionResult> Profile()
+        {
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            var item = new CreateAccountrViewModel();
+            item.Email = user.Email;
+            item.FullName = user.FullName;
+            item.Phone = user.Phone;
+            item.UserName = user.UserName;
+            item.CreatedDate = user.CreatedDate;
+            item.Address = user.Address;
+            return View(item);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateProfile(CreateAccountrViewModel request)
+        {
+            var user = await UserManager.FindByEmailAsync(request.Email);
+            user.FullName = request.FullName;
+            user.Phone = request.Phone;
+            user.Address = request.Address;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Profile");
+            }
+            return View(request);
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -153,10 +182,12 @@ namespace WebBanHangOnline.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { 
-                    UserName = model.UserName,
+                    UserName = model.Email,
                     Email = model.Email,
                     FullName = model.FullName,
+                    CreatedDate = DateTime.Now,
                     Phone = model.Phone
+                    
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

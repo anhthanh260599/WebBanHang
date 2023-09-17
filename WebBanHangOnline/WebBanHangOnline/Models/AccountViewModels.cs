@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebBanHangOnline.Models
@@ -13,6 +14,8 @@ namespace WebBanHangOnline.Models
         [Required]
         public string Phone { get; set; }
         public string Role { get; set; }
+        public string Address { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [Required]
         [EmailAddress]
@@ -96,8 +99,8 @@ namespace WebBanHangOnline.Models
 
     public class RegisterViewModel
     {
-        [Required]
-        public string UserName { get; set; }
+        //[Required]
+        //public string UserName { get; set; }
         [Required]
         public string FullName { get; set; }
         [Required]
@@ -107,7 +110,7 @@ namespace WebBanHangOnline.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
+        public DateTime CreatedDate { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
