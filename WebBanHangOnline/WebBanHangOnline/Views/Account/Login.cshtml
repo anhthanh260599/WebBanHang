@@ -14,12 +14,12 @@
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <h4>Sử dụng tên đăng nhập và mật khẩu bạn vừa mới đăng ký.</h4>
+                        <h4>Sử dụng email và mật khẩu mà bạn đã đăng ký.</h4>
                         <hr />
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group">
                             @*@Html.LabelFor(m => m.UserName, new { @class = "col-md-2 col-form-label" })*@
-                            <label class="col-12">Tên tài khoản</label>
+                            <label class="col-12">Email/Tên tài khoản</label>
                             <div class="col-md-10">
                                 @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })

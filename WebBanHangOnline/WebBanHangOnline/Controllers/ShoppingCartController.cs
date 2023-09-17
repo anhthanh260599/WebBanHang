@@ -11,12 +11,52 @@ using System.Configuration;
 using WebBanHangOnline.Models.Payment;
 using System.Data.SqlClient;
 using System.Data;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace WebBanHangOnline.Controllers
 {
     public class ShoppingCartController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+
+        private ApplicationSignInManager _signInManager;
+        private ApplicationUserManager _userManager;
+
+        public ShoppingCartController()
+        {
+        }
+
+        public ShoppingCartController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+
+        public ApplicationSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
+
         // GET: ShoppingCart
         public ActionResult Index()
         {
@@ -105,6 +145,11 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult Partial_Checkout()
         {
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            if (user != null)
+            {
+                ViewBag.User = user;
+            }
             return PartialView();
         }
 
