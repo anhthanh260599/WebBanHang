@@ -14,6 +14,7 @@ namespace WebBanHangOnline.Models
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ")]
         public string Address { get; set; }
         public string Email { get; set; }
+        public string CustomerID { get; set; }
         public int TypePayment { get; set; }
         public int TypePaymentVN { get; set; }
 

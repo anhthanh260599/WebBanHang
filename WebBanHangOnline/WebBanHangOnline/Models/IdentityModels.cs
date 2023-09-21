@@ -15,6 +15,7 @@ namespace WebBanHangOnline.Models
         public string Phone { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Address { get; set; }
+        public string Avatar { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -30,7 +31,7 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
-
+        public DbSet<ReviewProduct> ReviewProducts { get; set; }
         public DbSet<Matterial> Matterials { get; set; }
         public DbSet<OrderMatts> OrderMatts { get; set; }
         public DbSet<OrderDetailMatts> OrderDetailMatts { get; set; }

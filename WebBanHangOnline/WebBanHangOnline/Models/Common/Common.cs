@@ -83,5 +83,54 @@ namespace WebBanHangOnline.Models.Common
                        || value is double
                        || value is decimal;
         }
+
+        public static string HtmlStars(int stars)
+        {
+            var str = "";
+            if (stars == 1)
+            {
+                str = @"<li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>";
+            }
+
+            if (stars == 2)
+            {
+                str = @"  <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>";
+            }
+
+            if (stars == 3)
+            {
+                str = @"<li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>";
+            }
+
+            if (stars == 4)
+            {
+                str = @"<li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                         <li><i class='fa-regular fa-star' aria-hidden='true'></i></li>";
+            }
+            if (stars == 5)
+            {
+                str = @"<li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>
+                          <li><i class='fa-solid fa-star' aria-hidden='true'></i></li>";
+            }
+            return str;
+        }
     }
 }

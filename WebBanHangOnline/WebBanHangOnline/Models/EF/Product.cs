@@ -15,8 +15,9 @@ namespace WebBanHangOnline.Models.EF
 
         public Product() 
         {
-            this.ProductImage = new HashSet<ProductImage>();
-            this.OrderDetails = new HashSet<OrderDetail>();
+            this.ProductImage = new HashSet<ProductImage>(); // 1 sản phẩm có nhiều ảnh
+            this.OrderDetails = new HashSet<OrderDetail>(); // 1 sản phẩm có nhiều chi tiết đơn hàng
+            this.ReviewProducts = new HashSet<ReviewProduct>(); // 1 sản phẩm có nhiều review
         }
 
         [Key]
@@ -49,8 +50,8 @@ namespace WebBanHangOnline.Models.EF
         public string SeoDescription { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
-        public virtual ICollection<ProductImage> ProductImage { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-
+        public virtual ICollection<ProductImage> ProductImage { get; set; } // 1 sản phẩm có nhiều ảnh
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } // 1 sản phẩm có nhiều chi tiết đơn hàng
+        public virtual ICollection<ReviewProduct> ReviewProducts { get; set; } // 1 sản phẩm có nhiều review
     }
 }
