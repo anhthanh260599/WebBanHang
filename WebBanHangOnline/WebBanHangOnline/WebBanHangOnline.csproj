@@ -186,6 +186,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ContactInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DocumentsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogoController.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Models\EF\Category.cs" />
     <Compile Include="Models\EF\Contact.cs" />
     <Compile Include="Models\EF\ContactInfo.cs" />
+    <Compile Include="Models\EF\Documents.cs" />
     <Compile Include="Models\EF\Logo.cs" />
     <Compile Include="Models\EF\Matterial.cs" />
     <Compile Include="Models\EF\News.cs" />
@@ -324,6 +326,9 @@
     <Content Include="Content\assets\images\desc_1.jpg" />
     <Content Include="Content\assets\images\desc_2.jpg" />
     <Content Include="Content\assets\images\desc_3.jpg" />
+    <Content Include="Content\assets\images\logo-excel.png" />
+    <Content Include="Content\assets\images\logo-pdf.png" />
+    <Content Include="Content\assets\images\logo-word.png" />
     <Content Include="Content\assets\images\map_marker.png" />
     <Content Include="Content\assets\images\product_1.png" />
     <Content Include="Content\assets\images\product_10.png" />
@@ -3529,6 +3534,9 @@
     <Content Include="Areas\Admin\Views\Matterials\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\StoreOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Partial_Profile.cshtml" />
+    <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Documents\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Documents\Edit.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
