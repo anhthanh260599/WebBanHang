@@ -18,6 +18,18 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-4">
+            <h5>Ảnh đại diện</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <img style="width:100px; height:100px; border-radius:50%;" src="@Model.Avatar" />
+        </div>
+    </div>
+
     @using (Html.BeginForm("UpdateProfile", "Account"))
     {
         @Html.ValidationSummary(false)
@@ -59,8 +71,24 @@
                     <input type="text" class="form-control" name="Address" value="@Model.Address" />
                 </div>
             </div>
-
         </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Ảnh đại diện</label>
+                    <div class="input-group" style="width:100%;">
+                        <div class="custom-file">
+                            <input type="text" id="txtImage" style="width:100%" name="Avatar" value="@Model.Avatar" placeholder="Chọn ảnh từ máy tính" />
+                        </div>
+                        <div class="input-group-append">
+                            <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-2">
                 <button type="submit" class="btn btn-danger">Cập nhật</button>
@@ -69,5 +97,15 @@
     }
 </div>
 @section Scripts {
+
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fieldUrl) {
+                document.getElementById(field).value = fieldUrl;
+            };
+            finder.popup();
+        }
+    </script>
 }

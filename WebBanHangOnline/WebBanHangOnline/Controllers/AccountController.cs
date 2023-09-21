@@ -63,6 +63,7 @@ namespace WebBanHangOnline.Controllers
             item.UserName = user.UserName;
             item.CreatedDate = user.CreatedDate;
             item.Address = user.Address;
+            item.Avatar = user.Avatar;
             return View(item);
         }
 
@@ -74,6 +75,7 @@ namespace WebBanHangOnline.Controllers
             user.FullName = request.FullName;
             user.Phone = request.Phone;
             user.Address = request.Address;
+            user.Avatar = request.Avatar;
             var result = await UserManager.UpdateAsync(user);
             if (result.Succeeded)
             {

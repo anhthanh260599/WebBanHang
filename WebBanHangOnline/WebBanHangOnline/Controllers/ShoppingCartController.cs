@@ -12,6 +12,7 @@ using WebBanHangOnline.Models.Payment;
 using System.Data.SqlClient;
 using System.Data;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -175,6 +176,10 @@ namespace WebBanHangOnline.Controllers
                         Quantity = x.Quantity
 
                     }));
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        order.CustomerID = User.Identity.GetUserId();
+                    }
                     order.Quantity = cart.Items.Sum(x=>x.Quantity);
                     order.Email = request.Email;
                     order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));

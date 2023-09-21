@@ -32,6 +32,7 @@ namespace WebBanHangOnline.Models.EF
         public int TypePayment { get; set; }
         public int Status { get; set; }
 
+        public string CustomerID { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
 
     }

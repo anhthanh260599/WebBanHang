@@ -2,16 +2,19 @@
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="~/Uploads/images/e12c07089e6070061ac62f1d65702193.jpg" class="img-circle elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                @if (Request.IsAuthenticated)
-                {
-                    <a href="#" class="d-block">@User.Identity.Name</a>
-                }
-                @*<a href="#" class="d-block">Nguyễn Anh Thành</a>*@
-            </div>
+            @*<div class="image">
+            <img src="" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            @if (Request.IsAuthenticated)
+            {
+                <a href="#" class="d-block">@User.Identity.Name</a>
+            }
+        </div>*@
+            @{
+                var profileHtml = Html.Action("Partial_Profile", "Account", new { area = "Admin" });
+            }
+            @Html.Raw(profileHtml)
         </div>
 
         <!-- SidebarSearch Form -->
@@ -131,13 +134,13 @@
                         <li class="nav-item">
                             <a href="/admin/storeOrder" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Đặt nguyên vật liệu</p>
+                                <p>Đặt nguyên vật liệu (comming soon)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Quản lý đơn NVL</p>
+                                <p>Quản lý đơn NVL (comming soon)</p>
                             </a>
                         </li>
                     </ul>
