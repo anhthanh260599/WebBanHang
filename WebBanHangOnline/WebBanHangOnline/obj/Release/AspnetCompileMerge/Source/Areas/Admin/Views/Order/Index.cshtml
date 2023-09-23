@@ -206,11 +206,20 @@
                 data: { id: id, trangThai: trangThai },
                 success: function (rs) {
                     if (rs.success) {
-                        location.reload();
+                        //alert(rs.message)
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: rs.message,
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Reload trang sau khi người dùng nhấn OK
+                            }
+                        });
                     }
                 }
             })
-
         })
     });
     </script>    

@@ -17,8 +17,14 @@
             data: { id: id, quantity : quantity },
             success: function (rs) {
                 if (rs.success) {
-                    $('#checkout_items').html(rs.Count)
-                    alert(rs.message)
+                    $('#checkout_items').html(rs.Count);
+                    //alert(rs.message)
+                    Swal.fire({
+                        icon: 'success', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                        title: 'Thành công',
+                        text: rs.message,
+                        confirmButtonText: 'OK'
+                    });
                 }
             }
         });
