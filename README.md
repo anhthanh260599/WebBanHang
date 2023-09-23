@@ -18,3 +18,12 @@ Chức năng chính:
 - Quản lý tài khoản
 - Quản lý sản phẩm
 ..v.v...
+
+  Account thanh toán VNPAY Demo:
+ - Ngân hàng:	NCB
+ - Số thẻ:	9704198526191432198
+ - Tên chủ thẻ:	NGUYEN VAN A
+ - Ngày phát hành:	07/15
+ - Mật khẩu OTP:	123456
+Danh sách account thanh toán mẫu:
+https://sandbox.vnpayment.vn/apis/vnpay-demo/
