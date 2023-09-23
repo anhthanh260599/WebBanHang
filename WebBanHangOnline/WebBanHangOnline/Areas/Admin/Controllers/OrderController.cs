@@ -43,10 +43,10 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 item.Status = trangThai;
                 db.Entry(item).Property(x=>x.Status).IsModified = true;
                 db.SaveChanges();
-                return Json(new { success = true, message = Message.SuccessSaveChange });
+                return Json(new { success = true, message = Message.SuccessSaveChange.ToString() });
 
             }
-            return Json(new {success  = false, message = Message.FailureSaveChange });
+            return Json(new {success  = false, message = Message.FailureSaveChange.ToString() });
         }
     }
 }

@@ -38,7 +38,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/Store
         public ActionResult Index()
         {
-            var items = db.Stores.ToList();
+            var items = db.Stores.OrderByDescending(x=>x.Id).ToList();
             return View(items);
         }
 
