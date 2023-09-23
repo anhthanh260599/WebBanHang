@@ -6,6 +6,7 @@ Hosting:
 
 Account đăng nhập trang admin:
     - admin / admin1
+    
     - anhthanh2605 / 123456
 
 Web có thể hoạt động như 1 trang web bán hàng thực thụ
