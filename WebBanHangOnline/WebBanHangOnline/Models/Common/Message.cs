@@ -9,10 +9,12 @@ namespace WebBanHangOnline.Models.Common
 {
     public class Message
     {
-        public static IHtmlString Brand { get; } = new HtmlString("Cà phê nhóm 4");
+        public static IHtmlString Brand { get; } = new HtmlString("FourC");
+        public static IHtmlString SuccessDeleted { get; } = new HtmlString("Xoá thành công!");
+        public static IHtmlString SuccessDeletedSelected { get; } = new HtmlString("Các mục đã được xoá thành công!");
         public static IHtmlString NoMessage { get; } = new HtmlString("");
-        public static IHtmlString SuccessSaveChange { get; } = new HtmlString("Thay đổi thành công");
-        public static IHtmlString FailureSaveChange { get; } = new HtmlString("Thay đổi thất bại, vui lòng kiểm tra lại thông tin");
+        public static IHtmlString SuccessSaveChange { get; } = new HtmlString("Cập nhật thành công");
+        public static IHtmlString FailureSaveChange { get; } = new HtmlString("Cập nhật thất bại, vui lòng kiểm tra lại thông tin");
         public static IHtmlString NoRecord { get; } = new HtmlString("Không có bản ghi nào!");
         public static IHtmlString RecordNotChecked { get; } = new HtmlString("Vui lòng chọn bản ghi");
         public static IHtmlString ConfirmDelete { get; } = new HtmlString("Bạn có muốn xoá bản ghi này không?");

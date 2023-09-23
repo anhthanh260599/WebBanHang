@@ -14,7 +14,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/ContactInfo
         public ActionResult Index()
         {
-            var items = db.ContactInfos.ToList();
+            var items = db.ContactInfos.OrderByDescending(x=>x.Id).ToList();
             return View(items);
         }
 
