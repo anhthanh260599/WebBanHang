@@ -131,6 +131,7 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult CheckoutSuccess()
         {
+            string email = TempData["EmailCustomer"] as string;
             return View();
         }
 
@@ -182,6 +183,7 @@ namespace WebBanHangOnline.Controllers
                     }
                     order.Quantity = cart.Items.Sum(x=>x.Quantity);
                     order.Email = request.Email;
+                    TempData["EmailCustomer"] = order.Email;
                     order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;

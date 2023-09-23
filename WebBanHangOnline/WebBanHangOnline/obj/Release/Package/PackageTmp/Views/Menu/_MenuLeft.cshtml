@@ -1,0 +1,106 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.ProductCategory>
+
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="sidebar_section">
+        <div class="sidebar_title">
+            <h5>Danh mục</h5>
+        </div>
+        <ul class="sidebar_categories">
+            <li style="font-weight:bold"><a href="/san-pham">Tất cả</a></li>
+            @foreach (var item in Model)
+            {
+
+                if (ViewBag.CateId == item.Id)
+                {
+                    <li class="active"><a href="/san-pham/@item.Alias-@item.Id"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>@item.Title</a></li>
+                }
+                else
+                {
+
+                    <li><a href="/san-pham/@item.Alias-@item.Id">@item.Title</a></li>
+                }
+            }
+
+            @*<li class="active"><a href="#"><span><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>Women</a></li>
+                <li><a href="#">Accessories</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Collection</a></li>
+                <li><a href="#">Shop</a></li>*@
+        </ul>
+    </div>
+
+
+    <div class="sidebar_section">
+        <div class="sidebar_title">
+            <h5>Tìm kiếm sản phẩm</h5>
+        </div>
+        <div>
+           <input type="text" name="searchString" id="search" class="form-control" placeholder="Nhập tên sản phẩm">
+        </div>
+    </div>
+
+    <!-- Price Range Filtering -->
+    <div class="sidebar_section">
+            <div class="sidebar_title">
+                <h5>Khoảng giá</h5>
+            </div>
+            <p>
+                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                <input type="hidden" id="FromAmount" />
+                <input type="hidden" id="ToAmount" />
+
+            </p>
+            <div id="slider-range"></div>
+            <div class="filter_button"><span>Lọc</span></div>
+
+    </div>
+
+    <div class="sidebar_section">
+        <div class="sidebar_title">
+            <h5>Lượt truy cập</h5>
+        </div>
+        <div>
+            @Html.Action("Refresh", "Home")
+        </div>
+    </div>
+
+    <!-- Sizes -->
+    @*<div class="sidebar_section">
+            <div class="sidebar_title">
+                <h5>Sizes</h5>
+            </div>
+            <ul class="checkboxes">
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>S</span></li>
+                <li class="active"><i class="fa fa-square" aria-hidden="true"></i><span>M</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>L</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>XL</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>XXL</span></li>
+            </ul>
+        </div>*@
+
+    <!-- Color -->
+    @*<div class="sidebar_section">
+            <div class="sidebar_title">
+                <h5>Color</h5>
+            </div>
+            <ul class="checkboxes">
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Black</span></li>
+                <li class="active"><i class="fa fa-square" aria-hidden="true"></i><span>Pink</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>White</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Blue</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Orange</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>White</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Blue</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Orange</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>White</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Blue</span></li>
+                <li><i class="fa fa-square-o" aria-hidden="true"></i><span>Orange</span></li>
+            </ul>
+            <div class="show_more">
+                <span><span>+</span>Show More</span>
+            </div>
+        </div>*@
+}

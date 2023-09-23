@@ -1,0 +1,13 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.SocialMediaProfiles>
+
+@{
+    ViewBag.Title = "Partial_FooterSocialMedia";
+}
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <li class="footer-item_social-media"><a href="@item.LinkSocialMedia"><img class="social_media_icon" src="@item.LogoSocialMedia" /></a></li>
+    }
+}
