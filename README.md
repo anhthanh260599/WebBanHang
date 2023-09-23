@@ -25,5 +25,6 @@ Chức năng chính:
  - Tên chủ thẻ:	NGUYEN VAN A
  - Ngày phát hành:	07/15
  - Mật khẩu OTP:	123456
-Danh sách account thanh toán mẫu:
+
+Danh sách account/thẻ thanh toán mẫu:
 https://sandbox.vnpayment.vn/apis/vnpay-demo/
