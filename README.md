@@ -1,4 +1,3 @@
-# WebBanHang
 
 Hosting:
 - link trang chủ: http://anhthanh260599-001-site1.ftempurl.com/
