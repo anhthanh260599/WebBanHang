@@ -27,7 +27,7 @@
     <link rel="canonical" href="https://www.ten_mien_/" />
     <meta name="robots" content="index,follow,noodp" />
     <meta name="robots" content="noarchive">
-    <meta property="og:site_name" content="Cà phê nhóm 4" />
+    <meta property="og:site_name" content="@Message.Brand.ToString()" />
     <meta property="og:type" content="Website" />
     <meta property="og:locale" content="vi_VN" />
     @*<meta property="fb:app_id" content="232505114857147" />*@
@@ -257,7 +257,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-3">
-                        <h5 class="footer_title">Về Coffour</h5>
+                        <h5 class="footer_title">Về @Message.Brand</h5>
                         <ul class="footer_list">
                             <li class="footer-item"><a class="footer-link" href="/post/gioi-thieu">Giới thiệu</a></li>
                             <li class="footer-item"><a class="footer-link" href="/post/huong-dan-mua-online">Hướng dẫn mua online</a></li>
@@ -346,6 +346,8 @@
 
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
+
+    @* SweetAlert *@
     <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
     <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
@@ -359,6 +361,7 @@
     @*<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
     <script src="~/Content/ckeditor/ckeditor.js"></script>
     <script src="~/Content/ckfinder/ckfinder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -187,9 +187,10 @@ namespace WebBanHangOnline.Controllers
                     order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
-                    order.ModifierDate = DateTime.Now;
+                    order.ModifierDate = DateTime.Now.AddDays(1).AddHours(2);
                     // Tạo mã đơn hàng
-                    order.CreateDate = DateTime.Now;
+                    order.CreateDate = DateTime.Now.AddDays(1).AddHours(2);
+
                     //Random rd = new Random();
                     //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
 
