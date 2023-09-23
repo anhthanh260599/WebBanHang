@@ -1,0 +1,111 @@
+﻿@model WebBanHangOnline.Models.CreateAccountrViewModel
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+
+<style>
+    .section_container {
+        margin-top: 200px;
+    }
+</style>
+
+<div class="container section_container">
+    <div class="row">
+        <div class="col-12">
+            <h2>@ViewBag.Title</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <h5>Ảnh đại diện</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <img style="width:100px; height:100px; border-radius:50%;" src="@Model.Avatar" />
+        </div>
+    </div>
+
+    @using (Html.BeginForm("UpdateProfile", "Account"))
+    {
+        @Html.ValidationSummary(false)
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input type="text" class="form-control" name="FullName" value="@Model.FullName" />
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" class="form-control" name="Phone" value="@Model.Phone" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="Email" value="@Model.Email" readonly />
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Ngày gia nhập</label>
+                    <input type="text" class="form-control" name="CreatedDate" value="@Model.CreatedDate.ToString("dd/MM/yyyy")" readonly />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text" class="form-control" name="Address" value="@Model.Address" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Ảnh đại diện</label>
+                    <div class="input-group" style="width:100%;">
+                        <div class="custom-file">
+                            <input type="text" id="txtImage" style="width:100%" name="Avatar" value="@Model.Avatar" placeholder="Chọn ảnh từ máy tính" />
+                        </div>
+                        <div class="input-group-append">
+                            <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-danger">Cập nhật</button>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fieldUrl) {
+                document.getElementById(field).value = fieldUrl;
+            };
+            finder.popup();
+        }
+    </script>
+}
