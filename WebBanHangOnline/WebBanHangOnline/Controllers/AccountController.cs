@@ -10,12 +10,14 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.Common;
+using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -82,6 +84,25 @@ namespace WebBanHangOnline.Controllers
                 return RedirectToAction("Profile");
             }
             return View(request);
+        }
+
+        public ActionResult OrderHistory()
+        {
+            var userID = User.Identity.GetUserId();
+            var items = db.Orders.OrderByDescending(x=>x.Id).Where(x=>x.CustomerID == userID).ToList();
+            return View(items);
+        }
+
+        public ActionResult OrderHistoryDetail(int id)
+        {
+            var item = db.Orders.Find(id);
+            return View(item);
+        }
+
+        public ActionResult Partial_OrderHistoryDetail(int id)
+        {
+            var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
+            return PartialView(items);
         }
 
         //
