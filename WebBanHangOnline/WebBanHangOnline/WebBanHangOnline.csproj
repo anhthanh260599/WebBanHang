@@ -204,6 +204,7 @@
     <Compile Include="Areas\Admin\Controllers\SocialMediaPluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreOrderController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SubscribeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -3537,6 +3538,7 @@
     <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Documents\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Documents\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Subscribe\Index.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
