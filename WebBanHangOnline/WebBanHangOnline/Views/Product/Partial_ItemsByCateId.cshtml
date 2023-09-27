@@ -10,12 +10,30 @@
             strImage = img.Image;
         }
 
+        var wishList = item.WishLists.FirstOrDefault(x => x.CustomerName == User.Identity.Name);
+        var IsWishList = false;
+        if (wishList != null)
+        {
+            IsWishList = true;
+        }
+
             <div class="product-item @item.ProductCategory.Alias">
                 <div class="product discount product_filter">
                     <div class="product_image">
-                        <img style="height:200px;" src="@strImage" alt="@item.Title">
+                        <a href="/chi-tiet/@item.Alias-p@(item.Id)">
+                            <img style="height:200px;" src="@strImage" alt="@item.Title">
+                        </a>
                     </div>
-                    <div class="favorite favorite_left"></div>
+                    @if (IsWishList == true)
+                    {
+                        <div data-id="@item.Id" class="favorite favorite_left active"></div>
+
+                    }
+                    else
+                    {
+                        <div data-id="@item.Id" class="favorite favorite_left"></div>
+
+                    }
                     @*<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div>*@
                     <div class="product_info">
                         <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>

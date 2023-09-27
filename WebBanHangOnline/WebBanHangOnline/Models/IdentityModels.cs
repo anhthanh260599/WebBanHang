@@ -31,6 +31,8 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<WishList> WishLists { get; set; }
         public DbSet<Documents> Documents { get; set; }
         public DbSet<ReviewProduct> ReviewProducts { get; set; }
         public DbSet<Matterial> Matterials { get; set; }

@@ -50,7 +50,7 @@ jQuery(document).ready(function($)
 	});
 
 	initMenu();
-	initFavorite();
+	/*initFavorite();*/
 	initFixProductBorder();
 	initIsotopeFiltering();
 	initPriceSlider();
@@ -181,37 +181,6 @@ jQuery(document).ready(function($)
 
 	*/
 
-    function initFavorite()
-    {
-    	if($('.favorite').length)
-    	{
-    		var favs = $('.favorite');
-
-    		favs.each(function()
-    		{
-    			var fav = $(this);
-    			var active = false;
-    			if(fav.hasClass('active'))
-    			{
-    				active = true;
-    			}
-
-    			fav.on('click', function()
-    			{
-    				if(active)
-    				{
-    					fav.removeClass('active');
-    					active = false;
-    				}
-    				else
-    				{
-    					fav.addClass('active');
-    					active = true;
-    				}
-    			});
-    		});
-    	}
-    }
 
     /* 
 

@@ -28,23 +28,42 @@
                                     strImage = img.Image;
                                 }
 
-                                <div class="owl-item product_slider_item">
-                                    <div class="product-item accessories">
-                                        <div class="product">
-                                            <div class="product_image">
-                                                <img style="height:200px;" src="@strImage" alt="">
-                                            </div>
-                                            <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>Sale</span></div>
-                                            <div class="favorite favorite_left"></div>
-                                            <div class="product_info">
-                                                <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
-                                                <div class="product_price">@Common.FormatNumber(item.PriceSale)<span>@Common.FormatNumber(item.Price)</span></div>
-                                            </div>
-                                            <p style="font-size:12px;padding-right:24px;padding-top:24px;" class="text-md-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
+                                var wishList = item.WishLists.FirstOrDefault(x => x.CustomerName == User.Identity.Name);
+                                var IsWishList = false;
+                                if (wishList != null)
+                                {
+                                    IsWishList = true;
+                                }
 
+
+                                <div class="owl-item product_slider_item">
+                                        <div class="product-item accessories">
+                                            <div class="product">
+                                                <div class="product_image">
+                                                    <a href="/chi-tiet/@item.Alias-p@(item.Id)">
+                                                        <img style="height:200px;" src="@strImage" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>Sale</span></div>
+                                                @if (IsWishList == true)
+                                                {
+                                                    <div data-id="@item.Id" class="favorite favorite_left active"></div>
+
+                                                }
+                                                else
+                                                {
+                                                    <div data-id="@item.Id" class="favorite favorite_left"></div>
+
+                                                }
+                                                <div class="product_info">
+                                                    <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
+                                                    <div class="product_price">@Common.FormatNumber(item.PriceSale)<span>@Common.FormatNumber(item.Price)</span></div>
+                                                </div>
+                                                <p style="font-size:12px;padding-right:24px;padding-top:24px;" class="text-md-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
+
+                                            </div>
+                                            @*<div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">Thêm vào giỏ hàng</a></div>*@
                                         </div>
-                                        @*<div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">Thêm vào giỏ hàng</a></div>*@
-                                    </div>
                                 </div>
                             }
 
