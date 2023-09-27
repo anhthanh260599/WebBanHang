@@ -18,6 +18,7 @@ namespace WebBanHangOnline.Models.EF
             this.ProductImage = new HashSet<ProductImage>(); // 1 sản phẩm có nhiều ảnh
             this.OrderDetails = new HashSet<OrderDetail>(); // 1 sản phẩm có nhiều chi tiết đơn hàng
             this.ReviewProducts = new HashSet<ReviewProduct>(); // 1 sản phẩm có nhiều review
+            this.WishLists = new HashSet<WishList>(); // 1 sản phẩm có nhiều yêu thích
         }
 
         [Key]
@@ -53,5 +54,7 @@ namespace WebBanHangOnline.Models.EF
         public virtual ICollection<ProductImage> ProductImage { get; set; } // 1 sản phẩm có nhiều ảnh
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // 1 sản phẩm có nhiều chi tiết đơn hàng
         public virtual ICollection<ReviewProduct> ReviewProducts { get; set; } // 1 sản phẩm có nhiều review
+        public virtual ICollection<WishList> WishLists { get; set; } // 1 sản phẩm có nhiều yêu thích
+
     }
 }

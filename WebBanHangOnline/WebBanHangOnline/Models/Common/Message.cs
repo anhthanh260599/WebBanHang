@@ -10,7 +10,9 @@ namespace WebBanHangOnline.Models.Common
     public class Message
     {
         public static IHtmlString Brand { get; } = new HtmlString("FourC");
+        public static IHtmlString PleaseLogin { get; } = new HtmlString("Vui lòng đăng nhập");
         public static IHtmlString SuccessDeleted { get; } = new HtmlString("Xoá thành công!");
+        public static IHtmlString FailDeleted { get; } = new HtmlString("Xoá thất bại!");
         public static IHtmlString SuccessDeletedSelected { get; } = new HtmlString("Các mục đã được xoá thành công!");
         public static IHtmlString NoMessage { get; } = new HtmlString("");
         public static IHtmlString SuccessSaveChange { get; } = new HtmlString("Cập nhật thành công");
@@ -33,6 +35,7 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString OrderFailure { get; } = new HtmlString("Đặt hàng thất bại");
         public static IHtmlString SuccessLogin { get; } = new HtmlString("Đăng nhập thành công");
         public static IHtmlString WrongUserNameOrPassword { get; } = new HtmlString("Sai tên tài khoản hoặc mật khẩu");
+        public static IHtmlString ConfirmDeleteItemInWishList { get; } = new HtmlString("Bạn có thật sự muốn xoá sản phẩm này khỏi yêu thích?");
 
 
 

@@ -23,17 +23,20 @@
                     }
                     function OnSuccessSub(rs) {
                         if (rs.success) {
-                            Swal.fire({
-                                icon: 'success', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
-                                title: 'Thành công',
-                                text: 'Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai',
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                // Xử lý khi người dùng bấm nút OK (nếu cần)
-                                if (result.isConfirmed) {
-                                    Swal.close();
-                                }
-                            });
+
+                            alert("Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai");
+
+                            //Swal.fire({
+                            //    icon: 'success', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                            //    title: 'Thành công',
+                            //    text: 'Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai',
+                            //    confirmButtonText: 'OK'
+                            //}).then((result) => {
+                            //    // Xử lý khi người dùng bấm nút OK (nếu cần)
+                            //    if (result.isConfirmed) {
+                            //        Swal.close();
+                            //    }
+                            //});
                         }
 
                     }

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.WishList>
+@using WebBanHangOnline.Models.Common
+
+@{
+    ViewBag.Title = "Danh sách sản phẩm yêu thích";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+
+<style>
+    .news_section_container {
+        margin-top: 200px;
+    }
+</style>
+
+<div class="container news_section_container">
+    <div class="row">
+        <div class="col-md-9">
+            <h4 class="news-title">@ViewBag.Title </h4>
+        </div>
+        <!--<div class="col-md-3">
+            <label for="pageSizeSelect">Số lượng hiển thị:</label>
+            <select id="pageSizeSelect" class="form-control">
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>-->
+        <!-- Thêm các tùy chọn khác tùy theo nhu cầu -->
+        <!--</select>
+        </div>-->
+    </div>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            var strImage = "";
+            var img = item.Products.ProductImage.FirstOrDefault(x => x.IsDefault);
+            if (img != null)
+            {
+                strImage = img.Image;
+            }
+            <div class="row mb-5" id="trow_@item.Id">
+                <div class="col-md-3">
+                    <div class="img-box">
+                        <a href="/chi-tiet/@item.Products.Alias-p@(item.ProductId)" title="@item.Products.Title">
+                        <img style="width: 100%;" height="200px;" src="@strImage" alt="@item.Products.Title" /></a>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="content-box">
+                        <h5><a href="/chi-tiet/@item.Products.Alias-p@(item.ProductId)" title="@item.Products.Title">@item.Products.Title</a></h5>
+                        <p> Ngày thêm sản phẩm yêu thích: <i class="fa-solid fa-calendar-days"></i> @item.CreatedDate</p>
+                        <div class="description-box">
+                            @item.Products.Description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
+                </div>
+            </div>
+        }
+    }
+    else {
+        <h5 class="text-danger">Chưa có sản phẩm yêu thích nào</h5>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnDelete', function () {
+                  var id = $(this).data("id");
+                  var confirmMessage = confirm("@Message.ConfirmDeleteItemInWishList");
+                  if (confirmMessage === true)
+                  {
+                      $.ajax({
+                          url: '/WishList/delete',
+                          type: 'POST',
+                          data: { id: id },
+                          success: function (rs)
+                          {
+                              if (rs.success)
+                              {
+                                  location.reload();
+
+                                  $('#trow_' + id).remove();
+                      
+                              }
+                          }
+                      });
+                  }
+               });
+        });
+    </script>
+}
+
+
+
+
+
