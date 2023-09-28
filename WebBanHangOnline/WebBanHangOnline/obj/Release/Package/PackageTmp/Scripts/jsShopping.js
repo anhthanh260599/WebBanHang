@@ -18,13 +18,12 @@
             success: function (rs) {
                 if (rs.success) {
                     $('#checkout_items').html(rs.Count);
-                    alert(rs.message)
-                    //Swal.fire({
-                    //    icon: 'success', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
-                    //    title: 'Thành công',
-                    //    text: rs.message,
-                    //    confirmButtonText: 'OK'
-                    //});
+                    //alert(rs.message)
+                    toastr.options = {
+                        positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                        closeButton: true, // Hiển thị nút X để tắt
+                    };
+                    toastr.success(rs.message);
                 }
             }
         });

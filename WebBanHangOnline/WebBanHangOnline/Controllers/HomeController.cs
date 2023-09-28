@@ -40,6 +40,12 @@ namespace WebBanHangOnline.Controllers
         {
             if (ModelState.IsValid)
             {
+                var checkItem = db.Subscribes.FirstOrDefault(x => x.Email == request.Email);
+                if (checkItem != null)
+                {
+                    return Json(new { success = false });
+                }
+
                 db.Subscribes.Add(new Subscribe
                 {
                     Email = request.Email,

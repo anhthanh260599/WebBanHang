@@ -20,6 +20,9 @@
     <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/responsive.css">
     @* SweetAlert *@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Toast Message -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <!-- Apply SEO -->
     <meta name="title" content="@ViewBag.SeoTitle" />
     <meta name="description" content="@ViewBag.SeoDescription" />
@@ -353,7 +356,9 @@
 
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
-
+    <!-- Toast Message -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
     <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
