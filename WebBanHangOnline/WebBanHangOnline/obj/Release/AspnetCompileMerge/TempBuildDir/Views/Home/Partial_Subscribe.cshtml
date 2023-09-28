@@ -1,4 +1,5 @@
 ﻿@model WebBanHangOnline.Models.EF.Subscribe
+@using WebBanHangOnline.Models.Common
 
 <div class="container">
     <div class="row">
@@ -17,33 +18,32 @@
             }))
             {
                 @Html.AntiForgeryToken()
-                <script>
+            <script>
                     function OnBeginSub() {
 
                     }
                     function OnSuccessSub(rs) {
-                        if (rs.success) {
-
-                            alert("Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai");
-
-                            //Swal.fire({
-                            //    icon: 'success', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
-                            //    title: 'Thành công',
-                            //    text: 'Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai',
-                            //    confirmButtonText: 'OK'
-                            //}).then((result) => {
-                            //    // Xử lý khi người dùng bấm nút OK (nếu cần)
-                            //    if (result.isConfirmed) {
-                            //        Swal.close();
-                            //    }
-                            //});
+                        if (rs.success == true) {
+                            //alert("Bạn đã đăng ký thành công! Chúng tôi sẽ gửi mail cho bạn trong tương lai");
+                            toastr.options = {
+                                positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                                closeButton: true, // Hiển thị nút X để tắt
+                            };
+                            toastr.success("@Message.SuccessSubscribe");
+                        }
+                        else {
+                            toastr.options = {
+                                positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                                closeButton: true, // Hiển thị nút X để tắt
+                            };
+                            toastr.error("@Message.FailureSubscribe");
                         }
 
                     }
-                    function OnFailureSub(rs) {
+                function OnFailureSub(rs) {
 
-                    }
-                </script>
+                        }
+            </script>
                 <div class="newsletter_form d-flex flex-md-row flex-column flex-xs-column align-items-center justify-content-lg-end justify-content-center">
                     @*@Html.TextBoxFor(x=>x.Email, new {@placeholder = "Email của bạn", @type = "email", @required = "required" })*@
 

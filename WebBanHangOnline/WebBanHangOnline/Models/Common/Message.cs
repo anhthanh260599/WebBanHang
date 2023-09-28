@@ -36,7 +36,8 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString SuccessLogin { get; } = new HtmlString("Đăng nhập thành công");
         public static IHtmlString WrongUserNameOrPassword { get; } = new HtmlString("Sai tên tài khoản hoặc mật khẩu");
         public static IHtmlString ConfirmDeleteItemInWishList { get; } = new HtmlString("Bạn có thật sự muốn xoá sản phẩm này khỏi yêu thích?");
-
+        public static IHtmlString SuccessSubscribe { get; } = new HtmlString("Subscribe thành công! Chúng tôi sẽ gửi email cho bạn trong tương lai");
+        public static IHtmlString FailureSubscribe { get; } = new HtmlString("Email này đã subscribe, vui lòng sử dụng Email khác!");
 
 
     }
