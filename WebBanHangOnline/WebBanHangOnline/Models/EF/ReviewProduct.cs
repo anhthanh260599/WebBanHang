@@ -16,6 +16,8 @@ namespace WebBanHangOnline.Models.EF
         public int Id { get; set; }
         public int ProductId { get; set; }
         public string UserName { get; set; }
+        public string UserId { get; set; }
+        public bool IsApproved { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Content { get; set; }
@@ -23,5 +25,7 @@ namespace WebBanHangOnline.Models.EF
         public int Stars { get; set; }
         public string Avatar { get; set; } 
         public virtual Product Products { get; set; } // 1 sản phẩm sẽ có nhiều review
+        public virtual ApplicationUser User { get; set; }
+
     }
 }

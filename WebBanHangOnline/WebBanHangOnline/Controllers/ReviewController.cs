@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.Common;
 using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Controllers
@@ -34,10 +36,11 @@ namespace WebBanHangOnline.Controllers
                     item.FullName = user.FullName;
                     item.UserName = user.UserName;
                     item.Avatar = user.Avatar;
+                    item.UserId = user.Id;
                 }
-                return PartialView(item);
             }
-            return PartialView();
+            ViewBag.IsAuthenticated = User.Identity.IsAuthenticated; // Thêm biến này để xác định trạng thái đăng nhập
+            return PartialView(item);
         }
 
         [HttpPost]
@@ -45,10 +48,10 @@ namespace WebBanHangOnline.Controllers
         {
             if(ModelState.IsValid)
             {
-                request.CreatedDate = DateTime.Now;
+                request.CreatedDate = DateTime.Now.AddHours(14);
                 db.ReviewProducts.Add(request);
                 db.SaveChanges();
-                return Json(new {success = true});
+                return Json(new {success = true, message = Message.SuccessReview.ToString()});
             }
             return Json(new {success = false});
         }
@@ -56,7 +59,7 @@ namespace WebBanHangOnline.Controllers
         public ActionResult Partial_ListReview(int productId)
         {
             ViewBag.ProductId = productId;
-            var items = db.ReviewProducts.Where(x=>x.ProductId == productId).OrderByDescending(x=>x.Id).ToList();
+            var items = db.ReviewProducts.Where(x=>x.ProductId == productId && x.IsApproved == true).OrderByDescending(x=>x.Id).ToList();
             ViewBag.Count = items.Count;
             return PartialView(items);
         }
