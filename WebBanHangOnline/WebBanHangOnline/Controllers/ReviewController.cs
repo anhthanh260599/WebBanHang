@@ -48,6 +48,16 @@ namespace WebBanHangOnline.Controllers
         {
             if(ModelState.IsValid)
             {
+                var reviewContentLower = request.Content.ToLower();
+                var toxicWordsLower = db.ToxicWords.Select(w => w.Word.ToLower()).ToList();
+
+                foreach (var toxicWord in toxicWordsLower)
+                {
+                    if (reviewContentLower.Contains(toxicWord))
+                    {
+                        return Json(new { success = false, message = Message.PleaseDontUseBadWord.ToString() });
+                    }
+                }
                 request.CreatedDate = DateTime.Now.AddHours(14);
                 db.ReviewProducts.Add(request);
                 db.SaveChanges();

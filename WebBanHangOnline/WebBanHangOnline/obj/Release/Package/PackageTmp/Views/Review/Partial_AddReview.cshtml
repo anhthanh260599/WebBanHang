@@ -15,7 +15,7 @@
             <script>
 
                 function OnBeginRV() {
-                    $('#review_submit').attr("disabled", "disabled");
+                    //$('#review_submit').attr("disabled", "disabled");
                 }
 
                 function OnSuccessRV(result) {
@@ -26,6 +26,13 @@
                             closeButton: true, // Hiển thị nút X để tắt
                         };
                         toastr.success(result.message);
+                    }
+                    if (result.success == false) {
+                        toastr.options = {
+                            positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                            closeButton: true, // Hiển thị nút X để tắt
+                        };
+                        toastr.info(result.message);
                     }
                 }
             </script>
