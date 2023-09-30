@@ -13,13 +13,17 @@ Account đăng nhập trang admin:
 Web có thể hoạt động như 1 trang web bán hàng thực thụ
 
 Chức năng chính:
+
 Khách hàng:
+
   - Xem sản phẩm
   - Thêm sản phẩm vào giỏ hàng.
   - Bình luận / Đánh giá sản phẩm
   - Thêm sản phẩm vào mục ưa thích
   - Thực hiện thanh toán (COD và thanh toán VNPAY)(VNPAY chỉ thanh toán được demo).
+    
 Admin:
+
   - Quản lý đơn hàng.
   - Quản lý tài khoản
   - Quản lý sản phẩm
