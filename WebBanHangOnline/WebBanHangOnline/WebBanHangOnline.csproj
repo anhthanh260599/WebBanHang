@@ -198,6 +198,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductImageController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaController.cs" />
@@ -3542,6 +3543,8 @@
     <Content Include="Areas\Admin\Views\Documents\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Documents\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Subscribe\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ReviewProduct\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ReviewProduct\Detail.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

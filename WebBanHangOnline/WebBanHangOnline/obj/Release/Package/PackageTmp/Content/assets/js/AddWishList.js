@@ -37,7 +37,12 @@
             data: { ProductId: id },
             success: function (res) {
                 if (res.success == false) {
-                    alert(res.message)
+                    //alert(res.message)
+                    toastr.options = {
+                        positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                        closeButton: true, // Hiển thị nút X để tắt
+                    };
+                    toastr.info(res.message);
                 }
             }
         })
@@ -50,7 +55,12 @@
             data: { ProductId: id },
             success: function (res) {
                 if (res.success) {
-                    alert(res.message)
+                    //alert(res.message)
+                    toastr.options = {
+                        positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                        closeButton: true, // Hiển thị nút X để tắt
+                    };
+                    toastr.success(res.message);
                 }
             }
         })

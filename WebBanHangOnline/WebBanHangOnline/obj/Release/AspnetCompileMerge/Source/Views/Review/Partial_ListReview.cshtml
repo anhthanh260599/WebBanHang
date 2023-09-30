@@ -6,29 +6,32 @@
 </div>
 
 
-@if (Model != null && Model.Any())
-{
-    <!-- User Review -->
-    foreach (var item in Model)
+    @if (Model != null && Model.Any())
     {
-        <div class="user_review_container d-flex flex-column flex-sm-row">
-            <div class="user">
-                <div class="user_pic">
-                    <img style="width:100%; height: 100%; border-radius:50%;" src="@item.Avatar" />
+        <!-- User Review -->
+        foreach (var item in Model)
+        {
+            <div class="user_review_container d-flex flex-column flex-sm-row">
+                <div class="user">
+                    <div class="user_pic">
+                        <img style="width:100%; height: 100%; border-radius:50%;" src="@item.User.Avatar" />
+                    </div>
+                    <div class="user_rating">
+                        <ul class="star_rating">
+                            @Html.Raw(Common.HtmlStars(item.Stars))
+                        </ul>
+                    </div>
                 </div>
-                <div class="user_rating">
-                    <ul class="star_rating">
-                        @Html.Raw(Common.HtmlStars(item.Stars))
-                    </ul>
+                <div class="review">
+                    <div class="review_date">@item.CreatedDate.ToString("dd/MM/yyyy")</div>
+                    <div class="user_name">@item.User.FullName</div>
+                    <p>@item.Content</p>
                 </div>
             </div>
-            <div class="review">
-                <div class="review_date">@item.CreatedDate.ToString("dd/MM/yyyy")</div>
-                <div class="user_name">@item.FullName</div>
-                <p>@item.Content</p>
-            </div>
-        </div>
+        }
     }
-}
-
+    else
+            {
+                <h6 class="text-danger">Sản phẩm hiện tại chưa có đánh giá nào</h6>
+            }
 
