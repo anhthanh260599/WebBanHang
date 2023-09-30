@@ -33,9 +33,7 @@
     } */
 
         #slider .owl-dots {
-            position: absolute;
-            top: 94%;
-            right: 40%;
+            top: -10%;
         }
 
         #slider .owl-dot span {
@@ -79,52 +77,6 @@
         padding-bottom: 80px;
     }
 
- 
-
-    .owl-theme .owl-nav {
-        position: absolute;
-        top: 40%;
-        background-color: unset;
-    }
-
-    .owl-carousel .owl-next {
-        position: absolute;
-        right:  -1500px;
-        height: 50px;
-        width: 50px !important;
-        border-radius: 50% !important;
-        cursor: pointer;
-        background-color: #fe4c50 !important;
-    }
-
-    .owl-carousel .owl-prev {
-        position: absolute;
-        left: 33px;
-        height: 50px;
-        width: 50px !important;
-        border-radius: 50% !important;
-        cursor: pointer;
-        background-color: #fe4c50 !important;
-    }
-
-
-        .owl-carousel .owl-next span,
-        .owl-carousel .owl-prev span {
-            color: white;
-            text-align: center;
-            font-size: 4rem;
-        }
-        .owl-carousel .owl-next:hover,
-        .owl-carousel .owl-prev:hover {
-            background-color: #fe4c50 !important;
-            opacity: 0.8;
-        }
-
-            .owl-carousel .owl-next:hover span,
-            .owl-carousel .owl-prev:hover span {
-                color: black;
-            }
-
     .slider__content-header {
         font-size: 2rem;
         color: white;
@@ -156,7 +108,7 @@
     $('.owl-carousel').owlCarousel({
         loop: true,
         margin: 0,
-        nav: true,
+        nav: false,
         autoplay: true,
         smartSpeed: 700,
         autoplayTimeout: 7000,

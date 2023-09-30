@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreOrderController.cs" />
     <Compile Include="Areas\Admin\Controllers\SubscribeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ToxicWordsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArticalController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Models\EF\Subscribe.cs" />
     <Compile Include="Models\EF\SystemSetting.cs" />
     <Compile Include="Models\EF\ThongKe.cs" />
+    <Compile Include="Models\EF\ToxicWord.cs" />
     <Compile Include="Models\EF\WishList.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -3545,6 +3547,9 @@
     <Content Include="Areas\Admin\Views\Subscribe\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ReviewProduct\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ReviewProduct\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\ToxicWords\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ToxicWords\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ToxicWords\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

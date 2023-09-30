@@ -39,5 +39,7 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString SuccessSubscribe { get; } = new HtmlString("Subscribe thành công! Chúng tôi sẽ gửi email cho bạn trong tương lai");
         public static IHtmlString FailureSubscribe { get; } = new HtmlString("Email này đã subscribe, vui lòng sử dụng Email khác!");
         public static IHtmlString SuccessReview { get; } = new HtmlString("Gửi đánh giá thành công, đánh giá của bạn sẽ hiển thị nếu được duyệt");
+        public static IHtmlString PleaseDontUseBadWord { get; } = new HtmlString("Vui lòng không sử dụng từ ngữ tiêu cực");
+
     }
 }

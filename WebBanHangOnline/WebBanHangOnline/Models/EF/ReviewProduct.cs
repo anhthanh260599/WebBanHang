@@ -25,7 +25,6 @@ namespace WebBanHangOnline.Models.EF
         public int Stars { get; set; }
         public string Avatar { get; set; } 
         public virtual Product Products { get; set; } // 1 sản phẩm sẽ có nhiều review
-        public virtual ApplicationUser User { get; set; }
-
+        public virtual ApplicationUser User { get; set; } // 1 user sẽ có nhiều review
     }
 }
