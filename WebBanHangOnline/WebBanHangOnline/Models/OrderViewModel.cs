@@ -17,7 +17,7 @@ namespace WebBanHangOnline.Models
         public string CustomerID { get; set; }
         public int TypePayment { get; set; }
         public int TypePaymentVN { get; set; }
-
-
+        public int PromotionId { get; set; }
+        public string PromotionCode { get; set; }
     }
 }

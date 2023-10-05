@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -159,8 +160,13 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(OrderViewModel request)
         {
+            if (request.TypePayment == -1)
+            {
+                return Json(new { Success = false, message = "Vui lòng chọn phương thức thanh toán", errorcode = 69 });
+            }
+
             var code = new { Success = false, Code = -1, Url = "" };
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
                 if (cart != null)
@@ -174,9 +180,19 @@ namespace WebBanHangOnline.Controllers
                     {
                         ProductID = x.ProductId,
                         Price = x.Price,
-                        Quantity = x.Quantity
-
+                        Quantity = x.Quantity,
                     }));
+                    
+                    if (cart.PromotionId != 0)
+                    {
+                        order.PromotionId = cart.PromotionId;
+                        order.PromotionCode = cart.PromotionCode.ToUpper();
+                        order.TypePromotion = cart.TypePromotion;
+                        order.DiscountAmount = cart.DiscountAmount;
+                    }
+
+          
+
                     if (User.Identity.IsAuthenticated)
                     {
                         order.CustomerID = User.Identity.GetUserId();
@@ -184,7 +200,16 @@ namespace WebBanHangOnline.Controllers
                     order.Quantity = cart.Items.Sum(x=>x.Quantity);
                     order.Email = request.Email;
                     TempData["EmailCustomer"] = order.Email;
-                    order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
+
+                    if (order.PromotionId != null)
+                    {
+                        order.TotalAmount = cart.Items.Sum(x => (x.Quantity * x.Price)) - order.DiscountAmount;
+                    }
+                    if (order.PromotionId == null)
+                    {
+                        order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
+                    }
+
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
 
@@ -232,6 +257,7 @@ namespace WebBanHangOnline.Controllers
                     var strSanPham = "";
                     var thanhTien = decimal.Zero;
                     var tongTien = decimal.Zero;
+                    var khuyenMai = decimal.Zero;
 
                     foreach (var sp in cart.Items)
                     {
@@ -244,7 +270,19 @@ namespace WebBanHangOnline.Controllers
                         thanhTien += sp.Price * sp.Quantity;
 
                     }
-                    tongTien = thanhTien;
+
+                    khuyenMai = order.DiscountAmount;
+
+                    if (order.PromotionId != null)
+                    {
+                        tongTien = thanhTien - khuyenMai;
+                    }
+            
+                    if(order.PromotionId == null)
+                    {
+                        tongTien = thanhTien;
+                    }
+
                     string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                     contentCustomer = contentCustomer.Replace("{{MaDon}}",order.Code);
                     contentCustomer = contentCustomer.Replace("{{NgayDat}}", order.CreateDate.ToString());
@@ -254,6 +292,7 @@ namespace WebBanHangOnline.Controllers
                     contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
                     contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
                     contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien,0));
+                    contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                     contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien,0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
 
@@ -266,6 +305,7 @@ namespace WebBanHangOnline.Controllers
                     contentAdmin = contentAdmin.Replace("{{Email}}", order.Email);
                     contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
                     contentAdmin = contentAdmin.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                    contentAdmin = contentAdmin.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                     contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
                     cart.ClearCart();
@@ -302,6 +342,119 @@ namespace WebBanHangOnline.Controllers
             }
             return PartialView();
         }
+
+        public ActionResult Partial_List_PromotionCode()
+        {
+            var items = db.Promotions.Where(x => x.IsActive).OrderByDescending(x => x.Id).ToList();
+            return PartialView(items);
+        }
+
+        [HttpPost]
+        public ActionResult KiemTraVaApDungMaKhuyenMai(string maKhuyenMai)
+        {
+            // Thực hiện kiểm tra mã khuyến mãi và tính toán giảm giá
+            // Trả về kết quả dưới dạng JSON, ví dụ: { success: true, tongTienCartFormatted: "1,000,000 VND" }
+            var promotion = db.Promotions.FirstOrDefault(p => p.PromotionCode == maKhuyenMai && p.IsActive);
+            var promotionID = promotion.Id;
+            // Kiểm tra nếu không tìm thấy mã khuyến mãi
+            if (promotion == null)
+            {
+                return Json(new { success = false });
+            }
+            // Nếu mã khuyến mãi hợp lệ, tính toán lại tổng tiền của giỏ hàng và định dạng nó cho phù hợp
+            var tongTienCart = TinhToanLaiTongTienGioHang(maKhuyenMai);
+
+           
+            var tongTienCartFormatted = Common.FormatNumber(tongTienCart, 0);
+
+            // Trả về kết quả dưới dạng JSON
+            return Json(new { success = true, tongTienCartFormatted });
+        }
+
+        private decimal TinhToanLaiTongTienGioHang(string maKhuyenMai)
+        {
+            decimal tongTienCart = 0;
+            // Lấy giỏ hàng từ Session
+            ShoppingCart cart = (ShoppingCart)Session["Cart"];
+            if (cart != null)
+            {
+                // Tính toán tổng tiền trước khi áp dụng mã khuyến mãi
+                tongTienCart = cart.Items.Sum(item => item.TotalPrice);
+
+                // Kiểm tra và áp dụng mã khuyến mãi nếu hợp lệ
+                if (!string.IsNullOrEmpty(maKhuyenMai))
+                {
+                    var promotion = db.Promotions.FirstOrDefault(p => p.PromotionCode == maKhuyenMai && p.IsActive);
+                    var promotionID = promotion.Id;
+
+                    if (promotion != null)
+                    {
+
+                        if (promotion.TypePromotion == 1)
+                        {
+                            // Loại 1: Trừ một số tiền cụ thể
+                            decimal giamGia = promotion.DiscountAmount;
+                            int typePromotion = promotion.TypePromotion;
+
+                            cart.TypePromotion = typePromotion;
+                            cart.DiscountAmount = giamGia;
+                            TempData["DiscountAmount"] = cart.DiscountAmount;
+
+                            // Áp dụng giảm giá vào tổng tiền
+                            tongTienCart -= giamGia;
+
+                            // Đảm bảo tổng tiền không nhỏ hơn 0
+                            if (tongTienCart < 0)
+                            {
+                                tongTienCart = 0;
+                            }
+                      
+                        }
+                        else if (promotion.TypePromotion == 2)
+                        {
+                            // Loại 2: Giảm giá dựa trên phần trăm
+                            decimal phanTramGiamGia = promotion.DiscountAmount;
+
+                            // Tính số tiền giảm dựa trên phần trăm và áp dụng giảm giá vào tổng tiền
+                            decimal giamGia = tongTienCart * phanTramGiamGia;
+                            int typePromotion = promotion.TypePromotion;
+                            cart.DiscountAmount = giamGia;
+                            cart.TypePromotion = typePromotion;
+
+                            TempData["DiscountAmount"] = cart.DiscountAmount;
+
+                            tongTienCart -= giamGia;
+              
+                        }
+                        cart.PromotionId = promotionID;
+                        cart.PromotionCode = maKhuyenMai;
+
+                        TempData["IDMaKhuyenMai"] = cart.PromotionId;
+                        TempData["MaKhuyenMai"] = cart.PromotionCode;
+                    }
+                }
+            }
+            TempData["TongTienCartKM"] = tongTienCart;
+            return tongTienCart;
+        }
+
+        private decimal KiemTraVaLayGiamGiaTuMaKhuyenMai(string maKhuyenMai)
+        {
+            // Thực hiện kiểm tra và lấy giảm giá từ mã khuyến mãi
+            // Trong ví dụ này, bạn có thể xử lý logic kiểm tra mã khuyến mãi trong cơ sở dữ liệu hoặc bất kỳ cách nào bạn muốn để lấy giảm giá tương ứng.
+            // Nếu mã khuyến mãi hợp lệ, trả về giá trị giảm giá, nếu không, trả về 0.
+
+            // Ví dụ: kiểm tra mã khuyến mãi trong cơ sở dữ liệu
+            var giamGia = db.Promotions.FirstOrDefault(p => p.PromotionCode == maKhuyenMai);
+
+            if (giamGia != null)
+            {
+                return giamGia.DiscountAmount;
+            }
+
+            return 0; // Trả về 0 nếu mã khuyến mãi không hợp lệ hoặc không tìm thấy
+        }
+
 
 
         public ActionResult ShowCount() // Hàm dùng để lưu Session Cart

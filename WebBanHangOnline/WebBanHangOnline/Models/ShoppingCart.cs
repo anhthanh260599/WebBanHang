@@ -8,6 +8,11 @@ namespace WebBanHangOnline.Models
     public class ShoppingCart
     {
         public List<ShoppingCartItem> Items { get; set; }
+        public int PromotionId { get; set; } // Thêm thuộc tính PromotionId
+        public string PromotionCode { get; set; } // Thêm thuộc tính PromotionCode
+        public decimal DiscountAmount { get; set; } // Thêm thuộc tính PromotionCode
+        public int TypePromotion { get; set; } // Thêm thuộc tính PromotionCode
+
         public ShoppingCart() 
         {
             this.Items = new List<ShoppingCartItem>();
@@ -59,6 +64,10 @@ namespace WebBanHangOnline.Models
         public void ClearCart()
         {
             Items.Clear();
+            PromotionId = 0; 
+            PromotionCode = null; 
+            DiscountAmount = 0; 
+            TypePromotion = 0;
         }
     }
 
@@ -72,6 +81,8 @@ namespace WebBanHangOnline.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
-
+        public string PromotionCode { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public int PromotionId { get; set; }
     }
 }

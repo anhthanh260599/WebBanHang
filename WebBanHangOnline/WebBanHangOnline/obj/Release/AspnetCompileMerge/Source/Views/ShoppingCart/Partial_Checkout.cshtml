@@ -114,4 +114,52 @@
     </div>
 }
 
+<!-- Add the countdown modal -->
+<div id="countdownModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Đặt hàng thành công! Sẽ chuyển hướng sau <span id="countdownValue">5</span> giây.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript function to handle the countdown and redirect
+    function startCountdown() {
+        var countdownValue = 5; // Set the initial countdown value
+        var countdownElement = document.getElementById("countdownValue");
+
+        // Update the countdown modal content every second
+        var countdownInterval = setInterval(function () {
+            countdownValue--;
+            countdownElement.innerText = countdownValue;
+
+            if (countdownValue === 0) {
+                clearInterval(countdownInterval); // Stop the countdown
+                location.href = 'ShoppingCart/CheckoutSuccess'; // Redirect when countdown reaches zero
+            }
+        }, 1000);
+
+        // Close the modal when the countdown is finished
+        $('#countdownModal').modal('hide');
+    }
+
+    // Add a click event handler to the "Đặt hàng" button
+    $('#btnCheckOut').click(function () {
+        $('#countdownModal').modal('show'); // Show the countdown modal
+        startCountdown(); // Start the countdown
+    });
+</script>
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
