@@ -153,12 +153,32 @@
                 }
             </div>
 
+
+            @if (Model.PromotionCode != null)
+            {
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Mã giảm giá sử dụng</label>
+                            <input type="text" readonly class="form-control" value="@Model.PromotionCode.ToUpper()" />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Số tiền giảm</label>
+                            <input type="text" readonly class="form-control" value="@Common.FormatNumber(Model.DiscountAmount,0)" />
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div class="row">
                 <div class="col-12">
                     <h3>Danh sách sản phẩm mua</h3>
                 </div>
                 <div class="col-12">
-                    @Html.Action("Partial_Detail", "Order",new {id = Model.Id})
+                    @Html.Action("Partial_Detail", "Order", new { id = Model.Id })
                 </div>
             </div>
 

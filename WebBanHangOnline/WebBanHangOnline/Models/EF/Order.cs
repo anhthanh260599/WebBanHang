@@ -31,9 +31,12 @@ namespace WebBanHangOnline.Models.EF
         public int Quantity { get; set; }
         public int TypePayment { get; set; }
         public int Status { get; set; }
-
         public string CustomerID { get; set; }
+        public int? PromotionId { get; set; }
+        public string PromotionCode { get; set; } 
+        public decimal DiscountAmount { get; set; } 
+        public int TypePromotion { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
-
+        public virtual Promotion Promotion { get; set; }
     }
 }

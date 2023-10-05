@@ -197,6 +197,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductImageController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Models\EF\Product.cs" />
     <Compile Include="Models\EF\ProductCategory.cs" />
     <Compile Include="Models\EF\ProductImage.cs" />
+    <Compile Include="Models\EF\Promotion.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaPlugin.cs" />
@@ -3550,6 +3552,9 @@
     <Content Include="Areas\Admin\Views\ToxicWords\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ToxicWords\Add.cshtml" />
     <Content Include="Areas\Admin\Views\ToxicWords\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Promotion\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Promotion\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Promotion\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3635,6 +3640,7 @@
     <Content Include="Views\Account\OrderHistoryDetail.cshtml" />
     <Content Include="Views\Account\Partial_OrderHistoryDetail.cshtml" />
     <Content Include="Views\WishList\Index.cshtml" />
+    <Content Include="Views\ShoppingCart\Partial_List_PromotionCode.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
