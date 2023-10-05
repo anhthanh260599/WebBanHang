@@ -24,6 +24,8 @@ Khách hàng:
   - Áp dụng mã khuyến mãi vào đơn hàng
   - Đăng ký / Đăng nhập
   - Thay đổi thông tin hồ sơ cá nhân
+  - Xem lịch sử đơn hàng
+  - Xem trạng thái đơn hàng
 
 Admin:
 
@@ -33,6 +35,7 @@ Admin:
       + Hot
       + Khuyến mãi
       + Nổi bật
+      + ....
   - Quản lý nguyên vật liệu
   - Phân quyền
   - Thống kê doanh thu
