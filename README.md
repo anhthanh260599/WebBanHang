@@ -12,7 +12,7 @@ Account đăng nhập trang admin:
 
 Web có thể hoạt động như 1 trang web bán hàng thực thụ
 
-Chức năng chính:
+Chức năng chính: 
 
 Khách hàng:
 
@@ -20,12 +20,15 @@ Khách hàng:
   - Thêm sản phẩm vào giỏ hàng.
   - Bình luận / Đánh giá sản phẩm
   - Thêm sản phẩm vào mục ưa thích
-  - Thực hiện thanh toán (COD và thanh toán VNPAY)(VNPAY chỉ thanh toán được demo).
-    
+  - Thực hiện thanh toán đơn hàng (COD và thanh toán VNPAY)(VNPAY chỉ thanh toán được demo).
+  - Áp dụng mã khuyến mãi vào đơn hàng
+  - Đăng ký / Đăng nhập
+  - Thay đổi thông tin hồ sơ cá nhân
+
 Admin:
 
   - Quản lý đơn hàng.
-  - Quản lý tài khoản
+  - Quản lý tài khoản người dùng
   - Quản lý sản phẩm
       + Hot
       + Khuyến mãi
@@ -37,7 +40,8 @@ Admin:
   - Quản lý Subscribe
   - Quản lý đánh giá / từ ngữ tiêu cực
   - Quản lý nội dung trang web (Hình ảnh, content,...)
-  - Quarn ly
+  - Quản lý mã khuyến mãi
+  - Điều phối đơn hàng
 
 Account thanh toán VNPAY Demo:
    - Ngân hàng:	NCB
