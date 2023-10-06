@@ -7,13 +7,15 @@ namespace WebBanHangOnline.Models
    
     public class CreateAccountrViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         public string UserName { get; set; }
         [Required]
         public string FullName { get; set; }
         [Required]
         public string Phone { get; set; }
-        public string Role { get; set; }
+        public List<string> Roles { get; set; }
         public string Address { get; set; }
         public string Avatar { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -33,6 +35,27 @@ namespace WebBanHangOnline.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class EditAccountViewModel
+    {
+        public string Id { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        public List<string> Roles { get; set; }
+        public string Address { get; set; }
+        public string Avatar { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
     }
 
     public class ExternalLoginConfirmationViewModel
