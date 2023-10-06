@@ -44,7 +44,7 @@ else
     function copyPromotionCode(button) {
         // Tìm thẻ td chứa mã khuyến mãi trong cùng dòng với nút "Sao chép mã" được nhấp vào
         var promotionCode = button.closest("tr").querySelector(".promotion-code").textContent;
-
+        console.log(promotionCode)
         // Sử dụng Clipboard API để sao chép vào clipboard
         navigator.clipboard.writeText(promotionCode)
             .then(function () {

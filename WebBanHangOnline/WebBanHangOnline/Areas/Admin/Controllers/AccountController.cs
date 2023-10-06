@@ -149,8 +149,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    UserManager.AddToRole(user.Id, model.Role);
-
+                    if(model.Roles !=null)
+                    {
+                        foreach (var role in model.Roles)
+                        {
+                            UserManager.AddToRole(user.Id, role);
+                        }
+                    }
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -207,21 +212,91 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Edit(string id)
         {
-            var item = db.Users.Find(id);
-            return View(item);
+            var item = UserManager.FindById(id);
+            var newUser = new EditAccountViewModel();
+            if(item != null)
+            {
+                var rolesOfUser = UserManager.GetRoles(id);
+                var roles = new List<string>();
+                if (rolesOfUser != null)
+                {
+                    foreach (var role in rolesOfUser)
+                    {
+                        roles.Add(role);
+                    }
+                }
+                newUser.UserName = item.UserName;
+                newUser.Email = item.Email;
+                newUser.FullName = item.FullName;
+                newUser.Phone = item.Phone;
+                newUser.Roles = roles;
+            }
+            ViewBag.Role = new SelectList(db.Roles.ToList(), "Name", "Name");
+            return View(newUser);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ApplicationUser model)
+        public async Task<ActionResult> Edit(EditAccountViewModel model)
         {
+            ViewBag.Role = new SelectList(db.Roles.ToList(), "Name", "Name");
             if (ModelState.IsValid)
             {
-                db.Users.Attach(model);
-                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var user = UserManager.FindById(model.Id);
+                user.FullName = model.FullName;
+                user.Phone = model.Phone;
+                user.Email = model.Email;
+
+                // Xóa tất cả các Roles hiện tại của người dùng
+                var currentRoles = UserManager.GetRoles(user.Id);
+                foreach (var role in currentRoles)
+                {
+                    await UserManager.RemoveFromRoleAsync(user.Id, role);
+                }
+
+                // Thêm các Roles mới được chọn
+                if (model.Roles != null)
+                {
+                    foreach (var role in model.Roles)
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, role);
+                    }
+                }
+
+                var result = await UserManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    //var roleOfUser = UserManager.GetRoles(user.Id);
+
+                    //if (model.Roles != null)
+                    //{
+                    //    foreach (var role in model.Roles)
+                    //    {
+                    //        var checkRoles = roleOfUser.FirstOrDefault(x => x.Equals(model.Roles));
+                    //        if(checkRoles == null)
+                    //        {
+                    //            UserManager.AddToRole(user.Id, role);
+                    //        }
+                    //    }
+                    //}
+
+
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+
+                    // Send an email with this link, cái này dùng để gửi email khi tạo thành công
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    return RedirectToAction("Index", "Account");
+                }
+                AddErrors(result);
             }
+
+            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
