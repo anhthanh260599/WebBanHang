@@ -1,0 +1,23 @@
+﻿
+@model List<WebBanHangOnline.Models.WishListCountViewModel>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Lượt yêu thích</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductCode</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.WishCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>

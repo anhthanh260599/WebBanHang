@@ -23,33 +23,23 @@
 <!-- Main content -->
 <section class="content">
 
-    <!-- Default box -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Danh sách danh mục</h3>
-
-            <div class="card-tools">
-
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                    <i class="fas fa-time"></i>
-                </button>
-            </div>
+    <div class="row">
+        <div class="col-4">
+            <h5>Top 5 sản phẩm xem nhiều </h5>
+            @Html.Action("Partial_TopViewCount", "Home")
         </div>
 
-        <div class="card-body">
-            Đây là body 
 
+        <div class="col-4">
+            <h5>Top 5 sản phẩm bán ra</h5>
+            @Html.Action("Partial_TopOrder", "Home")
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            Đây là footer
+
+        <div class="col-4">
+            <h5>Top 5 sản phẩm yêu thích</h5>
+            @Html.Action("Partial_TopWishList", "Home")
         </div>
-        <!-- /.card-footer-->
     </div>
-    <!-- /.card -->
 
 </section>
 <!-- /.content -->

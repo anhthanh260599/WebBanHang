@@ -1,0 +1,26 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+
+@if (Model != null && Model.Any())
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Lượt xem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductCode</td>
+                    <td>@item.Title</td>
+                    <td>@item.ViewCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
