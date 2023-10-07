@@ -233,6 +233,7 @@
     <Compile Include="Models\Common\Filter.cs" />
     <Compile Include="Models\Common\Message.cs" />
     <Compile Include="Models\Common\SettingHelper.cs" />
+    <Compile Include="Models\Common\test.cs" />
     <Compile Include="Models\Common\ThongKeTruyCap.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EF\Adv.cs" />
