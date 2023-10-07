@@ -31,5 +31,9 @@ namespace WebBanHangOnline.Models.EF
         public string District { get; set; }
         [Display(Name = "Phường/Xã")]
         public string Ward { get; set; }
+
+        [ForeignKey("User")]
+        public string UserID { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }
