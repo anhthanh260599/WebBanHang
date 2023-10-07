@@ -355,7 +355,10 @@ namespace WebBanHangOnline.Controllers
             // Thực hiện kiểm tra mã khuyến mãi và tính toán giảm giá
             // Trả về kết quả dưới dạng JSON, ví dụ: { success: true, tongTienCartFormatted: "1,000,000 VND" }
             var promotion = db.Promotions.FirstOrDefault(p => p.PromotionCode == maKhuyenMai && p.IsActive);
-            var promotionID = promotion.Id;
+            if (promotion != null)
+            {
+                var promotionID = promotion.Id;
+            }
             // Kiểm tra nếu không tìm thấy mã khuyến mãi
             if (promotion == null)
             {

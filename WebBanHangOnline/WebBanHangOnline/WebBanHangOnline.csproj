@@ -233,7 +233,6 @@
     <Compile Include="Models\Common\Filter.cs" />
     <Compile Include="Models\Common\Message.cs" />
     <Compile Include="Models\Common\SettingHelper.cs" />
-    <Compile Include="Models\Common\test.cs" />
     <Compile Include="Models\Common\ThongKeTruyCap.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EF\Adv.cs" />
@@ -267,9 +266,11 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\Payment\VnPayLibrary.cs" />
+    <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
+    <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -3556,6 +3557,9 @@
     <Content Include="Areas\Admin\Views\Promotion\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Promotion\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Promotion\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopViewCount.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopOrder.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopWishList.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
