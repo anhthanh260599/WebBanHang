@@ -39,7 +39,6 @@ namespace WebBanHangOnline.Models
         public DbSet<Matterial> Matterials { get; set; }
         public DbSet<OrderMatts> OrderMatts { get; set; }
         public DbSet<OrderDetailMatts> OrderDetailMatts { get; set; }
-
         public DbSet<SocialMediaPlugin> SocialMediaPlugins { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Logo> Logos { get; set; }
@@ -48,14 +47,12 @@ namespace WebBanHangOnline.Models
         public DbSet<SocialMediaProfiles> SocialMediaProfiles { get; set; }
         public DbSet<ThongKe> ThongKes { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Adv> Advs { get; set; }
         public DbSet<Posts> Posts { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImage { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Subscribe> Subscribes { get; set; }

@@ -15,10 +15,12 @@ namespace WebBanHangOnline.Models.EF
         public int Id { get; set; }
 
         public int ProductId { get; set; }
+
+        [ForeignKey("User")]
         public string CustomerID { get; set; }
         public string CustomerName { get; set; }
         public DateTime CreatedDate { get; set; }
-
+        public virtual ApplicationUser User { get; set; } 
         public virtual Product Products { get; set; }
     }
 }

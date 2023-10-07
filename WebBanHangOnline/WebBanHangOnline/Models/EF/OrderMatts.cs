@@ -17,6 +17,7 @@ namespace WebBanHangOnline.Models.EF
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
+        public int StoreID { get; set; }
         [Required]
         public string Code { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập tên khách hàng")]
@@ -29,6 +30,7 @@ namespace WebBanHangOnline.Models.EF
         public decimal TotalAmount { get; set; }
         public int Quantity { get; set; }
         public int Status { get; set; }
+        public virtual Store Store { get; set; }
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; } // quan hệ 1 - nhiều
 
     }
