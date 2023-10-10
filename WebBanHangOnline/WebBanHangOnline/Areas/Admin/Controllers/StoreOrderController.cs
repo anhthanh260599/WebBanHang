@@ -20,6 +20,11 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(items);
         }
 
+        public ActionResult Add()
+        {
+            return View();
+        }
+
 
         ///////////////// Thông làm phần này đi
     }

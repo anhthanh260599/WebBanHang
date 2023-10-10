@@ -28,7 +28,6 @@ namespace WebBanHangOnline.Models.EF
         public string Address { get; set; }
         public string Email { get; set; }
         public decimal TotalAmount { get; set; }
-        public int Quantity { get; set; }
         public int Status { get; set; }
         public virtual Store Store { get; set; }
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; } // quan hệ 1 - nhiều

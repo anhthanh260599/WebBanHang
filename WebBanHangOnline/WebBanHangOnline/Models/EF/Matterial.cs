@@ -29,6 +29,8 @@ namespace WebBanHangOnline.Models.EF
         public string Description { get; set; }
         [AllowHtml]
         public string Detail { get; set; }
+        public decimal Price { get; set; }
+
         public string Image { get; set; }
         public bool IsActive { get; set; }
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; }
