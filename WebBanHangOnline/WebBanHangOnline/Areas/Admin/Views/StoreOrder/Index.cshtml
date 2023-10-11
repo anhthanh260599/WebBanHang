@@ -69,11 +69,12 @@
                         <th>STT</th>
                         <th>Ảnh đại diện</th>
                         <th>Tên nguyên liệu</th>
+                        <th>Giá</th>
                         <th>Số lượng</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @using (Html.BeginForm("PlaceOrder", "StoreOrder", FormMethod.Post))
+                    @using (Html.BeginForm(FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
@@ -83,16 +84,17 @@
 
                             foreach (var item in Model)
                             {
-                                <tr id="trow_@item.Id">
-                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
-                                    <td class="stt-cell">@i</td>
-                                    <td><img src="@item.Image" width="100px" /></td>
-                                    <td id="title_Matts">@item.Title</td>
-                                    <td>
-                                        <input width="50px" type="number" data-id="@item.Id" min="0" value="0" required />
-                                        <p class="message_error"></p>
-                                    </td>
-                                </tr>
+                    <tr id="trow_@item.Id">
+                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
+                        <td class="stt-cell">@i</td>
+                        <td><img src="@item.Image" width="100px" /></td>
+                        <td id="title_Matts">@item.Title</td>
+                        <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td> 
+                        <td>
+                            <input width="50px" type="number" data-id="@item.Id" min="0" required />
+                            <p class="message_error"></p>
+                        </td>
+                    </tr>
                                 i++;
                             }
                         }
@@ -114,8 +116,8 @@
     <!-- /.card -->
     @* FORM POPUP de xac nhan don hang *@
     <div>
-        <div id="myModal" class="modal fade">
-            <div class="modal-dialog">
+        <div id="myModal" tabindex="-1" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title text-bold">Xác nhận đơn hàng</h4>
@@ -126,17 +128,29 @@
                             <thead>
                                 <tr>
                                     <th>Ảnh đại diện</th>
-                                    <th>Tên nguyên liệu</th>
+                                    <th>Nguyên liệu</th>
+                                    <th>Giá</th>
                                     <th>Số lượng</th>
+                                    <th>Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody id="table_Confirmed">
+                                @* truyền data vao đây*@
                             </tbody>
+                            <tfoot>
+                                <tr class="text-bold text-md">
+                                    <td></td>
+                                    <td></td>
+                                    <td>Tổng cộng</td>
+                                    <td id="quantityConfirmOrder">115</td>
+                                    <td id="totalPriceConfirmOrder">225,000 đ</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                        <button type="button" id="btn_Confirmed_Order" class="btn btn-primary" data-dismiss="modal">Đặt hàng</button>
                     </div>
                 </div>
             </div>
@@ -145,74 +159,139 @@
 
 </section>
 
-<script>
-    let btnOrder = document.querySelector("#StoreOrder");
-    let myPopup = document.querySelector('#myModal');
-    let checkBoxs = document.querySelectorAll("input[class=cbkItem]")
+@section scripts{
+    <script>
+        let btnOrder = document.querySelector("#StoreOrder");
+        let myPopup = document.querySelector('#myModal');
+        let checkBoxs = document.querySelectorAll("input[class=cbkItem]")
+        let formValue;
 
-    Array.from(checkBoxs).forEach((checkBox) => {
-        let messageError = checkBox.closest("tr").querySelector("td .message_error");
-        checkBox.onchange = (e) => {
-            if (!checkBox.checked) { // neu khong checked
-                messageError.innerHTML = "";
-            } else {
-                let inputValue = checkBox.closest("tr").querySelector("td input[type=number]");
-                inputValue.onchange = (e) => {
+        // Xử lý checkbox và input số lượng
+        Array.from(checkBoxs).forEach((checkBox) => {
+            let messageError = checkBox.closest("tr").querySelector("td .message_error");
+            checkBox.onchange = (e) => {
+                if (!checkBox.checked) { // neu khong checked
+                    messageError.innerHTML = "";
+                } else {
+                    let inputValue = checkBox.closest("tr").querySelector("td input[type=number]");
                     if (inputValue.value == 0) {
                         messageError.innerHTML = "Vui lòng không để trống";
-                    } else {
-                        messageError.innerHTML = "";
                     }
-                }             
-            }
-        }
-    })
-
-    btnOrder.onclick = (e) => {
-        let formValue = [];
-        let checkedBoxes = document.querySelectorAll("input[class=cbkItem]:checked")
-
-        if (checkedBoxes != null) {
-            Array.from(checkedBoxes).forEach((checkbox, index) => {
-                let nextElement = checkbox.closest("tr");
-                if (nextElement != null) {
-                    let imageSrc = nextElement.querySelector("td img");
-                    let titleMatt = nextElement.querySelector("#title_Matts");
-                    let inputValue = nextElement.querySelector("td input[type=number]");
-                    let messageError = nextElement.querySelector("td .message_error");
-
-                    if (inputValue.value != 0) {
-                        messageError.textContent = "";
-
-                        let itemData = {
-                            imageSrc: imageSrc.getAttribute("src"),
-                            titleMatt: titleMatt.textContent,
-                            inputValue: inputValue.value
-                        };
-                        formValue.push(itemData);
-                    }
-                    else {
-                        messageError.innerHTML = "Vui lòng không để trống";
+                    inputValue.oninput = (e) => {
+                        if (inputValue.value == 0) {
+                            messageError.innerHTML = "Vui lòng không để trống";
+                        } else {
+                            messageError.innerHTML = "";
+                        }
                     }
                 }
-            });
+            }
+        })
+
+
+        // Xử lý xác nhận đơn
+        btnOrder.onclick = (e) => {
+            formValue = [];
+            let sumQuantityConfirmed = 0;
+            let sumTotalPriceConfirmed = 0;
+
+            let checkedBoxes = document.querySelectorAll("input[class=cbkItem]:checked")
+            if (checkedBoxes.length != 0) {
+                Array.from(checkedBoxes).forEach((checkbox, index) => {
+                    let nextElement = checkbox.closest("tr");
+                    if (nextElement != null) {
+                        let imageSrc = nextElement.querySelector("td img");
+                        let titleMatt = nextElement.querySelector("#title_Matts");
+                        let inputValue = nextElement.querySelector("td input[type=number]");
+                        let priceMatts = nextElement.querySelector("#price_Matts");
+                        let messageError = nextElement.querySelector("td .message_error");
+
+                        sumTotalPriceConfirmed += inputValue.value * ParsePriceToFloat(priceMatts.textContent);
+                        sumQuantityConfirmed += parseInt(inputValue.value);
+
+                        if (inputValue.value != 0) {
+                            btnOrder.setAttribute("data-target", "#myModal");
+                            btnOrder.setAttribute("data-toggle", "modal");
+                            messageError.textContent = "";
+
+                            let itemData = {
+                                idMatt: checkbox.value,
+                                imageSrc: imageSrc.getAttribute("src"),
+                                titleMatt: titleMatt.textContent,
+                                priceMatts: priceMatts.textContent,
+                                inputValue: inputValue.value
+                            };
+                            formValue.push(itemData);
+                        }
+                        else {
+                            btnOrder.removeAttribute("data-target");
+                            btnOrder.removeAttribute("data-toggle");
+                            messageError.innerHTML = "Vui lòng không để trống";
+                        }
+                    }
+                });
+            } else {
+                btnOrder.removeAttribute("data-target");
+                btnOrder.removeAttribute("data-toggle");
+                alert("Ban chưa chọn nguyên liệu nào")
+            }
+            if (formValue.length != null) {
+                let tableBody = document.getElementById("table_Confirmed");
+                let htmlString = formValue.reduce((html, data) => {
+                    let rowHtml = `
+                <tr>
+                    <td><img src="${data.imageSrc}" width="80px" /></td>
+                    <td>${data.titleMatt}</td>
+                    <td>${data.priceMatts}</td>
+                    <td>${data.inputValue}</td>
+                    <td>${(data.inputValue * ParsePriceToFloat(data.priceMatts)).toLocaleString('en-US')} đ</td>
+                </tr>
+                `;
+
+                    return html + rowHtml;
+                }, '');
+                tableBody.innerHTML = htmlString;
+                document.querySelector("#quantityConfirmOrder").innerHTML = sumQuantityConfirmed;
+                document.querySelector("#totalPriceConfirmOrder").innerHTML = `${sumTotalPriceConfirmed.toLocaleString('en-US')} đ`;
+
+                // Xử lý submit đơn và truyền vào controller
+                let btnConfirmOrder = document.querySelector("#btn_Confirmed_Order");
+                let orderDetailValueArray = formValue.map(itemData => {
+                    return {
+                        MatterialID: itemData.idMatt,
+                        Quantity: itemData.inputValue
+                    };
+                });
+                var postData = JSON.stringify({
+                    list: orderDetailValueArray,
+                    total: (parseFloat(sumTotalPriceConfirmed) / 1000).toFixed(2)
+                });
+                btnConfirmOrder.onclick = (e) => {
+                    if (orderDetailValueArray.length != 0) {
+                        $.ajax({
+                            type: "POST",
+                            url: '/admin/StoreOrder/Index',
+                            data: postData,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                // Chuyển hướng sau khi SweetAlert được hiển thị
+                                //window.location.href = response.newUrl;
+
+                                alert("thành công");
+                            }
+                        })
+                    } else {
+                        alert("Đơn hàng của bạn trống !");
+                    }
+                }
+            } 
         }
-        if (formValue != null) {
-            let tableBody = document.getElementById("table_Confirmed");
-            let htmlString = formValue.reduce((html, data) => {
-                let rowHtml = `
-                                        <tr>
-                                            <td><img src="${data.imageSrc}" width="80px" /></td>
-                                            <td>${data.titleMatt}</td>
-                                            <td>${data.inputValue}</td>
-                                        </tr>
-                                      `;
 
-                return html + rowHtml;
-            }, '');
-
-            tableBody.innerHTML = htmlString;
+        function ParsePriceToFloat(input) {
+            return parseFloat(input.replace(/[^\d]/g, ''));
         }
-    }
 
-</script>
+
+    </script>
+}
