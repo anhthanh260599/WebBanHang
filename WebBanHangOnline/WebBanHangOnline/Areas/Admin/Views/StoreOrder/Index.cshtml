@@ -39,7 +39,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item active">Đặt nguyên liệu</li>
+                    <li class="breadcrumb-item active">Danh sách nguyên liệu</li>
                 </ol>
             </div>
         </div>
@@ -84,17 +84,17 @@
 
                             foreach (var item in Model)
                             {
-                    <tr id="trow_@item.Id">
-                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
-                        <td class="stt-cell">@i</td>
-                        <td><img src="@item.Image" width="100px" /></td>
-                        <td id="title_Matts">@item.Title</td>
-                        <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td> 
-                        <td>
-                            <input width="50px" type="number" data-id="@item.Id" min="0" required />
-                            <p class="message_error"></p>
-                        </td>
-                    </tr>
+                                <tr id="trow_@item.Id">
+                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td><img src="@item.Image" width="100px" /></td>
+                                    <td id="title_Matts">@item.Title</td>
+                                    <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td>
+                                    <td>
+                                        <input width="50px" type="number" data-id="@item.Id" min="0" required />
+                                        <p class="message_error"></p>
+                                    </td>
+                                </tr>
                                 i++;
                             }
                         }
@@ -227,6 +227,7 @@
                             btnOrder.removeAttribute("data-target");
                             btnOrder.removeAttribute("data-toggle");
                             messageError.innerHTML = "Vui lòng không để trống";
+                            alert("Bạn chưa nhập số lượng")
                         }
                     }
                 });
@@ -239,14 +240,14 @@
                 let tableBody = document.getElementById("table_Confirmed");
                 let htmlString = formValue.reduce((html, data) => {
                     let rowHtml = `
-                <tr>
-                    <td><img src="${data.imageSrc}" width="80px" /></td>
-                    <td>${data.titleMatt}</td>
-                    <td>${data.priceMatts}</td>
-                    <td>${data.inputValue}</td>
-                    <td>${(data.inputValue * ParsePriceToFloat(data.priceMatts)).toLocaleString('en-US')} đ</td>
-                </tr>
-                `;
+                                    <tr>
+                                        <td><img src="${data.imageSrc}" width="80px" /></td>
+                                        <td>${data.titleMatt}</td>
+                                        <td>${data.priceMatts}</td>
+                                        <td>${data.inputValue}</td>
+                                        <td>${(data.inputValue * ParsePriceToFloat(data.priceMatts)).toLocaleString('en-US')} đ</td>
+                                    </tr>
+                                    `;
 
                     return html + rowHtml;
                 }, '');
@@ -264,8 +265,9 @@
                 });
                 var postData = JSON.stringify({
                     list: orderDetailValueArray,
-                    total: (parseFloat(sumTotalPriceConfirmed) / 1000).toFixed(2)
+                    total: parseFloat(sumTotalPriceConfirmed)
                 });
+
                 btnConfirmOrder.onclick = (e) => {
                     if (orderDetailValueArray.length != 0) {
                         $.ajax({
@@ -285,7 +287,7 @@
                         alert("Đơn hàng của bạn trống !");
                     }
                 }
-            } 
+            }
         }
 
         function ParsePriceToFloat(input) {
