@@ -49,7 +49,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
                     model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
-
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này

@@ -1,5 +1,4 @@
-﻿@model IEnumerable<WebBanHangOnline.Models.EF.OrderDetail>
-@using WebBanHangOnline.Models.Common
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.OrderDetailMatts>
 
 @if (Model != null && Model.Any())
 {
@@ -8,7 +7,7 @@
         <thead>
             <tr>
                 <th>STT</th>
-                <th>Tên sản phẩm</th>
+                <th>Tên nguyên liệu</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
                 <th>Thành tiền</th>
@@ -18,14 +17,13 @@
         <tbody>
             @foreach (var item in Model)
             {
-                var thanhTien = item.Price * item.Quantity;
+                var thanhTien = item.Matterial.Price * item.Quantity;
                 <tr>
                     <td>@i</td>
-                    <td>@item.Product.Title</td>
-                    <td>@Common.FormatNumber(item.Price,0) đ</td>
+                    <td>@item.Matterial.Title (@item.MatterialID)</td>
+                    <td>@String.Format("{0:N0}", item.Matterial.Price) đ</td>
                     <td>@item.Quantity</td>
-                    <td>@Common.FormatNumber(thanhTien, 0) đ</td>
-
+                    <td>@String.Format("{0:N0}", thanhTien) đ</td>
                 </tr>
                 i++;
             }
