@@ -65,10 +65,25 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 context.SaveChanges();
             }
 
-            return Json(new { newUrl = Url.Action("Index", "Matterials") });
+            return Json(new { newUrl = Url.Action("OrderIndex", "StoreOrder") }); // Truyền đến quản lý đơn nvl
         }
 
+        public ActionResult OrderIndex()
+        {
+            var items = db.OrderMatts.ToList();
+            return View(items);
+        }
 
-        ///////////////// Thông làm phần này đi
+        public ActionResult OrderDetail(int id)
+        {
+            var item = db.OrderMatts.Find(id);
+            return View(item);
+        }
+
+        public ActionResult Partial_OrderDetail(int id)
+        {
+            var items = db.OrderDetailMatts.Where(x => x.OrderMattsID == id).ToList();
+            return PartialView(items);
+        }
     }
 }

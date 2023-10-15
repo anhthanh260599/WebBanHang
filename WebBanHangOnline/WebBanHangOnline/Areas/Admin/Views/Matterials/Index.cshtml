@@ -83,7 +83,7 @@
                                 <td class="stt-cell">@i</td>
                                 <td><img src="@item.Image" width="100px" /></td>
                                 <td>@item.Title</td>
-                                <td>@item.Price</td>
+                                <td>@String.Format("{0:N0}", item.Price) đ</td>
                                 <td>
                                     <label class="switch">
                                         <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
@@ -94,8 +94,6 @@
                                 @*<td class="text-center">
                                        <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
                                     </td>*@
-
-
 
                                 <td>
                                     <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>

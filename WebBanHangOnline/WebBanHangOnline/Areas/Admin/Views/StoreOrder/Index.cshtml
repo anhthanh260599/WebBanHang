@@ -53,7 +53,7 @@
             <h3 class="card-title">@ViewBag.Title</h3>
 
             <div class="card-tools">
-                <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
+                <a id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
@@ -160,22 +160,56 @@
 </section>
 
 @section scripts{
+
+    @*Xử lý nút chọn tất cả checkbox*@
+    <script>
+
+    </script>
+    <script>
+
+    </script>
+    @*Xử lý form đặt nguyên liệu*@
     <script>
         let btnOrder = document.querySelector("#StoreOrder");
         let myPopup = document.querySelector('#myModal');
-        let checkBoxs = document.querySelectorAll("input[class=cbkItem]")
+        let checkBoxs = document.querySelectorAll("input[class=cbkItem]") // lay ra het checkbox
+        let btnCheckAll = document.querySelector("#SelectAll");
+        let btnDeleteSelected = document.querySelector("#btnDeleteSelected");
+
         let formValue;
 
         // Xử lý checkbox và input số lượng
         Array.from(checkBoxs).forEach((checkBox) => {
             let messageError = checkBox.closest("tr").querySelector("td .message_error");
-            checkBox.onchange = (e) => {
-                if (!checkBox.checked) { // neu khong checked
+            HandleInputValue(checkBox, messageError);
+        })
+
+        // Xử lý Unchecked các nút đang được check
+       btnDeleteSelected.onclick = (e) => {
+            Array.from(checkBoxs).forEach((checkBox) => {
+                let messageError = checkBox.closest("tr").querySelector("td .message_error");
+
+                if (checkBox.checked == true) {
+                    checkBox.checked = false;
+                    btnCheckAll.checked = false;
                     messageError.innerHTML = "";
-                } else {
+
+                }
+            })
+        }
+
+        // Xử lý nút chọn tất cả checkbox
+        btnCheckAll.onchange = (e) => {
+            if (btnCheckAll.checked) {
+                Array.from(checkBoxs).forEach((checkBox) => {
+                    let messageError = checkBox.closest("tr").querySelector("td .message_error");
                     let inputValue = checkBox.closest("tr").querySelector("td input[type=number]");
+
+                    checkBox.checked = true;
                     if (inputValue.value == 0) {
                         messageError.innerHTML = "Vui lòng không để trống";
+                    } else {
+                        messageError.innerHTML = "";
                     }
                     inputValue.oninput = (e) => {
                         if (inputValue.value == 0) {
@@ -184,18 +218,24 @@
                             messageError.innerHTML = "";
                         }
                     }
-                }
+                })
+            } else {
+                Array.from(checkBoxs).forEach((checkBox) => {
+                    let messageError = checkBox.closest("tr").querySelector("td .message_error");
+                    messageError.innerHTML = "";
+                    checkBox.checked = false;
+
+                })
             }
-        })
-
-
+        }
         // Xử lý xác nhận đơn
         btnOrder.onclick = (e) => {
             formValue = [];
             let sumQuantityConfirmed = 0;
             let sumTotalPriceConfirmed = 0;
-
+            let isInputValue = true;
             let checkedBoxes = document.querySelectorAll("input[class=cbkItem]:checked")
+
             if (checkedBoxes.length != 0) {
                 Array.from(checkedBoxes).forEach((checkbox, index) => {
                     let nextElement = checkbox.closest("tr");
@@ -224,10 +264,8 @@
                             formValue.push(itemData);
                         }
                         else {
-                            btnOrder.removeAttribute("data-target");
-                            btnOrder.removeAttribute("data-toggle");
+                            isInputValue = false;
                             messageError.innerHTML = "Vui lòng không để trống";
-                            alert("Bạn chưa nhập số lượng")
                         }
                     }
                 });
@@ -236,10 +274,15 @@
                 btnOrder.removeAttribute("data-toggle");
                 alert("Ban chưa chọn nguyên liệu nào")
             }
-            if (formValue.length != null) {
-                let tableBody = document.getElementById("table_Confirmed");
-                let htmlString = formValue.reduce((html, data) => {
-                    let rowHtml = `
+            if (!isInputValue) {
+                btnOrder.removeAttribute("data-target");
+                btnOrder.removeAttribute("data-toggle");
+                alert("Bạn chưa nhập số lượng")
+            } else {
+                if (formValue.length != null) {
+                    let tableBody = document.getElementById("table_Confirmed");
+                    let htmlString = formValue.reduce((html, data) => {
+                        let rowHtml = `
                                     <tr>
                                         <td><img src="${data.imageSrc}" width="80px" /></td>
                                         <td>${data.titleMatt}</td>
@@ -249,51 +292,82 @@
                                     </tr>
                                     `;
 
-                    return html + rowHtml;
-                }, '');
-                tableBody.innerHTML = htmlString;
-                document.querySelector("#quantityConfirmOrder").innerHTML = sumQuantityConfirmed;
-                document.querySelector("#totalPriceConfirmOrder").innerHTML = `${sumTotalPriceConfirmed.toLocaleString('en-US')} đ`;
+                        return html + rowHtml;
+                    }, '');
+                    tableBody.innerHTML = htmlString;
+                    document.querySelector("#quantityConfirmOrder").innerHTML = sumQuantityConfirmed;
+                    document.querySelector("#totalPriceConfirmOrder").innerHTML = `${sumTotalPriceConfirmed.toLocaleString('en-US')} đ`;
 
-                // Xử lý submit đơn và truyền vào controller
-                let btnConfirmOrder = document.querySelector("#btn_Confirmed_Order");
-                let orderDetailValueArray = formValue.map(itemData => {
-                    return {
-                        MatterialID: itemData.idMatt,
-                        Quantity: itemData.inputValue
-                    };
-                });
-                var postData = JSON.stringify({
-                    list: orderDetailValueArray,
-                    total: parseFloat(sumTotalPriceConfirmed)
-                });
+                    // Xử lý submit đơn và truyền vào controller
+                    let btnConfirmOrder = document.querySelector("#btn_Confirmed_Order");
+                    let orderDetailValueArray = formValue.map(itemData => {
+                        return {
+                            MatterialID: itemData.idMatt,
+                            Quantity: itemData.inputValue
+                        };
+                    });
+                    var postData = JSON.stringify({
+                        list: orderDetailValueArray,
+                        total: parseFloat(sumTotalPriceConfirmed)
+                    });
 
-                btnConfirmOrder.onclick = (e) => {
-                    if (orderDetailValueArray.length != 0) {
-                        $.ajax({
-                            type: "POST",
-                            url: '/admin/StoreOrder/Index',
-                            data: postData,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function (response) {
-                                // Chuyển hướng sau khi SweetAlert được hiển thị
-                                //window.location.href = response.newUrl;
-
-                                alert("thành công");
-                            }
-                        })
-                    } else {
-                        alert("Đơn hàng của bạn trống !");
+                    btnConfirmOrder.onclick = (e) => {
+                        if (orderDetailValueArray.length != 0) {
+                            $.ajax({
+                                type: "POST",
+                                url: '/admin/StoreOrder/Index',
+                                data: postData,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    @* alert("thành công");*@
+                                    Swal.fire({
+                                        title: 'Thành công',
+                                        text: "Đặt thành công",
+                                        icon: 'success',
+                                        confirmButtonColor: '#3085d6',
+                                        confirmButtonText: 'Đồng ý'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Chuyển hướng sau khi SweetAlert được hiển thị
+                                            window.location.href = response.newUrl
+                                        }
+                                    })
+                                }
+                            })
+                        } else {
+                            alert("Đơn hàng của bạn trống !");
+                        }
                     }
                 }
             }
+
         }
 
         function ParsePriceToFloat(input) {
             return parseFloat(input.replace(/[^\d]/g, ''));
         }
 
+        function HandleInputValue(checkBox, messageError) {
+            checkBox.onchange = (e) => {
+                if (!checkBox.checked) { // neu khong checked
+                    messageError.innerHTML = "";
+                } else {
+                    let inputValue = checkBox.closest("tr").querySelector("td input[type=number]");
+
+                    if (inputValue.value == 0) {
+                        messageError.innerHTML = "Vui lòng không để trống";
+                    }
+                    inputValue.oninput = (e) => {
+                        if (inputValue.value == 0) {
+                            messageError.innerHTML = "Vui lòng không để trống";
+                        } else {
+                            messageError.innerHTML = "";
+                        }
+                    }
+                }
+            }
+        }
 
     </script>
 }

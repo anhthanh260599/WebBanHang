@@ -1,0 +1,186 @@
+﻿@model WebBanHangOnline.Models.EF.OrderMatts
+
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader {
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Chi tiết đơn hàng</a>
+        </li>
+    </ul>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý đơn nguyên liệu</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Chi tiết đơn hàng</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a href="@Url.Action("OrderIndex","StoreOrder")" class="btn btn-danger">Quay lại</a>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@ViewBag.Title</h3>
+
+            <div class="card-tools">
+
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Mã đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="@Model.Id" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Mã code đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="@Model.Code" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Cửa hàng</label>
+                        <input type="text" readonly class="form-control" value="@Model.Store.Name (@Model.StoreID)" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input type="text" readonly class="form-control" value="@Model.Phone" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" readonly class="form-control" value="@Model.Address" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" readonly class="form-control" value="@Model.Email" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Tổng tiền</label>
+                        <input type="text" readonly class="form-control" value="@String.Format("{0:N0}", Model.TotalAmount) đ" />
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Thời gian đạt hàng</label>
+                        <input type="text" readonly class="form-control" value="@Model.CreateDate.ToString("dd/MM/yyyy HH:mm")" />
+                    </div>
+                </div>
+
+                @if (Model.Status == 1)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == 2)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == 3)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Giao hàng thành công" />
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == 4)
+                {
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Trạng thái thanh toán</label>
+                            <input type="text" readonly class="form-control" value="Huỷ" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+
+    <!-- /.card 2 -->
+    <!-- Default box 2 -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-bold">Danh sách sản phẩm mua</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mt-1">
+                <div class="col-12">
+                    @Html.Action("Partial_OrderDetail", "StoreOrder", new { id = @Model.Id })
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
