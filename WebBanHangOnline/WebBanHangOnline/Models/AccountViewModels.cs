@@ -96,14 +96,15 @@ namespace WebBanHangOnline.Models
 
     public class ForgotViewModel
     {
-        [Required(ErrorMessage = "Vui lòng không để trống")]
+        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
-        [Required(ErrorMessage ="Vui lòng không để trống")]
+        [Required]
+        [Display(Name = "UserName")]
         public string UserName { get; set; }
 
         //[Required]
@@ -111,11 +112,12 @@ namespace WebBanHangOnline.Models
         //[EmailAddress]
         //public string Email { get; set; }
 
-        [Required(ErrorMessage = "Vui lòng không để trống")]
+        [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Nhớ mật khẩu?")]
+        [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
