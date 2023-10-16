@@ -7,23 +7,15 @@
 }
 
 <div class="card-body login-card-body">
+    <div class="login-logo">
         <a href="/admin"><b>Four</b>Coffee</a>
-        <hr style="margin-top:2px; width:60%; " />
-    </div>
-
-        <a href="/admin"><b>Four</b>Coffee</a>
-        <hr style="margin-top:2px; width:60%; " />
+        <hr class="mt-2" />
     </div>
 
     @using (Html.BeginForm("Login", "Account", FormMethod.Post))
     {
-        <div class="login-logo">
-            <a href="/admin"><b>Four</b>Coffee</a>
-            <hr class="mt-2" />
-        </div>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true);
-
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
@@ -46,7 +38,6 @@
         </div>
 
         <div class="row">
-
             <div class="col-md-6">
                 @Html.CheckBoxFor(x => x.RememberMe)
                 <label for="remember">
@@ -64,6 +55,12 @@
                 <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </div>
         </div>
+
     }
 
+
+    <!-- /.social-auth-links -->
+    @*<p class="mb-0">
+            <a href="register.html" class="text-center">Register a new membership</a>
+        </p>*@
 </div>
