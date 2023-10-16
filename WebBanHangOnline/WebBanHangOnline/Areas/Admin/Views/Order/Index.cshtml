@@ -109,6 +109,10 @@
                                 {
                                     <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
                                 }
+                                @if (item.Status == 5)
+                                {
+                                    <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
+                                }
 
                                 @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
@@ -172,6 +176,7 @@
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
                         <option value="2">Đã thanh toán</option>
+                        <option value="5">Đang giao hàng</option>
                         <option value="3">Giao hàng thành công</option>
                         <option value="4">Huỷ</option>
 

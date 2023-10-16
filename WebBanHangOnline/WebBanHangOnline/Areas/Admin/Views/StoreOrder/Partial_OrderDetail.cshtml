@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>STT</th>
+                <th>Mã nguyên liệu</th>
                 <th>Tên nguyên liệu</th>
                 <th>Giá</th>
                 <th>Số lượng</th>
@@ -20,7 +21,8 @@
                 var thanhTien = item.Matterial.Price * item.Quantity;
                 <tr>
                     <td>@i</td>
-                    <td>@item.Matterial.Title (@item.MatterialID)</td>
+                    <td>@item.Matterial.MattsCode</td>
+                    <td>@item.Matterial.Title</td>
                     <td>@String.Format("{0:N0}", item.Matterial.Price) đ</td>
                     <td>@item.Quantity</td>
                     <td>@String.Format("{0:N0}", thanhTien) đ</td>

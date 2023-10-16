@@ -68,6 +68,7 @@
                         <th><input type="checkbox" id="SelectAll" /></th>
                         <th>STT</th>
                         <th>Ảnh đại diện</th>
+                        <th>Mã nguyên liệu</th>
                         <th>Tên nguyên liệu</th>
                         <th>Giá</th>
                         <th>Số lượng</th>
@@ -88,6 +89,7 @@
                                     <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
                                     <td class="stt-cell">@i</td>
                                     <td><img src="@item.Image" width="100px" /></td>
+                                    <td id="code_Matts">@item.MattsCode</td>
                                     <td id="title_Matts">@item.Title</td>
                                     <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td>
                                     <td>
@@ -127,6 +129,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Mã</th>
                                     <th>Ảnh đại diện</th>
                                     <th>Nguyên liệu</th>
                                     <th>Giá</th>
@@ -139,6 +142,7 @@
                             </tbody>
                             <tfoot>
                                 <tr class="text-bold text-md">
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td>Tổng cộng</td>
@@ -241,6 +245,7 @@
                     let nextElement = checkbox.closest("tr");
                     if (nextElement != null) {
                         let imageSrc = nextElement.querySelector("td img");
+                        let codeMatt = nextElement.querySelector("#code_Matts");
                         let titleMatt = nextElement.querySelector("#title_Matts");
                         let inputValue = nextElement.querySelector("td input[type=number]");
                         let priceMatts = nextElement.querySelector("#price_Matts");
@@ -257,6 +262,7 @@
                             let itemData = {
                                 idMatt: checkbox.value,
                                 imageSrc: imageSrc.getAttribute("src"),
+                                codeMatt: codeMatt.textContent,
                                 titleMatt: titleMatt.textContent,
                                 priceMatts: priceMatts.textContent,
                                 inputValue: inputValue.value
@@ -284,6 +290,7 @@
                     let htmlString = formValue.reduce((html, data) => {
                         let rowHtml = `
                                     <tr>
+                                        <td>${data.codeMatt}</td>
                                         <td><img src="${data.imageSrc}" width="80px" /></td>
                                         <td>${data.titleMatt}</td>
                                         <td>${data.priceMatts}</td>

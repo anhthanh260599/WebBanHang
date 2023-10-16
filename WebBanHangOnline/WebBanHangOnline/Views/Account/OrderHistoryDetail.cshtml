@@ -116,6 +116,15 @@
                 </div>
             </div>
         }
+        @if (Model.Status == 5)
+        {
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Trạng thái thanh toán</label>
+                    <input type="text" readonly class="form-control" value="Đang giao hàng" />
+                </div>
+            </div>
+        }
     </div>
     @if (Model.PromotionCode != null)
     {

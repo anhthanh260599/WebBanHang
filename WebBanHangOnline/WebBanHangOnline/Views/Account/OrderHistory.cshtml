@@ -67,7 +67,10 @@
                         {
                             <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
                         }
-
+                        @if (item.Status == 5)
+                        {
+                            <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
+                        }
                         @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                         <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
