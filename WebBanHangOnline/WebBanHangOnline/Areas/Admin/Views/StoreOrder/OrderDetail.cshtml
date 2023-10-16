@@ -60,15 +60,15 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-6">
+                @*<div class="col-6">
                     <div class="form-group">
                         <label>Mã đơn hàng</label>
                         <input type="text" readonly class="form-control" value="@Model.Id" />
                     </div>
-                </div>
+                </div>*@
                 <div class="col-6">
                     <div class="form-group">
-                        <label>Mã code đơn hàng</label>
+                        <label>Mã đơn hàng</label>
                         <input type="text" readonly class="form-control" value="@Model.Code" />
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label>Cửa hàng</label>
-                        <input type="text" readonly class="form-control" value="@Model.Store.Name (@Model.StoreID)" />
+                        <input type="text" readonly class="form-control" value="@Model.Store.Name" />
                     </div>
                 </div>
                 <div class="col-6">
@@ -118,7 +118,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                            <input type="text" readonly class="form-control" value="Đặt hàng thành công" />
                         </div>
                     </div>
                 }
@@ -127,7 +127,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                            <input type="text" readonly class="form-control" value="Đang giao hàng" />
                         </div>
                     </div>
                 }
@@ -137,15 +137,6 @@
                         <div class="form-group">
                             <label>Trạng thái thanh toán</label>
                             <input type="text" readonly class="form-control" value="Giao hàng thành công" />
-                        </div>
-                    </div>
-                }
-                @if (Model.Status == 4)
-                {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Huỷ" />
                         </div>
                     </div>
                 }

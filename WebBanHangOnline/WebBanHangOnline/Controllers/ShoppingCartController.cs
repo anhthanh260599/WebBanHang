@@ -175,7 +175,7 @@ namespace WebBanHangOnline.Controllers
                     order.CustomerName = request.CustomerName;
                     order.Address = request.Address;
                     order.Phone = request.Phone;
-                    order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ
+                    order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ, 5 = Đang giao hàng
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
                     {
                         ProductID = x.ProductId,

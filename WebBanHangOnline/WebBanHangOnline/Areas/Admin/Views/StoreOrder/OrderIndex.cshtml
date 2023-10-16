@@ -75,42 +75,38 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@item.Id</td>
-                                <td>@item.Store.Name (@item.StoreID)</td>
+                                <td>@item.Code</td>
+                                <td>@item.Store.Name</td>
                                 <td>@item.Phone</td>
                                 <td>@String.Format("{0:N0}", item.TotalAmount) đ</td>
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
                                 @if (item.Status == 1)
                                 {
-                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Đặt hàng thành công</td>
                                 }
                                 @if (item.Status == 2)
                                 {
-                                    <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                    <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
                                 }
                                 @if (item.Status == 3)
                                 {
                                     <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
                                 }
-                                @if (item.Status == 4)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
-                                }
-                            <td>
-                                <a href="@Url.Action("OrderDetail", "StoreOrder", new { id = item.Id })" class="btn btn-sm btn-info">Xem</a>
+                                <td>
+                                    <a href="@Url.Action("OrderDetail", "StoreOrder", new { id = item.Id })" class="btn btn-sm btn-info">Xem</a>
 
-                                @if (item.Status != 3)
-                                {
+                                    @if (item.Status != 3)
+                                    {
 
-                                    <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                                        Cập nhật
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
-                                }
-                            </td>
+                                        <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
+                                            Cập nhật
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                    }
+                                </td>
                             </tr>
                             i++;
                         }
@@ -132,3 +128,73 @@
 
 </section>
 <!-- /.content -->
+
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cập nhật trạng thái</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtOrderID" value="0" />
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <select class="form-control" id="ddTrangThai">
+                        <option value="2">Đang giao hàng</option>
+                        <option value="3">Giao hàng thành công</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+@section scripts {
+    <script>
+    $(document).ready(function () {
+        $('body').on('click', '.btnCapNhat', function () {
+            var id = $(this).data('id')
+            $('#txtOrderID').val(id);
+            $('#modal-default').modal('show')
+        })
+
+        $('body').on('click', '#btnLuu', function () {
+            var id = $('#txtOrderID').val();
+            var trangThai = $('#ddTrangThai').val();
+            $.ajax({
+                url: '/admin/StoreOrder/UpdateTrangThai',
+                type: 'POST',
+                data: { id: id, trangThai: trangThai },
+                success: function (rs) {
+                    if (rs.success) {
+                        //alert(rs.message)
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công',
+                            text: rs.message,
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(); // Reload trang sau khi người dùng nhấn OK
+                            }
+                        });
+                    }
+                }
+            })
+        })
+    });
+    </script>
+
+}

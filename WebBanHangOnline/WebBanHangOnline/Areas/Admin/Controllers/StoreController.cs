@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -78,6 +80,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             var item = db.Stores.Find(id);
             var store = new Store();
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var allUsers = userManager.Users.ToList();
+            var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
+            var userSelectList = new SelectList(usersInRole, "Id", "UserName");
+            ViewBag.UserList = userSelectList;
+
             await PopulateDropdownLists(store);
             return View(item);
         }
@@ -106,6 +115,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 return RedirectToAction("Index"); // Chuyển hướng sau khi tạo sản phẩm thành công
             }
             // Nếu có lỗi xảy ra, điền lại Dropdownlist và hiển thị lại trang Create
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var allUsers = userManager.Users.ToList();
+            var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
+            var userSelectList = new SelectList(usersInRole, "Id", "UserName");
+            ViewBag.UserList = userSelectList;
+
             PopulateDropdownLists(store);
             return View(store);
         }
