@@ -51,7 +51,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 orderMatts.StoreID = store.Id;
             }
-            else
+            else if (store == null) 
             {
                 orderMatts.StoreID = 14;
             }
@@ -90,7 +90,15 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             orderMatts.CustomerName = currentUser.FullName;
             orderMatts.Phone = currentUser.Phone;
             orderMatts.Email = currentUser.Email;
-            orderMatts.Address = store.Address + ", " + store.Ward + ", " + store.District + ", " + store.Province;
+            if (store != null)
+            {
+                orderMatts.Address = store.Address + ", " + store.Ward + ", " + store.District + ", " + store.Province;
+            }
+            else if (store == null)
+            {
+                orderMatts.Address = "FourC Sư Vạn Hạnh";
+            }
+
             orderMatts.TotalAmount = total;
             orderMatts.Status = 1;
 
@@ -113,7 +121,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult OrderIndex()
         {
-            var items = db.OrderMatts.ToList();
+            var items = db.OrderMatts.OrderByDescending(x=>x.Id).ToList();
             return View(items);
         }
 

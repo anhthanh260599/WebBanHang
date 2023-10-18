@@ -3331,6 +3331,7 @@
     <Content Include="Content\clients\plugins\uplot\uPlot.iife.min.js" />
     <Content Include="Content\clients\plugins\uplot\uPlot.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\template\avatar-mac-dinh.jpg" />
     <Content Include="Content\template\sendMailCuaHang.html" />
     <Content Include="Content\template\sendMailKhachHang.html" />
     <Content Include="favicon.ico" />
@@ -3649,6 +3650,7 @@
     <Content Include="Views\Account\Partial_OrderHistoryDetail.cshtml" />
     <Content Include="Views\WishList\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Partial_List_PromotionCode.cshtml" />
+    <Content Include="Views\Account\NoPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

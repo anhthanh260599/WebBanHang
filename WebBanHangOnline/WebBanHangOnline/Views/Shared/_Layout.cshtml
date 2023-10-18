@@ -106,35 +106,35 @@
 
                                     <!-- Currency / Language / My Account -->
                                     @*<li class="currency">
-                                            <a href="#">
-                                                usd
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="currency_selection">
-                                                <li><a href="#">cad</a></li>
-                                                <li><a href="#">aud</a></li>
-                                                <li><a href="#">eur</a></li>
-                                                <li><a href="#">gbp</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="language">
-                                            <a href="#">
-                                                English
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="language_selection">
-                                                <li><a href="#">French</a></li>
-                                                <li><a href="#">Italian</a></li>
-                                                <li><a href="#">German</a></li>
-                                                <li><a href="#">Spanish</a></li>
-                                            </ul>
-                                        </li>*@
+            <a href="#">
+                usd
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="currency_selection">
+                <li><a href="#">cad</a></li>
+                <li><a href="#">aud</a></li>
+                <li><a href="#">eur</a></li>
+                <li><a href="#">gbp</a></li>
+            </ul>
+        </li>
+        <li class="language">
+            <a href="#">
+                English
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="language_selection">
+                <li><a href="#">French</a></li>
+                <li><a href="#">Italian</a></li>
+                <li><a href="#">German</a></li>
+                <li><a href="#">Spanish</a></li>
+            </ul>
+        </li>*@
                                     <li style="min-width:150px;" class="account">
 
                                         @if (!Request.IsAuthenticated)
                                         {
                                             <a href="#">
-                                                Xin chào bạn
+                                                Thông tin
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
@@ -148,16 +148,22 @@
                                                 @User.Identity.Name
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
-                                            <ul class="account_selection">
-                                                <li><a href="/account/profile"><i class="fa fa-sign-in" aria-hidden="true"></i>Hồ sơ</a></li>
+                                            <ul class="account_selection" style="width:250px;">
+                                                <li><a href="/account/profile"><i class="fa fa-user-plus" aria-hidden="true"></i>Hồ sơ</a></li>
                                                 <li><a href="/account/OrderHistory"><i class="fa-solid fa-clock-rotate-left"></i>Lịch sử đơn hàng</a></li>
                                                 <li><a href="/wishlist/Index"><i class="fa-solid fa-heart"></i>Sản phẩm yêu thích</a></li>
-                                                <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-user-plus" aria-hidden="true"></i>Đăng xuất</a></li>
-                                            </ul>
-                                        }
+                                                @if (!User.IsInRole("Customer"))
+                                                {
+                                                    <li><a href="/admin/home"><i class="fa-solid fa-user-gear"></i>Trang quản lý</a></li>
 
-                                    </li>
-                                </ul>
+                                                }
+                                                <li><a href="javascript:document.getElementById('logOffForm').submit()"> <i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</a></li>
+
+                                            </ul>
+                                    }
+
+                                        </li>
+                                    </ul>
                                 @if (Request.IsAuthenticated)
                                 {
                                     <div style="display:none;">
@@ -193,7 +199,14 @@
                                 @Html.Action("MenuTop", "Menu")
                                 <ul class="navbar_user">
                                     <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    @if (!Request.IsAuthenticated)
+                                    {
+                                        <li><a href="/account/login"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="/account/profile"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    }
                                     <li class="checkout">
                                         <a href="/gio-hang">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>

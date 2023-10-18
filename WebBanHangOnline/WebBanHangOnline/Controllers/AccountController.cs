@@ -105,6 +105,14 @@ namespace WebBanHangOnline.Controllers
             return PartialView(items);
         }
 
+        // GET: /Account/NoPermission
+        [AllowAnonymous]
+        public ActionResult NoPermission(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -209,8 +217,8 @@ namespace WebBanHangOnline.Controllers
                     Email = model.Email,
                     FullName = model.FullName,
                     CreatedDate = DateTime.Now,
+                    Avatar = "/Content/template/avatar-mac-dinh.jpg",
                     Phone = model.Phone
-                    
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -395,7 +403,9 @@ namespace WebBanHangOnline.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+
                     return RedirectToLocal(returnUrl);
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -430,10 +440,14 @@ namespace WebBanHangOnline.Controllers
                     return View("ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                user.CreatedDate = DateTime.UtcNow;
+                user.Avatar = "/Content/template/avatar-mac-dinh.jpg";
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    await UserManager.AddToRoleAsync(user.Id, "Customer");
+
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);

@@ -118,7 +118,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         // GET: /Account/Register
@@ -144,6 +144,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     Email = model.Email, 
                     FullName = model.FullName, 
                     CreatedDate = DateTime.Now,
+                    Avatar = "/Content/template/avatar-mac-dinh.jpg",
                     Phone = model.Phone 
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);

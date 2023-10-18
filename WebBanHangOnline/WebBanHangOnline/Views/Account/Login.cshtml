@@ -36,26 +36,23 @@
     <div class="jumbotron">
         <div id="background_login_client" class="container">
 
-            <h4 style="color:gray;">Four Coffee</h4>
-            <h2 class="mb-4">@ViewBag.Title</h2>
+                <h4 style="color:gray;">Four Coffee</h4>
+                <h2 class="mb-4">@ViewBag.Title</h2>
 
             <div class="row">
-                <div class="col-md-4 " id="vertical_line">
+                <div class="col-5" id="vertical_line">
                     <div class="centered-span">
                         <span class="text-bold text-md text-black">Hoặc</span>
                     </div>
-                    <div class="mb-3 mr-4">
-                        <a href="#" class="btn btn-outline-dark w-100 text-left">
-                            <img class="mr-2" width="35px" src="/Uploads/files/Facebook_Logo_(2019).png" />Đăng nhập với Facebook
-                        </a>
-                    </div>
-                    <div class=" mr-4">
-                        <a href="#" class="btn btn-outline-dark w-100 text-left">
-                            <img class="mr-2" width="35px" src="~/Uploads/files/Facebook_Logo_(2019).png" />Đăng nhập với Google
-                        </a>
+                    <div class="row">
+                        <div class="col-6">
+                            <section id="socialLoginForm">
+                                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                            </section>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-7 ml-3">
+                <div class="col-7 pl-5">
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
                     {
                         @Html.AntiForgeryToken()
