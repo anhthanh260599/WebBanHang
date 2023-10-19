@@ -214,9 +214,9 @@ namespace WebBanHangOnline.Controllers
                     order.CreateBy = request.Phone;
 
                     // Cộng 14 giờ do khi publish thì sẽ bị lệch múi giờ
-                    order.ModifierDate = DateTime.Now.AddHours(14);
+                    order.ModifierDate = DateTime.Now;
                     // Tạo mã đơn hàng
-                    order.CreateDate = DateTime.Now.AddHours(14);
+                    order.CreateDate = DateTime.Now;
 
                     //Random rd = new Random();
                     //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
