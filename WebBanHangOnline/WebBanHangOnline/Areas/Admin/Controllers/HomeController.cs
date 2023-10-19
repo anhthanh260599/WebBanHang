@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,6 +18,36 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/Home
         public ActionResult Index()
         {
+            DateTime today = DateTime.Today;
+            ViewBag.NewOrderToDay = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Count();
+
+            var newOrderToday = ViewBag.NewOrderToDay;
+            var totalAmountToday = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Sum(x=>x.TotalAmount);
+
+            var ticketAccount = totalAmountToday / newOrderToday;
+            ViewBag.TicketAccount = ticketAccount;
+
+            // Khởi tạo UserManager và RoleManager
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
+            // Tìm role "Customer" bằng tên
+            var customerRole = roleManager.FindByName("Customer");
+
+            // Kiểm tra nếu role tồn tại
+            if (customerRole != null)
+            {
+                // Đếm số lượng người dùng có vai trò "Customer"
+                int customerCount = db.Database.SqlQuery<int>("SELECT COUNT(*) FROM AspNetUsers INNER JOIN AspNetUserRoles ON AspNetUsers.Id = AspNetUserRoles.UserId INNER JOIN AspNetRoles ON AspNetUserRoles.RoleId = AspNetRoles.Id WHERE AspNetRoles.Name = 'Customer'").Single();
+
+                // Gán giá trị cho ViewBag
+                ViewBag.UserAccount = customerCount;
+            }
+
+            var item = new ThongKeViewModelString();
+            item.HomNay = HttpContext.Application["HomNay"].ToString();
+            ViewBag.TruyCapHomNay = item.HomNay;
+
             return View();
         }
 
