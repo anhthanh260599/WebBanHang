@@ -1,4 +1,4 @@
-Web eCommercial
+Web eCommercial (Chuỗi cửa hàng)
 
 Hosting:
   - link trang chủ: http://anhthanh260599-001-site1.ftempurl.com/
@@ -22,13 +22,15 @@ Khách hàng:
   - Thêm sản phẩm vào mục ưa thích
   - Thực hiện thanh toán đơn hàng (COD và thanh toán VNPAY)(VNPAY chỉ thanh toán được demo).
   - Áp dụng mã khuyến mãi vào đơn hàng
-  - Đăng ký / Đăng nhập
+  - Đăng ký / Đăng nhập (Tích hợp đăng nhập bằng Google, Microsoft)
   - Thay đổi thông tin hồ sơ cá nhân
   - Xem lịch sử đơn hàng
   - Xem trạng thái đơn hàng
-
+  - Đặt nguyên vật liệu (Áp dụng cho user cửa hàng)
+    
 Admin:
 
+  - Thống kê lượt truy cập, lượt mua, lượt xem,....
   - Quản lý đơn hàng.
   - Quản lý tài khoản người dùng
   - Quản lý sản phẩm
@@ -42,7 +44,7 @@ Admin:
   - Quản lý tài liệu
   - Quản lý Subscribe
   - Quản lý đánh giá / từ ngữ tiêu cực
-  - Quản lý nội dung trang web (Hình ảnh, content,...)
+  - Quản lý các nội dung trang web (Hình ảnh, content,...)
   - Quản lý mã khuyến mãi
   - Điều phối đơn hàng
 
