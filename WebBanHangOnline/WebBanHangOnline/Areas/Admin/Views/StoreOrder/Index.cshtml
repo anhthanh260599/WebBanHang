@@ -278,12 +278,26 @@
             } else {
                 btnOrder.removeAttribute("data-target");
                 btnOrder.removeAttribute("data-toggle");
-                alert("Ban chưa chọn nguyên liệu nào")
+                //alert("Ban chưa chọn nguyên liệu nào")
+                Swal.fire({
+                    title: 'Thất bại',
+                    text: "Bạn chưa chọn nguyên liệu nào",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đồng ý'
+                })
             }
             if (!isInputValue) {
                 btnOrder.removeAttribute("data-target");
                 btnOrder.removeAttribute("data-toggle");
-                alert("Bạn chưa nhập số lượng")
+                //alert("Bạn chưa nhập số lượng")
+                Swal.fire({
+                    title: 'Thất bại',
+                    text: "Bạn chưa nhập số lượng",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Đồng ý'
+                })
             } else {
                 if (formValue.length != null) {
                     let tableBody = document.getElementById("table_Confirmed");
@@ -342,6 +356,15 @@
                                     })
                                 }
                             })
+                        } else {
+                            Swal.fire({
+                                title: 'Thất bại',
+                                text: "Đơn hàng không được trống",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Đồng ý'
+                            })
+                            //alert("Đơn hàng của bạn trống !");
                         }
                     }
                 }
