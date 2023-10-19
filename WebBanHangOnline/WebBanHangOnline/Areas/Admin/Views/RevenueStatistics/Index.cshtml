@@ -43,6 +43,11 @@
                 <label>Từ ngày:</label>
                 <div class="input-group date" id="fromDate" data-target-input="nearest">
                     <input type="date" class="form-control " data-target="#fromDate" id="fromDateInput" />
+
+                    @*    <input type="date" class="form-control datetimepicker-input " data-target="#fromDate" id="fromDateInput" />
+                                     <div class="input-group-append" data-target="#fromDate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>*@
                 </div>
 
             </div>
@@ -53,6 +58,12 @@
                 <label>Đến ngày:</label>
                 <div class="input-group date" id="toDate" data-target-input="nearest">
                     <input type="date" class="form-control" data-target="#toDate" id="toDateInput" />
+
+                    @*                    <input type="date" class="form-control datetimepicker-input" data-target="#toDate" id="toDateInput" />
+
+                                    <div class="input-group-append" data-target="#toDate" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -127,111 +138,95 @@
 @section scripts {
     <script src="~/Content/clients/plugins/chart.js/Chart.min.js"></script>
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
-
     <script>
 
         let btnDateFromTo = document.querySelector("#DateFromTo");
         let fromDate = '';
         let toDate = '';
-        let barChartCanvas = document.querySelector("#barChart").getContext('2d');
-        let myChart;
-
         btnDateFromTo.onclick = (e) => {
             fromDate = document.querySelector("#fromDateInput").value;
             toDate = document.querySelector("#toDateInput").value;
-            // Thực hiện yêu cầu AJAX mới khi người dùng chọn ngày
-            $.ajax({
-                url: '/RevenueStatistics/GetStatistical',
-                type: 'GET',
-                data: { fromDate: fromDate, toDate: toDate },
-                success: function (rs) {
-                    myChart.destroy();
-                    GenerateChart(rs);
-                }
-            });
+
+            console.log(fromDate)
+            console.log(toDate)
 
         }
 
+
+        let arrDoanhThu = [];
+        let arrLoiNhuan = [];
+        let arrDate = [];
         $.ajax({
             url: '/RevenueStatistics/GetStatistical',
             type: 'GET',
             data: { fromDate: fromDate, toDate: toDate },
             success: function (rs) {
-                GenerateChart(rs);
+                $.each(rs.Data, function (i, item) {
+                    let strDate = moment(item.Date).format('DD/MM/yyyy') // Convert và Định dạng date cho đúng
+                    arrDate.push(strDate)
+                    arrDoanhThu.push(item.DoanhThu);
+                    arrLoiNhuan.push(item.LoiNhuan);
+                });
+                let areaChartData = {
+                    labels: arrDate,
+                    datasets: [
+                        {
+                            label: 'Lợi nhuận',
+                            backgroundColor: 'rgba(60,141,188,0.9)',
+                            borderColor: 'rgba(60,141,188,0.8)',
+                            pointRadius: false,
+                            pointColor: '#3b8bba',
+                            pointStrokeColor: 'rgba(60,141,188,1)',
+                            pointHighlightFill: '#fff',
+                            pointHighlightStroke: 'rgba(60,141,188,1)',
+                            data: arrLoiNhuan
+                        },
+                        {
+                            label: 'Doanh thu',
+                            backgroundColor: 'rgba(210, 214, 222, 1)',
+                            borderColor: 'rgba(210, 214, 222, 1)',
+                            pointRadius: false,
+                            pointColor: 'rgba(210, 214, 222, 1)',
+                            pointStrokeColor: '#c1c7d1',
+                            pointHighlightFill: '#fff',
+                            pointHighlightStroke: 'rgba(220,220,220,1)',
+                            data: arrDoanhThu
+                        },
+                    ]
+                }
+                //-------------
+                //- BAR CHART -
+                //-------------
+                let barChartCanvas = $('#barChart').get(0).getContext('2d')
+                let barChartData = $.extend(true, {}, areaChartData)
+                let temp0 = areaChartData.datasets[0]
+                let temp1 = areaChartData.datasets[1]
+                barChartData.datasets[0] = temp1
+                barChartData.datasets[1] = temp0
+
+                let barChartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    datasetFill: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    // Định dạng giá trị số có dấu ngăn cách phần nghìn
+                                    return value.toLocaleString('en-US');
+                                }
+                            }
+                        }]
+                    }
+                }
+                new Chart(barChartCanvas, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: barChartOptions
+                });
+                LoadData(rs.Data);
             }
         });
-
-        // Hàm cập nhật biểu đồ với dữ liệu mới
-        function GenerateChart(rs) {
-            let arrDoanhThu = [];
-            let arrLoiNhuan = [];
-            let arrDate = [];
-            $.each(rs.Data, function (i, item) {
-                let strDate = moment(item.Date).format('DD/MM/yyyy') // Convert và Định dạng date cho đúng
-                arrDate.push(strDate)
-                arrDoanhThu.push(item.DoanhThu);
-                arrLoiNhuan.push(item.LoiNhuan);
-            });
-            let areaChartData = {
-                labels: arrDate,
-                datasets: [
-                    {
-                        label: 'Lợi nhuận',
-                        backgroundColor: 'rgba(60,141,188,0.9)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: arrLoiNhuan
-                    },
-                    {
-                        label: 'Doanh thu',
-                        backgroundColor: 'rgba(210, 214, 222, 1)',
-                        borderColor: 'rgba(210, 214, 222, 1)',
-                        pointRadius: false,
-                        pointColor: 'rgba(210, 214, 222, 1)',
-                        pointStrokeColor: '#c1c7d1',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(220,220,220,1)',
-                        data: arrDoanhThu
-                    },
-                ]
-            }
-            //-------------
-            //- BAR CHART -
-            //-------------
-            let barChartCanvas = document.querySelector("#barChart").getContext('2d');
-            let barChartData = $.extend(true, {}, areaChartData)
-            let temp0 = areaChartData.datasets[0]
-            let temp1 = areaChartData.datasets[1]
-            barChartData.datasets[0] = temp1
-            barChartData.datasets[1] = temp0
-
-            let barChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                datasetFill: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            callback: function (value, index, values) {
-                                // Định dạng giá trị số có dấu ngăn cách phần nghìn
-                                return value.toLocaleString('en-US');
-                            }
-                        }
-                    }]
-                }
-            }
-            myChart = new Chart(barChartCanvas, {
-                type: 'bar',
-                data: barChartData,
-                options: barChartOptions
-            });
-            // Cập nhật biểu đồ và dữ liệu
-            LoadData(rs.Data);
-        }
 
         function LoadData(data) {
             var strHtml = ``;
@@ -248,5 +243,14 @@
             });
             $('#load_data').html(strHtml);
         }
+
+        //Date picker
+       @* $('#fromDate').datetimepicker({
+            format: 'L'
+        });
+
+        $('#toDate').datetimepicker({
+            format: 'L'
+        });*@
     </script>
 }
