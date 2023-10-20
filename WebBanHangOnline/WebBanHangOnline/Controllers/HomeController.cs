@@ -38,6 +38,7 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Subscribe(Subscribe request)
         {
+            var emailBrand = db.ContactInfos.Where(x => x.InfoName == "Email").Select(x=>x.InfoValue).FirstOrDefault();
             if (ModelState.IsValid)
             {
                 var checkItem = db.Subscribes.FirstOrDefault(x => x.Email == request.Email);
@@ -52,6 +53,17 @@ namespace WebBanHangOnline.Controllers
                     CreateDate = DateTime.Now,
                 });
                 db.SaveChanges();
+
+                //Send Mail
+
+                string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailSubscribeKH.html"));
+                contentCustomer = contentCustomer.Replace("{{EmailDangKy}}", request.Email);
+                contentCustomer = contentCustomer.Replace("{{Brand}}", Message.Brand.ToString());
+                contentCustomer = contentCustomer.Replace("{{EmailBrand}}", emailBrand.ToString());
+                Common.SendMail(Message.Brand.ToString(), "Thông tin đăng ký tài khoản tại " + Message.Brand.ToString(), contentCustomer.ToString(), request.Email);
+
+                //End Send Mail
+
                 return Json(new {success = true});
             }
             return View("Partial_Subscribe",request);
