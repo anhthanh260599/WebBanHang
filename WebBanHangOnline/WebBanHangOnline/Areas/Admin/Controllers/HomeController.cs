@@ -21,10 +21,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             DateTime today = DateTime.Today;
             ViewBag.NewOrderToDay = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Count();
 
-            var newOrderToday = ViewBag.NewOrderToDay;
-            var totalAmountToday = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Sum(x=>x.TotalAmount);
+            var newOrderToday = 0;
+            decimal totalAmountToday = 0;
+            decimal ticketAccount = 0;
 
-            var ticketAccount = totalAmountToday / newOrderToday;
+            if (ViewBag.NewOrderToDay > 0)
+            {
+                newOrderToday = ViewBag.NewOrderToDay;
+                totalAmountToday = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Sum(x => x.TotalAmount);
+            }
+            else
+            {
+                newOrderToday = 1;
+            }
+            ticketAccount = totalAmountToday / newOrderToday;
             ViewBag.TicketAccount = ticketAccount;
 
             // Khởi tạo UserManager và RoleManager
