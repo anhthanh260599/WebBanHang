@@ -52,38 +52,42 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryval") <!--Render validate Thanh toán-->
 
+    <style>
+        .swal2-container {
+            z-index: 9999; /* Đặt giá trị z-index lớn hơn để đảm bảo hiển thị trên tất cả */
+        }
+
+        .footer_title {
+            text-transform: uppercase;
+        }
+
+        .footer-container {
+            padding-top: 24px;
+            padding-bottom: 36px;
+            margin-top: 36px;
+            border-top: 1px solid #dbdbdb;
+        }
+
+        .footer-link {
+            color: unset;
+        }
+
+        .footer_list_social-media {
+            display: flex;
+        }
+
+        .footer-item_social-media {
+            padding: 0 8px;
+        }
+
+        .social_media_icon {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+
 </head>
-<style>
-    .swal2-container {
-        z-index: 9999; /* Đặt giá trị z-index lớn hơn để đảm bảo hiển thị trên tất cả */
-    }
 
-    .footer_title {
-        text-transform: uppercase;
-    }
-    .footer-container {
-        padding-top: 24px;
-        padding-bottom: 36px;
-        margin-top: 36px;
-        border-top: 1px solid #dbdbdb;
-    }
-    .footer-link{
-        color: unset;
-    }
-
-    .footer_list_social-media {
-        display: flex;
-    }
-
-    .footer-item_social-media {
-        padding: 0 8px;
-    }
-
-    .social_media_icon {
-        width: 30px;
-        height: 30px;
-    }
-</style>
 <body>
 
     <div class="super_container">
@@ -106,29 +110,29 @@
 
                                     <!-- Currency / Language / My Account -->
                                     @*<li class="currency">
-            <a href="#">
-                usd
-                <i class="fa fa-angle-down"></i>
-            </a>
-            <ul class="currency_selection">
-                <li><a href="#">cad</a></li>
-                <li><a href="#">aud</a></li>
-                <li><a href="#">eur</a></li>
-                <li><a href="#">gbp</a></li>
-            </ul>
-        </li>
-        <li class="language">
-            <a href="#">
-                English
-                <i class="fa fa-angle-down"></i>
-            </a>
-            <ul class="language_selection">
-                <li><a href="#">French</a></li>
-                <li><a href="#">Italian</a></li>
-                <li><a href="#">German</a></li>
-                <li><a href="#">Spanish</a></li>
-            </ul>
-        </li>*@
+                                            <a href="#">
+                                                usd
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                            <ul class="currency_selection">
+                                                <li><a href="#">cad</a></li>
+                                                <li><a href="#">aud</a></li>
+                                                <li><a href="#">eur</a></li>
+                                                <li><a href="#">gbp</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="language">
+                                            <a href="#">
+                                                English
+                                                <i class="fa fa-angle-down"></i>
+                                            </a>
+                                            <ul class="language_selection">
+                                                <li><a href="#">French</a></li>
+                                                <li><a href="#">Italian</a></li>
+                                                <li><a href="#">German</a></li>
+                                                <li><a href="#">Spanish</a></li>
+                                            </ul>
+                                        </li>*@
                                     <li style="min-width:150px;" class="account">
 
                                         @if (!Request.IsAuthenticated)
@@ -160,10 +164,10 @@
                                                 <li><a href="javascript:document.getElementById('logOffForm').submit()"> <i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</a></li>
 
                                             </ul>
-                                    }
+                                        }
 
-                                        </li>
-                                    </ul>
+                                    </li>
+                                </ul>
                                 @if (Request.IsAuthenticated)
                                 {
                                     <div style="display:none;">
