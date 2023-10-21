@@ -112,6 +112,13 @@ namespace WebBanHangOnline
            namespaces: new[] { "WebBanHangOnline.Controllers" }
        );
 
+            routes.MapRoute( // Trang tra cứu đơn hàng
+              name: "TraCuu",
+              url: "tra-cuu",
+              defaults: new { controller = "Home", action = "TraCuuDonHang", alias = UrlParameter.Optional },
+              namespaces: new[] { "WebBanHangOnline.Controllers" }
+          );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

@@ -69,6 +69,32 @@ namespace WebBanHangOnline.Controllers
             return View("Partial_Subscribe",request);
         }
 
+        public ActionResult TraCuuDonHang(string request)
+        {
+            List<Order> danhSachDonHang = new List<Order>();
+
+            if (!string.IsNullOrEmpty(request))
+            {
+                // Thực hiện tìm kiếm trong cơ sở dữ liệu sử dụng Entity Framework
+                danhSachDonHang = db.Orders
+                   .Where(d => d.Code.Equals(request, StringComparison.OrdinalIgnoreCase) || d.Phone.Equals(request, StringComparison.OrdinalIgnoreCase))
+                   .ToList();
+            }
+            return View(danhSachDonHang);
+        }
+
+        public ActionResult TraCuuDonHangDetail(int id)
+        {
+            var item = db.Orders.Find(id);
+            return View(item);
+        }
+
+        public ActionResult Partial_TraCuuDonHangDetail(int id)
+        {
+            var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
+            return PartialView(items);
+        }
+
         // Hàm dùng để thống kê số lượt truy cập
         public ActionResult Refresh()
         {

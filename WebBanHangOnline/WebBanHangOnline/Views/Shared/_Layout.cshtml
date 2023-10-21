@@ -202,7 +202,7 @@
                             <nav class="navbar">
                                 @Html.Action("MenuTop", "Menu")
                                 <ul class="navbar_user">
-                                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                                    @*<li><a href="/tra-cuu">Tra cứu đơn hàng</a></li>*@
                                     @if (!Request.IsAuthenticated)
                                     {
                                         <li><a href="/account/login"><i class="fa fa-user" aria-hidden="true"></i></a></li>

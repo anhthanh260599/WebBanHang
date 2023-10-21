@@ -3652,6 +3652,9 @@
     <Content Include="Views\WishList\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Partial_List_PromotionCode.cshtml" />
     <Content Include="Views\Account\NoPermission.cshtml" />
+    <Content Include="Views\Home\TraCuuDonHang.cshtml" />
+    <Content Include="Views\Home\TraCuuDonHangDetail.cshtml" />
+    <Content Include="Views\Home\Partial_TraCuuDonHangDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
