@@ -1,0 +1,80 @@
+﻿@model List<WebBanHangOnline.Models.EF.Order>
+@using WebBanHangOnline.Models.Common
+
+@{
+    ViewBag.Title = "Tra cứu đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+
+<h3 class="text-center" style="margin-top:200px;">@ViewBag.Title</h3>
+
+<section class="container">
+
+    @using (Html.BeginForm("TraCuuDonHang", "Home", FormMethod.Get))
+    {
+        <div class="form-group row">
+            @Html.TextBox("request", null, new { @class = "form-control col-10", placeholder = "Nhập mã đơn hàng hoặc số điện thoại để tra cứu" })
+            <button type="submit" class="btn btn-primary col-2"> <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+
+        </div>
+    }
+
+    @if (Model.Count > 0)
+    {
+        <h4>Kết quả tìm kiếm:</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Tên khách hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var donHang in Model)
+                {
+                    <tr>
+                        <td>@donHang.Code</td>
+                        <td>@donHang.CustomerName</td>
+                        <td>@Common.FormatNumber(donHang.TotalAmount,0)</td>
+                        <td>
+                            @if (donHang.Status == 1)
+                            {
+                                <span class="btn btn-secondary">Chưa thanh toán</span>
+                            }
+                            @if (donHang.Status == 2)
+                            {
+                                <span class="btn btn-primary">Đã thanh toán</span>
+                            }
+                            @if (donHang.Status == 3)
+                            {
+                                <span class="btn btn-success">Giao hành thành công</span>
+                            }
+                            @if (donHang.Status == 4)
+                            {
+                                <span class="btn btn-danger">Huỷ</span>
+                            }
+                            @if (donHang.Status == 5)
+                            {
+                                <span class="btn btn-warning">Đang giao hàng</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="/Home/TraCuuDonHangDetail/@donHang.Id" class="btn btn-sm btn-info">Xem</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Không có kết quả phù hợp.</p>
+    }
+</section>
+
