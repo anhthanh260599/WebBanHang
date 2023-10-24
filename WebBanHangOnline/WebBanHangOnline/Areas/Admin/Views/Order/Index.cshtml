@@ -84,11 +84,15 @@
                                 <td>
                                     @if (item.TypePayment == 1)
                                     {
-                                        <span>COD</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/cod-logo.png" /></span>
                                     }
-                                    else
+                                    @if (item.TypePayment == 2)
                                     {
-                                        <span>VNPAY</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/VNPAY_Logo.png" /></span>
+                                    }
+                                    @if (item.TypePayment == 3)
+                                    {
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/paypal-logo-small.png" /></span>
                                     }
                                 </td>
 

@@ -84,5 +84,7 @@ namespace WebBanHangOnline.Models
         public string PromotionCode { get; set; }
         public decimal DiscountAmount { get; set; }
         public int PromotionId { get; set; }
+        public decimal TotalAmount { get; set; }
+        public int TypePromotion { get; internal set; }
     }
 }
