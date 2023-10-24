@@ -14,6 +14,8 @@ using System.Data;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using System.Data.Entity;
+using PayPal.Api;
+using System.Security.Policy;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -23,6 +25,9 @@ namespace WebBanHangOnline.Controllers
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+
+        private readonly string _clientId;
+        private readonly string _secretKey;
 
         public ShoppingCartController()
         {
@@ -160,6 +165,7 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(OrderViewModel request)
         {
+
             if (request.TypePayment == -1)
             {
                 return Json(new { Success = false, message = "Vui lòng chọn phương thức thanh toán", errorcode = 69 });
@@ -171,7 +177,7 @@ namespace WebBanHangOnline.Controllers
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
                 if (cart != null)
                 {
-                    Order order = new Order();
+                    Models.EF.Order order = new Models.EF.Order();
                     order.CustomerName = request.CustomerName;
                     order.Address = request.Address;
                     order.Phone = request.Phone;
@@ -182,7 +188,7 @@ namespace WebBanHangOnline.Controllers
                         Price = x.Price,
                         Quantity = x.Quantity,
                     }));
-                    
+
                     if (cart.PromotionId != 0)
                     {
                         order.PromotionId = cart.PromotionId;
@@ -191,13 +197,13 @@ namespace WebBanHangOnline.Controllers
                         order.DiscountAmount = cart.DiscountAmount;
                     }
 
-          
+
 
                     if (User.Identity.IsAuthenticated)
                     {
                         order.CustomerID = User.Identity.GetUserId();
                     }
-                    order.Quantity = cart.Items.Sum(x=>x.Quantity);
+                    order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
                     TempData["EmailCustomer"] = order.Email;
 
@@ -207,7 +213,7 @@ namespace WebBanHangOnline.Controllers
                     }
                     if (order.PromotionId == null)
                     {
-                        order.TotalAmount = cart.Items.Sum(x=> (x.Quantity * x.Price));
+                        order.TotalAmount = cart.Items.Sum(x => (x.Quantity * x.Price));
                     }
 
                     order.TypePayment = request.TypePayment;
@@ -244,8 +250,8 @@ namespace WebBanHangOnline.Controllers
                     }
                     // Tạo mã đơn hàng mới
                     string newOrderCode = $"DH{currentDate}{(lastOrderNumber + 1).ToString("D5")}"; // D5 có nghĩa là 5 số 0 cuối, rồi + lên
-                    ////////// End Tạo mã đơn hàng với Ngày/Tháng/Năm //////////////
-                    
+                                                                                                    ////////// End Tạo mã đơn hàng với Ngày/Tháng/Năm //////////////
+
 
                     // Gán mã đơn hàng và lưu vào cơ sở dữ liệu
                     order.Code = newOrderCode;
@@ -258,17 +264,17 @@ namespace WebBanHangOnline.Controllers
                     var thanhTien = decimal.Zero;
                     var tongTien = decimal.Zero;
                     var khuyenMai = decimal.Zero;
-
+                    string stringSubTotal = null;
                     foreach (var sp in cart.Items)
                     {
                         strSanPham += "<tr>";
                         strSanPham += "<td>" + sp.ProductName + "</td>";
                         strSanPham += "<td>" + sp.Quantity + "</td>";
-                        strSanPham += "<td>" + Common.FormatNumber(sp.Price,0) + "</td>";
+                        strSanPham += "<td>" + Common.FormatNumber(sp.Price, 0) + "</td>";
                         strSanPham += "</tr>";
 
                         thanhTien += sp.Price * sp.Quantity;
-
+                        stringSubTotal = thanhTien.ToString();
                     }
 
                     khuyenMai = order.DiscountAmount;
@@ -277,23 +283,26 @@ namespace WebBanHangOnline.Controllers
                     {
                         tongTien = thanhTien - khuyenMai;
                     }
-            
+
                     if(order.PromotionId == null)
                     {
                         tongTien = thanhTien;
                     }
 
+                    var stringTotal = tongTien.ToString();
+
+
                     string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
-                    contentCustomer = contentCustomer.Replace("{{MaDon}}",order.Code);
+                    contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
                     contentCustomer = contentCustomer.Replace("{{NgayDat}}", order.CreateDate.ToString());
                     contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
                     contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
                     contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
                     contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
                     contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
-                    contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien,0));
+                    contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
                     contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
-                    contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien,0));
+                    contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
 
                     string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailCuaHang.html"));
@@ -317,9 +326,16 @@ namespace WebBanHangOnline.Controllers
                         code = new { Success = true, Code = request.TypePayment, Url = url };
 
                     }
+                    if (request.TypePayment == 3)
+                    {
+                        Session["CurrentOrder"] = new { Order = order, Products = cart.Items, OrderCode = order.Code, Total = stringTotal, SubTotal = stringSubTotal };
+                        code = new { Success = true, Code = request.TypePayment, Url = "/ShoppingCart/PaymentWithPaypal" };
+
+                    }
                     //return RedirectToAction("CheckoutSuccess");
                 }
             }
+
             return Json(code);
         }
 
@@ -367,7 +383,7 @@ namespace WebBanHangOnline.Controllers
             // Nếu mã khuyến mãi hợp lệ, tính toán lại tổng tiền của giỏ hàng và định dạng nó cho phù hợp
             var tongTienCart = TinhToanLaiTongTienGioHang(maKhuyenMai);
 
-           
+
             var tongTienCartFormatted = Common.FormatNumber(tongTienCart, 0);
 
             // Trả về kết quả dưới dạng JSON
@@ -411,7 +427,7 @@ namespace WebBanHangOnline.Controllers
                             {
                                 tongTienCart = 0;
                             }
-                      
+
                         }
                         else if (promotion.TypePromotion == 2)
                         {
@@ -427,7 +443,7 @@ namespace WebBanHangOnline.Controllers
                             TempData["DiscountAmount"] = cart.DiscountAmount;
 
                             tongTienCart -= giamGia;
-              
+
                         }
                         cart.PromotionId = promotionID;
                         cart.PromotionCode = maKhuyenMai;
@@ -471,7 +487,7 @@ namespace WebBanHangOnline.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddToCart(int id, int quantity) 
+        public ActionResult AddToCart(int id, int quantity)
         {
             //Message messages = new Message();
             var code = new { success = false, message = Message.NoMessage.ToString() , code=-1 , Count = 0}; // Giá trị ban đầu
@@ -481,7 +497,7 @@ namespace WebBanHangOnline.Controllers
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
                 if(cart == null)
                 {
-                    cart = new ShoppingCart();  
+                    cart = new ShoppingCart();
                 }
                 var cartItemsExists = cart.Items.FirstOrDefault(x => x.ProductId == id);
                 if (cartItemsExists != null)
@@ -513,7 +529,7 @@ namespace WebBanHangOnline.Controllers
             return Json(code);
         }
 
-     
+
 
         [HttpPost]
         public ActionResult DeleteCartItem(int id)
@@ -526,6 +542,10 @@ namespace WebBanHangOnline.Controllers
                 if (checkProductExists != null)
                 {
                     cart.Items.Remove(checkProductExists);
+                    TempData.Remove("TongTienCartKM");
+                    TempData.Remove("IDMaKhuyenMai");
+                    TempData.Remove("MaKhuyenMai");
+                    TempData.Remove("DiscountAmount");
                     return Json(new { success = true, code = 1, Count = cart.Items.Count });
                 }
             }
@@ -551,6 +571,10 @@ namespace WebBanHangOnline.Controllers
             if(cart != null )
             {
                 cart.Items.Clear();
+                TempData.Remove("TongTienCartKM");
+                TempData.Remove("IDMaKhuyenMai");
+                TempData.Remove("MaKhuyenMai");
+                TempData.Remove("DiscountAmount");
                 return Json(new {success = true});
             }
             return Json(new { success = false });
@@ -607,6 +631,176 @@ namespace WebBanHangOnline.Controllers
             urlPayment = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
             //log.InfoFormat("VNPAY URL: {0}", paymentUrl);
             return urlPayment;
+        }
+
+        public ActionResult PayPalPayment_SuccessView()
+        {
+            string email = TempData["EmailCustomerPaypal"] as string;
+
+            return View();
+        }
+
+        public ActionResult PayPalPayment_FailureView()
+        {
+            return View();
+        }
+
+        public ActionResult PaymentWithPaypal(string Cancel = null)
+        {
+            //getting the apiContext  
+            APIContext apiContext = PaypalConfiguration.GetAPIContext();
+
+            var orderCode = TempData["OrderCodePayPal"];
+
+            var order = db.Orders.ToList().Where(x => x.Code == orderCode).FirstOrDefault();
+            var orderEmail = TempData["EmailCustomerPaypal"];
+            try
+            {
+                //A resource representing a Payer that funds a payment Payment Method as paypal  
+                //Payer Id will be returned when payment proceeds or click to pay  
+                string payerId = Request.Params["PayerID"];
+                if (string.IsNullOrEmpty(payerId))
+                {
+                    //this section will be executed first because PayerID doesn't exist  
+                    //it is returned by the create function call of the payment class  
+                    // Creating a payment  
+                    // baseURL is the url on which paypal sendsback the data.  
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/shoppingcart/PaymentWithPayPal?";
+                    //here we are generating guid for storing the paymentID received in session  
+                    //which will be used in the payment execution  
+                    var guid = Convert.ToString((new Random()).Next(100000));
+                    //CreatePayment function gives us the payment approval url  
+                    //on which payer is redirected for paypal account payment  
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid);
+                    //get links returned from paypal in response to Create function call  
+                    var links = createdPayment.links.GetEnumerator();
+                    string paypalRedirectUrl = null;
+                    while (links.MoveNext())
+                    {
+                        Links lnk = links.Current;
+                        if (lnk.rel.ToLower().Trim().Equals("approval_url"))
+                        {
+                            //saving the payapalredirect URL to which user will be redirected for payment  
+                            paypalRedirectUrl = lnk.href;
+                        }
+                    }
+                    // saving the paymentID in the key guid  
+                    Session.Add(guid, createdPayment.id);
+                    return Redirect(paypalRedirectUrl);
+                }
+                else
+                {
+                    // This function exectues after receving all parameters for the payment  
+                    var guid = Request.Params["guid"];
+                    var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
+                    //If executed payment failed then we will show payment failure message to user  
+                    if (executedPayment.state.ToLower() != "approved")
+                    {
+                        return View("PayPalPayment_FailureView");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("PayPalPayment_FailureView");
+            }
+            var itemOrder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
+            if (itemOrder != null)
+            {
+                itemOrder.Status = 2;//đã thanh toán
+                db.Orders.Attach(itemOrder);
+                db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            ////on successful payment, show success page to user.  
+            return View("PayPalPayment_SuccessView");
+        }
+
+        private PayPal.Api.Payment payment;
+        private Payment ExecutePayment(APIContext apiContext, string payerId, string paymentId)
+        {
+            var paymentExecution = new PaymentExecution()
+            {
+                payer_id = payerId
+            };
+            this.payment = new Payment()
+            {
+                id = paymentId
+            };
+            return this.payment.Execute(apiContext, paymentExecution);
+        }
+        private Payment CreatePayment(APIContext apiContext, string redirectUrl)
+        {
+
+            var currentOrder = (dynamic)Session["CurrentOrder"];
+            var orderCode = currentOrder.OrderCode;
+            var totalAmount = currentOrder.Total;
+            var subTotal = currentOrder.SubTotal;
+
+            var order = db.Orders.ToList().Where(x=>x.Code == orderCode).FirstOrDefault();
+
+            TempData["OrderCodePayPal"] = order.Code;
+            TempData["EmailCustomerPaypal"] = order.Email;
+
+            var itemList = new ItemList()
+            {
+                items = new List<Item>()
+            };
+
+
+            //Adding Item Details like name, currency, price etc  
+            itemList.items.Add(new Item()
+            {
+                name = order.Code,
+                currency = "USD",
+                price = Math.Round(order.TotalAmount / 25000,2).ToString(),
+                quantity = "1",
+                sku = "1"
+            });
+
+            var payer = new Payer()
+            {
+                payment_method = "paypal"
+            };
+            // Configure Redirect Urls here with RedirectUrls object  
+            var redirUrls = new RedirectUrls()
+            {
+                cancel_url = redirectUrl + "&Cancel=true",
+                return_url = redirectUrl
+            };
+            // Adding Tax, shipping and Subtotal details  
+            var details = new Details()
+            {
+                tax = "0",
+                shipping = "0",
+                subtotal = Math.Round(order.TotalAmount / 25000, 2).ToString()
+            };
+            //Final amount with details  
+            var amount = new Amount()
+            {
+                currency = "USD",
+                total = (Convert.ToDecimal(details.tax) + Convert.ToDecimal(details.shipping) + Convert.ToDecimal(details.subtotal)).ToString(), // Cập nhật total
+                details = details
+            };
+            var transactionList = new List<Transaction>();
+            // Adding description about the transaction  
+            var paypalOrderId = DateTime.Now.Ticks;
+            transactionList.Add(new Transaction()
+            {
+                description = $"Invoice #{paypalOrderId}",
+                invoice_number = paypalOrderId.ToString(), //Generate an Invoice No    
+                amount = amount,
+                item_list = itemList
+            });
+            this.payment = new Payment()
+            {
+                intent = "sale",
+                payer = payer,
+                transactions = transactionList,
+                redirect_urls = redirUrls
+            };
+            // Create a payment using a APIContext  
+            return this.payment.Create(apiContext);
         }
     }
 }

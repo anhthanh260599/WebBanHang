@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Thanh toán Paypal thành công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string email = TempData["EmailCustomerPaypal"] as string;
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+
+<section class="container" style="margin-top: 200px">
+    <div class="row">
+        <div class="col-12 text-center">
+            <img width="20%" class="text-center" src="~/Content/template/Paypal-logo.png" />
+        </div>
+    </div>
+    <div class="row">
+        <h4 class="col-12 text-center">Thanh toán thành công</h4>
+        <p class="col-12 text-center">Cảm ơn bạn đã thanh toán. Hoá đơn thanh toán tự động sẽ được gửi đến email: <strong>@email</strong> của bạn</p>
+    </div>
+</section>
