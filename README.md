@@ -19,19 +19,30 @@ Khách hàng:
   - Xem sản phẩm
   - Thêm sản phẩm vào giỏ hàng.
   - Bình luận / Đánh giá sản phẩm
+      + Kiểm tra từ ngữ tiêu cực khi thực hiện đánh giá
   - Thêm sản phẩm vào mục ưa thích
-  - Thực hiện thanh toán đơn hàng (COD và thanh toán VNPAY)(VNPAY chỉ thanh toán được demo).
+  - Thực hiện thanh toán đơn hàng, đặt hàng thành công sẽ gửi email cho người đặt và cho cửa hàng
+      + Ship COD
+      + VNPAY (thanh toán demo)
+      + PayPal (thanh toán demo)
   - Áp dụng mã khuyến mãi vào đơn hàng
-  - Đăng ký / Đăng nhập (Tích hợp đăng nhập bằng Google, Microsoft)
+      + Mã giảm theo tiền
+      + Mã giảm theo phần trăm
+  - Đăng ký / Đăng nhập
+      + Đăng nhập bằng Google
+      + Đăng nhập bằng Microsoft
   - Thay đổi thông tin hồ sơ cá nhân
   - Xem lịch sử đơn hàng
+  - Tra cứu đơn hàng
   - Xem trạng thái đơn hàng
   - Đặt nguyên vật liệu (Áp dụng cho user cửa hàng)
+  - Đăng ký nhận thông báo (Subscribe): Gửi mail khi Subscribe thành công
     
 Admin:
 
   - Thống kê lượt truy cập, lượt mua, lượt xem,....
   - Quản lý đơn hàng.
+  - Quản lý đơn nguyên vật liệu
   - Quản lý tài khoản người dùng
   - Quản lý sản phẩm
       + Hot
@@ -41,7 +52,7 @@ Admin:
   - Quản lý nguyên vật liệu
   - Phân quyền
   - Thống kê doanh thu
-  - Quản lý tài liệu
+  - Quản lý tài liệu (công thức, nội quy)
   - Quản lý Subscribe
   - Quản lý đánh giá / từ ngữ tiêu cực
   - Quản lý các nội dung trang web (Hình ảnh, content,...)
@@ -57,3 +68,7 @@ Account thanh toán VNPAY Demo:
 
 Danh sách account/thẻ thanh toán mẫu:
 https://sandbox.vnpayment.vn/apis/vnpay-demo/
+
+Account thanh toán PayPal Demo:
+  - Email: sb-47gttp27832106@personal.example.com
+  - Password: d.1EEN1q
