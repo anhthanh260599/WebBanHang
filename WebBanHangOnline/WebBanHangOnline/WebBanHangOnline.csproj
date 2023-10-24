@@ -3334,6 +3334,7 @@
     <Content Include="Content\template\avatar-mac-dinh.jpg" />
     <Content Include="Content\template\sendMailCuaHang.html" />
     <Content Include="Content\template\sendMailKhachHang.html" />
+    <Content Include="Content\template\sendMailKhachHang_Online.html" />
     <Content Include="Content\template\sendMailSubscribeKH.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -3655,6 +3656,7 @@
     <Content Include="Views\Home\TraCuuDonHang.cshtml" />
     <Content Include="Views\Home\TraCuuDonHangDetail.cshtml" />
     <Content Include="Views\Home\Partial_TraCuuDonHangDetail.cshtml" />
+    <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

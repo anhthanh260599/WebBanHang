@@ -43,13 +43,16 @@
 
                     @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThanhCong))
                     {
-                        <p class="text-info">@ViewBag.ThanhToanThanhCong</p>
+                        <p class="text-info">@ViewBag.ThanhToanThanhCong </p>
                     }
-                    @if  (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
+                    @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
                     {
                         <p class="text-danger">@ViewBag.ThanhToanThatBai</p>
                     }
-                    <p> @ViewBag.InnerText </p>
+                    <p>
+                        Giao dịch được thực hiện thành công. Cảm ơn bạn đã sử dụng dịch vụ. <br />
+                        Bạn có thể theo dõi đơn hàng<strong> @ViewBag.InnerText</strong> tại mục <a class="text-info" href="/tra-cuu"> Tra cứu đơn</a>
+                    </p>
                 </div>
             </div>
         </div>

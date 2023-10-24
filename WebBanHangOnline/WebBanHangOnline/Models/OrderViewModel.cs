@@ -13,6 +13,7 @@ namespace WebBanHangOnline.Models
         public string Phone { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ")]
         public string Address { get; set; }
+        public bool IsConfirm   { get; set; }
         public string Email { get; set; }
         public string CustomerID { get; set; }
         public int TypePayment { get; set; }

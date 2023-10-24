@@ -92,27 +92,37 @@
                                     }
                                 </td>
 
+                                @{
+                                    if (item.IsConfirm == true)
+                                    {
+                                        if (item.Status == 1)
+                                        {
+                                            <td style="cursor:text; width:130px;" class="btn btn-sm btn-secondary ">Chưa thanh toán</td>
+                                        }
+                                        if (item.Status == 2)
+                                        {
+                                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-primary ">Đã thanh toán</td>
+                                        }
+                                        if (item.Status == 3)
+                                        {
+                                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-success ">Giao hàng thành công</td>
+                                        }
+                                        if (item.Status == 4)
+                                        {
+                                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                        }
+                                        if (item.Status == 5)
+                                        {
+                                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning ">Đang giao hàng</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
 
-                                @if (item.Status == 1)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                                    }
                                 }
-                                @if (item.Status == 2)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
-                                }
-                                @if (item.Status == 3)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
-                                }
-                                @if (item.Status == 4)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
-                                }
-                                @if (item.Status == 5)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
-                                }
+
 
                                 @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
@@ -121,7 +131,7 @@
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3)
+                                    @if (item.Status != 3 && item.IsConfirm != false)
                                     {
 
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
@@ -194,39 +204,39 @@
 </div>
 
 @section scripts {
-<script>
-    $(document).ready(function () {
-        $('body').on('click', '.btnCapNhat', function () {
-            var id = $(this).data('id')
-            $('#txtOrderID').val(id);
-            $('#modal-default').modal('show')
-        })
-
-        $('body').on('click', '#btnLuu', function () {
-            var id = $('#txtOrderID').val();
-            var trangThai = $('#ddTrangThai').val();
-            $.ajax({
-                url: '/admin/order/UpdateTrangThai',
-                type: 'POST',
-                data: { id: id, trangThai: trangThai },
-                success: function (rs) {
-                    if (rs.success) {
-                        //alert(rs.message)
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công',
-                            text: rs.message,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload(); // Reload trang sau khi người dùng nhấn OK
-                            }
-                        });
-                    }
-                }
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnCapNhat', function () {
+                var id = $(this).data('id')
+                $('#txtOrderID').val(id);
+                $('#modal-default').modal('show')
             })
-        })
-    });
-    </script>    
-    
+
+            $('body').on('click', '#btnLuu', function () {
+                var id = $('#txtOrderID').val();
+                var trangThai = $('#ddTrangThai').val();
+                $.ajax({
+                    url: '/admin/order/UpdateTrangThai',
+                    type: 'POST',
+                    data: { id: id, trangThai: trangThai },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+
 }

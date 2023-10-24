@@ -76,6 +76,7 @@ namespace WebBanHangOnline.Controllers
             {
                 string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"]; //Chuoi bi mat
                 var vnpayData = Request.QueryString;
+                string contentCustomer = null;
                 VnPayLibrary vnpay = new VnPayLibrary();
 
                 foreach (string s in vnpayData)
@@ -95,21 +96,62 @@ namespace WebBanHangOnline.Controllers
                 long vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / 100;
                 String bankCode = Request.QueryString["vnp_BankCode"];
 
+            
                 bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
                 if (checkSignature)
                 {
                     if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                     {
                         var itemOrder = db.Orders.FirstOrDefault(x => x.Code == orderCode);
+                        //Lấy sản phẩm 
+                        var item = db.OrderDetails.Where(s => s.OrderID == itemOrder.Id).ToList();
+                        string strSanPham = "";
+                        decimal thanhTien = decimal.Zero;
+                        decimal khuyenMai = decimal.Zero;
+                        decimal tongTien = decimal.Zero;
+
+                        foreach (var order in item)
+                        {
+                            strSanPham += "<tr>";
+                            strSanPham += "<td>" + order.Product.Title + "</td>";
+                            strSanPham += "<td>" + order.Quantity + "</td>";
+                            strSanPham += "<td>" + Common.FormatNumber(order.Price, 0) + "</td>";
+                            strSanPham += "</tr>";
+                            thanhTien += order.Price * order.Quantity;
+                        }
+                        khuyenMai = itemOrder.DiscountAmount;
+
+                        if (itemOrder.PromotionId != null)
+                        {
+                            tongTien = thanhTien - khuyenMai;
+                        }
+
+                        if (itemOrder.PromotionId == null)
+                        {
+                            tongTien = thanhTien;
+                        }
                         if (itemOrder != null)
                         {
                             itemOrder.Status = 2;//đã thanh toán
+                            itemOrder.IsConfirm = true;
+                            contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang_Online.html"));
+                            contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
+                            contentCustomer = contentCustomer.Replace("{{NgayDat}}", itemOrder.CreateDate.ToString());
+                            contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", itemOrder.CustomerName);
+                            contentCustomer = contentCustomer.Replace("{{Phone}}", itemOrder.Phone);
+                            contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", itemOrder.Address);
+                            contentCustomer = contentCustomer.Replace("{{Email}}", itemOrder.Email);
+                            contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
+                            contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                            contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(itemOrder.DiscountAmount, 0));
+                            contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(itemOrder.TotalAmount, 0));
+                            Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + itemOrder.Code, contentCustomer.ToString(), itemOrder.Email);
                             db.Orders.Attach(itemOrder);
                             db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
                         //Thanh toan thanh cong
-                        ViewBag.InnerText = "Giao dịch được thực hiện thành công. Cảm ơn quý khách đã sử dụng dịch vụ. Vui lòng kiểm tra thông tin đơn hàng tại email: " + itemOrder.Email;
+                        ViewBag.InnerText = itemOrder.Code;
                         //log.InfoFormat("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", orderId, vnpayTranId);
                     }
                     else
@@ -135,7 +177,6 @@ namespace WebBanHangOnline.Controllers
             string email = TempData["EmailCustomer"] as string;
             return View();
         }
-
         public ActionResult Checkout()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
@@ -191,15 +232,13 @@ namespace WebBanHangOnline.Controllers
                         order.DiscountAmount = cart.DiscountAmount;
                     }
 
-
-
                     if (User.Identity.IsAuthenticated)
                     {
                         order.CustomerID = User.Identity.GetUserId();
                     }
                     order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
-                    order.IsConfirm = false;
+
                     TempData["EmailCustomer"] = order.Email;
 
                     if (order.PromotionId != null)
@@ -249,9 +288,9 @@ namespace WebBanHangOnline.Controllers
 
 
                     // Gán mã đơn hàng và lưu vào cơ sở dữ liệu
+
+
                     order.Code = newOrderCode;
-                    db.Orders.Add(order);
-                    db.SaveChanges();
 
                     //// Send Mail cho Khách hàng ////
 
@@ -283,19 +322,25 @@ namespace WebBanHangOnline.Controllers
                     {
                         tongTien = thanhTien;
                     }
-                    string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
-                    contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
-                    contentCustomer = contentCustomer.Replace("{{NgayDat}}", order.CreateDate.ToString());
-                    contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
-                    contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
-                    contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
-                    contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
-                    contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
-                    contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
-                    contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
-                    contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
-                    Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
 
+
+                    string contentCustomer = null;
+                    if (order.TypePayment == 1)
+                    {
+                        order.IsConfirm = false;
+                        contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
+                        contentCustomer = contentCustomer.Replace("{{MaDon}}", order.Code);
+                        contentCustomer = contentCustomer.Replace("{{NgayDat}}", order.CreateDate.ToString());
+                        contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", order.CustomerName);
+                        contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
+                        contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
+                        contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
+                        contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
+                        contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                        contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
+                        contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
+                        Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
+                    }
                     string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailCuaHang.html"));
                     contentAdmin = contentAdmin.Replace("{{MaDon}}", order.Code);
                     contentAdmin = contentAdmin.Replace("{{NgayDat}}", order.CreateDate.ToString());
@@ -308,6 +353,8 @@ namespace WebBanHangOnline.Controllers
                     contentAdmin = contentAdmin.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                     contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
+                    db.Orders.Add(order);
+                    db.SaveChanges();
                     cart.ClearCart();
                     //// End Mail ////
                     code = new { Success = true, Code = request.TypePayment, Url = "" };
@@ -319,7 +366,7 @@ namespace WebBanHangOnline.Controllers
                     }
                     Session["MaDonHang"] = order.Code;
                     Session["MaId"] = order.Id;
-
+                    Session["OrderViewModel"] = request;
                     //return RedirectToAction("CheckoutSuccess");
                 }
             }
