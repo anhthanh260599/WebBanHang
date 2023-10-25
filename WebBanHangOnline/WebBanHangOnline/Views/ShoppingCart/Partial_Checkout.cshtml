@@ -34,6 +34,9 @@
         }
     </script>
 
+    <h6 class="text-danger">Lưu ý: Khi thanh toán bằng Paypal, giao dịch sẽ sử dụng đơn vị tiền tệ là USD.</h6>
+    <p class="text-info">Tỉ giá: 1 USD = 25.000 VND</p>
+
     @Html.AntiForgeryToken()
     <h4>Thông tin khách hàng</h4>
 
@@ -92,9 +95,11 @@
         <select class="form-control" name="TypePayment" id="drTypePayment">
             <option value="1" selected>Ship COD</option>
             <option value="2">Thanh toán VNPAY</option>
-
+            <option value="3">Thanh toán PAYPAL</option>
         </select>
     </div>
+
+
 
     <div class="form-group" id="load_form_payment" style="display:none;">
         <h4> <label>Chọn phương thực thanh toán: </label></h4>
