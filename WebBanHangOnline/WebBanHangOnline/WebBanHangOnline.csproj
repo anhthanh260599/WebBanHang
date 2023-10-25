@@ -3343,6 +3343,7 @@
     <Content Include="Content\template\sendMailCuaHang.html" />
     <Content Include="Content\template\sendMailForgotPassword.html" />
     <Content Include="Content\template\sendMailKhachHang.html" />
+    <Content Include="Content\template\sendMailKhachHang_Online.html" />
     <Content Include="Content\template\sendMailSubscribeKH.html" />
     <Content Include="Content\template\VNPAY_Logo.png" />
     <Content Include="favicon.ico" />

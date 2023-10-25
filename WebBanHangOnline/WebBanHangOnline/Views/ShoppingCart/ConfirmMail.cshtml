@@ -1,18 +1,12 @@
-﻿@{
-    string email = TempData["EmailCustomer"] as string;
-}
-
+﻿
 @{
-    ViewBag.Title = "Đặt hàng thành công";
+    ViewBag.Title = "confirmMail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
 <link rel="stylesheet" type="text/css" href="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 
 <div class="container product_section_container">
     <div class="row">
@@ -40,8 +34,16 @@
                 </div>
 
                 <div class="col-md-12">
-                    <h4>Vui lòng xác nhận đơn hàng tại email: <strong style="color:red;">@email</strong></h4>
-                 </div>
+                    <h3 class="mb-3">
+                        <strong>Xác nhận thành công!!!</strong>
+                    </h3>
+                    <h5>
+                        Chúng tôi đang tiến hành hoàn thiện đơn đặt hàng của bạn!!
+                    </h5>
+                    <h6 class="font-italic text-gray">
+                        Bạn có thể theo dõi đơn <strong>@ViewBag.CodeDonHang </strong> tại mục <a href="/tra-cuu">Tra cứu đơn</a>
+                    </h6>
+                </div>
 
             </div>
 

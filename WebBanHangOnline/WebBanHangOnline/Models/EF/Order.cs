@@ -27,6 +27,8 @@ namespace WebBanHangOnline.Models.EF
         [Required(ErrorMessage ="Vui lòng nhập địa chỉ")]
         public string Address { get; set; }
         public string Email { get; set; }
+        public bool IsConfirm { get; set; }
+
         public decimal TotalAmount { get; set; }
         public int Quantity { get; set; }
         public int TypePayment { get; set; }
