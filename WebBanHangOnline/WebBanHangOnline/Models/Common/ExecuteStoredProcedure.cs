@@ -35,5 +35,19 @@ namespace WebBanHangOnline.Models.Common
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void sp_UpdateIsActivePromotionCode()
+        {
+            using (SqlConnection connection = new SqlConnection(strConnection))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("sp_UpdateIsActivePromotionCode", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Thực thi stored procedure
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

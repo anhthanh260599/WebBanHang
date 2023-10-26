@@ -253,6 +253,8 @@ namespace WebBanHangOnline.Controllers
                         order.PromotionCode = cart.PromotionCode.ToUpper();
                         order.TypePromotion = cart.TypePromotion;
                         order.DiscountAmount = cart.DiscountAmount;
+                        var promotionItem = db.Promotions.Where(x => x.Id == order.PromotionId).FirstOrDefault();
+                        promotionItem.Quantity = promotionItem.Quantity - 1;
                     }
 
 
