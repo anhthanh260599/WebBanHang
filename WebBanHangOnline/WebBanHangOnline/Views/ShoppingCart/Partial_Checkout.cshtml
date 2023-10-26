@@ -156,11 +156,17 @@
         // Close the modal when the countdown is finished
         $('#countdownModal').modal('hide');
     }
+    let nameInput = document.querySelector("input[name=CustomerName]");
+    let phoneInput = document.querySelector("input[name=Phone]");
+    let addressInput = document.querySelector("input[name=Address]");
+    let emailInput = document.querySelector("input[name=Email]");
 
     // Add a click event handler to the "Đặt hàng" button
     $('#btnCheckOut').click(function () {
-        $('#countdownModal').modal('show'); // Show the countdown modal
-        startCountdown(); // Start the countdown
+        if (nameInput.value != '' && phoneInput.value && '' && addressInput.value != '' && emailInput.value != '') {
+            $('#countdownModal').modal('show'); // Show the countdown modal
+            startCountdown(); // Start the countdown
+        }
     });
 </script>
 
