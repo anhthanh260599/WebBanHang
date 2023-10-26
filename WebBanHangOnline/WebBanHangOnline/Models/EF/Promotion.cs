@@ -22,6 +22,11 @@ namespace WebBanHangOnline.Models.EF
 
         [Required]
         public decimal DiscountAmount { get; set; }
+        [Required]
+        public DateTime DateFrom { get; set; }
+        [Required]
+        public DateTime DateTo { get; set; }
+        public int Quantity { get; set; }
         public int TypePromotion { get; set; }
         public bool IsActive { get; set; }
     }
