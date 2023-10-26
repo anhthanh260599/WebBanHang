@@ -109,6 +109,8 @@ namespace WebBanHangOnline.Controllers
                         if (itemOrder != null)
                         {
                             itemOrder.Status = 2;//đã thanh toán
+                            itemOrder.IsConfirm = true;
+
                             db.Orders.Attach(itemOrder);
                             db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
@@ -471,7 +473,7 @@ namespace WebBanHangOnline.Controllers
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
-                item.Status = 2;
+                item.Status = 1;
                 item.IsConfirm = true;
 
                 if (item.IsConfirm == true)
@@ -869,6 +871,8 @@ namespace WebBanHangOnline.Controllers
             if (itemOrder != null)
             {
                 itemOrder.Status = 2;//đã thanh toán
+                itemOrder.IsConfirm = true;
+
                 db.Orders.Attach(itemOrder);
                 db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
