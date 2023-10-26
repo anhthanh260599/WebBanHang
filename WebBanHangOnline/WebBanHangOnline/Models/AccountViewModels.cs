@@ -27,7 +27,7 @@ namespace WebBanHangOnline.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Vui lòng không để trống")]
-        [StringLength(100, ErrorMessage = "Mật khẩu phải lớn hơn {6} ký tự.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Mật khẩu phải lớn hơn {0} {2} ký tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Mật khẩu")]
         public string Password { get; set; }

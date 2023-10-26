@@ -47,6 +47,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public async Task<ActionResult> Add()
         {
             var store = new Store();
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var allUsers = userManager.Users.ToList();
+            var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
+            var userSelectList = new SelectList(usersInRole, "Id", "UserName");
+            ViewBag.UserList = userSelectList;
+
             await PopulateDropdownLists(store);
             return View(store);
         }
@@ -67,6 +74,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 store.Province = GetProvinceName(provinceCode);
                 store.District = GetDistrictName(districtCode);
                 store.Ward = GetWardName(wardCode);
+
+
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var allUsers = userManager.Users.ToList();
+                var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
+                var userSelectList = new SelectList(usersInRole, "Id", "UserName");
+                ViewBag.UserList = userSelectList;
+
                 db.Stores.Add(store);
                 db.SaveChanges();
                 return RedirectToAction("Index"); // Chuyển hướng sau khi tạo sản phẩm thành công

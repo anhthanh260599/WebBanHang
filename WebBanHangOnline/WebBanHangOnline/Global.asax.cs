@@ -16,7 +16,7 @@ namespace WebBanHangOnline
 
         protected void Application_Start()
         {
-            timer = new Timer(ExecuteStoredProcedure, null, 0, 6000); // 1 phút thực hiện stored 1 lần
+            //timer = new Timer(ExecuteStoredProcedure, null, 0, 6000); // 1 phút thực hiện stored 1 lần
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -63,18 +63,18 @@ namespace WebBanHangOnline
             Application.UnLock();
         }
 
-        private void ExecuteStoredProcedure(object state)
-        {
-            try
-            {
-                // Gọi stored procedure ở đây
-                WebBanHangOnline.Models.Common.ExecuteStoredProcedure.UpdateStatusIfNoChange();
-                HttpContext.Current.Application["LastStoredProcedureExecution"] = DateTime.Now.AddHours(14);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi nếu cần
-            }
-        }
+        //private void ExecuteStoredProcedure(object state)
+        //{
+        //    try
+        //    {
+        //        // Gọi stored procedure ở đây
+        //        WebBanHangOnline.Models.Common.ExecuteStoredProcedure.UpdateStatusIfNoChange();
+        //        HttpContext.Current.Application["LastStoredProcedureExecution"] = DateTime.Now.AddHours(14);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Xử lý lỗi nếu cần
+        //    }
+        //}
     }
 }
