@@ -34,6 +34,10 @@ namespace WebBanHangOnline.Models.EF
 
         [ForeignKey("User")]
         public string UserID { get; set; }
+        public string AccountLogin{ get; set; }
+        public string StoreManagerName { get; set; }
+        public string StorePhone { get; set; }
+
         public virtual ApplicationUser User { get; set; }
     }
 }

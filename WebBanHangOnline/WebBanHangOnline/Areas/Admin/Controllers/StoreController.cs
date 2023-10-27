@@ -50,9 +50,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             var allUsers = userManager.Users.ToList();
+
             var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
             var userSelectList = new SelectList(usersInRole, "Id", "UserName");
             ViewBag.UserList = userSelectList;
+
+            var userStoreManager = allUsers.Where(u => userManager.IsInRole(u.Id, "StoreManager")).ToList();
+            var userStoreManagerSelectList = new SelectList(userStoreManager, "FullName", "FullName");
+            ViewBag.UserStoreManagerList = userStoreManagerSelectList;
 
             await PopulateDropdownLists(store);
             return View(store);
@@ -78,9 +83,28 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
                 var allUsers = userManager.Users.ToList();
+
                 var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
                 var userSelectList = new SelectList(usersInRole, "Id", "UserName");
                 ViewBag.UserList = userSelectList;
+
+                var userStoreManager = allUsers.Where(u => userManager.IsInRole(u.Id, "StoreManager")).ToList();
+                var userStoreManagerSelectList = new SelectList(userStoreManager, "FullName", "FullName");
+                ViewBag.UserStoreManagerList = userStoreManagerSelectList;
+
+                var userAccount = store.UserID;
+                var AccountLogin = db.Users.Where(x=>x.Id == userAccount).Select(x=>x.UserName).FirstOrDefault();
+                store.AccountLogin = AccountLogin;
+
+                if (store.StoreManagerName == null)
+                {
+                    store.StoreManagerName = "Chưa có quản lý";
+                }
+
+                if (store.AccountLogin == null)
+                {
+                    store.AccountLogin = "Chưa có tài khoản đăng nhập";
+                }
 
                 db.Stores.Add(store);
                 db.SaveChanges();
@@ -98,9 +122,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             var allUsers = userManager.Users.ToList();
+
             var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
             var userSelectList = new SelectList(usersInRole, "Id", "UserName");
             ViewBag.UserList = userSelectList;
+
+            var userStoreManager = allUsers.Where(u => userManager.IsInRole(u.Id, "StoreManager")).ToList();
+            var userStoreManagerSelectList = new SelectList(userStoreManager, "FullName", "FullName");
+            ViewBag.UserStoreManagerList = userStoreManagerSelectList;
 
             await PopulateDropdownLists(store);
             return View(item);
@@ -125,16 +154,37 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 store.District = GetDistrictName(districtCode);
                 store.Ward = GetWardName(wardCode);
 
+                // Nếu có lỗi xảy ra, điền lại Dropdownlist và hiển thị lại trang Create
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var allUsers = userManager.Users.ToList();
+
+                var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
+                var userSelectList = new SelectList(usersInRole, "Id", "UserName");
+                ViewBag.UserList = userSelectList;
+
+                var userStoreManager = allUsers.Where(u => userManager.IsInRole(u.Id, "StoreManager")).ToList();
+                var userStoreManagerSelectList = new SelectList(userStoreManager, "FullName", "FullName");
+                ViewBag.UserStoreManagerList = userStoreManagerSelectList;
+
+                var userAccount = store.UserID;
+                var AccountLogin = db.Users.Where(x => x.Id == userAccount).Select(x => x.UserName).FirstOrDefault();
+                store.AccountLogin = AccountLogin;
+
+                if (store.StoreManagerName == null)
+                {
+                    store.StoreManagerName = "Chưa có quản lý";
+                }
+
+                if (store.AccountLogin == null)
+                {
+                    store.AccountLogin = "Chưa có tài khoản đăng nhập";
+                }
+
                 db.Entry(store).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index"); // Chuyển hướng sau khi tạo sản phẩm thành công
             }
-            // Nếu có lỗi xảy ra, điền lại Dropdownlist và hiển thị lại trang Create
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-            var allUsers = userManager.Users.ToList();
-            var usersInRole = allUsers.Where(u => userManager.IsInRole(u.Id, "Store")).ToList();
-            var userSelectList = new SelectList(usersInRole, "Id", "UserName");
-            ViewBag.UserList = userSelectList;
+
 
             PopulateDropdownLists(store);
             return View(store);

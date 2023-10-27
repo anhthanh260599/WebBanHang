@@ -77,10 +77,23 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="exampleInputEmail1">Số điện thoại cửa hàng</label>
+                        @Html.TextAreaFor(x => x.StorePhone, new { @class = "form-control", @placeholder = "Nhập số điện thoại của cửa hàng" })
+                        @Html.ValidationMessageFor(x => x.StorePhone, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Quản lý cửa hàng</label>
+                        @Html.DropDownListFor(model => model.StoreManagerName, ViewBag.UserStoreManagerList as SelectList, "Chọn Quản lý", new { @class = "form-control searchable-dropdown-list", @value = Model.StoreManagerName })
+                    </div>
+
+                    @Html.HiddenFor(x => x.Alias)
+
+                    @*<div class="form-group">
                         <label for="exampleInputEmail1">Alias</label>
                         @Html.TextBoxFor(x => x.Alias, new { @class = "form-control", @placeholder = "Không cần điền field này" })
                         @Html.ValidationMessageFor(x => x.Alias, null, new { @class = "text-danger" })
-                    </div>
+                    </div>*@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Mô tả</label>
@@ -117,6 +130,8 @@
                         @Html.TextAreaFor(x => x.EmbedMap, new { @class = "form-control" })
                         @Html.ValidationMessageFor(x => x.EmbedMap, null, new { @class = "text-danger" })
                     </div>
+
+                    <p class="text-info">Địa chỉ hiện tại: @Model.Address, @Model.Ward, @Model.District, @Model.Province</p>
 
                     <div class="form-group">
                         <label for="exampleInputPassword1">Tỉnh/Thành</label>
