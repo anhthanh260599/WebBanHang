@@ -11,7 +11,7 @@ using WebBanHangOnline.Models;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Employee,Store")]
+    [Authorize(Roles = "Admin,StoreEmployee,Store,StoreManager,Coordinator,Warehouse")]
     public class HomeController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
