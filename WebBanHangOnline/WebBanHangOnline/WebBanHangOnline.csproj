@@ -3576,6 +3576,8 @@
     <Content Include="Areas\Admin\Views\StoreOrder\OrderIndex.cshtml" />
     <Content Include="Areas\Admin\Views\StoreOrder\OrderDetail.cshtml" />
     <Content Include="Areas\Admin\Views\StoreOrder\Partial_OrderDetail.cshtml" />
+    <Content Include="Areas\Admin\Views\News\Preview.cshtml" />
+    <Content Include="Areas\Admin\Views\Posts\Preview.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
