@@ -24,7 +24,7 @@ namespace WebBanHangOnline.Models.EF
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Vui lòng không để trống")]
         [StringLength(250)]
         public string Title { get; set; }
         [StringLength(250)]
@@ -35,8 +35,12 @@ namespace WebBanHangOnline.Models.EF
         public string Description { get; set; }
         [AllowHtml]
         public string Detail { get; set; }
+        [Required(ErrorMessage = "Vui lòng không để trống")]
+
         public string Image { get; set; }
+        [Required(ErrorMessage = "Vui lòng không để trống")]
         public decimal OriginalPrice { get; set; }
+        [Required(ErrorMessage = "Vui lòng không để trống")]
         public decimal Price { get; set; }
         public decimal? PriceSale { get; set; }
         public bool IsHome { get; set; }
@@ -44,6 +48,7 @@ namespace WebBanHangOnline.Models.EF
         public bool IsFeature { get; set; }
         public bool IsHot { get; set; }
         public bool IsActive { get; set; }
+        [Required(ErrorMessage = "Vui lòng không để trống")]
         public int Quantity { get; set; }
         public int ViewCount { get; set; }
         public string SeoTitle { get; set; }

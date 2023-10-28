@@ -31,6 +31,7 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+        public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<ToxicWord> ToxicWords { get; set; }
         public DbSet<WishList> WishLists { get; set; }

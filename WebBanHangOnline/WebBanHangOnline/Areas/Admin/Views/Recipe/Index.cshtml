@@ -1,0 +1,103 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Recipe>
+
+@{
+    ViewBag.Title = "Danh sách công thức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader {
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/recipe" class="nav-link">Công thức</a>
+        </li>
+    </ul>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Đặt nguyên liệu</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Danh sách công thức</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@ViewBag.Title</h3>
+
+            <div class="card-tools">
+                <a class="btn btn-primary" href="@Url.Action("Add","Recipe")">
+                    Thêm mới
+                </a>
+                <a id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-hover" id="dataTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="SelectAll" /></th>
+                        <th>STT</th>
+                        <th>Tên công thức</th>
+                        <th>Mã công thức</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày chỉnh sửa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @using (Html.BeginForm(FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        if (Model != null && Model.Any())
+                        {
+                            var i = 1;
+
+                            foreach (var item in Model)
+                            {
+                                <tr id="trow_@i">
+                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.MatterialID" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.DateCreate</td>
+                                    <td>@item.DateEdit</td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+</section>
