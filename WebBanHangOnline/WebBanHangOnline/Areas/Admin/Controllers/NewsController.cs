@@ -28,7 +28,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(News model) 
+        public ActionResult Add(News model, bool preview = false) 
         {
             if (ModelState.IsValid)
             {
@@ -51,15 +51,38 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
 
+                if (preview)
+                {
+                    model.IsActive = false;
+                }
+
                 model.CreateDate = DateTime.Now;
                 model.CategoryID = 18; // CategoryID của Tin tức (check trong DB)
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.News.Add(model);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+
+                if (preview)
+                {
+                    // Nếu truyền tham số preview = true, thì chuyển hướng đến trang Preview với tham số id là model.Id
+                    return RedirectToAction("Preview", new { id = model.Id });
+                }
+                else
+                {
+                    // Ngược lại, chuyển hướng đến trang Index hoặc trang khác tùy theo logic của ứng dụng của bạn
+                    return RedirectToAction("Index");
+                }
+                //return RedirectToAction("Index");
             }
             return View(model);
+        }
+
+        public ActionResult Preview(int id)
+        {
+            var item = db.News.Find(id);
+            return View(item);
         }
 
         public ActionResult Edit(int id)
@@ -70,7 +93,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(News model)
+        public ActionResult Edit(News model, bool preview = false)
         {
             if (ModelState.IsValid)
             {
@@ -95,12 +118,29 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
 
+                if(preview)
+                {
+                    model.IsActive = false;
+                }
 
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+
+                if (preview)
+                {
+                    // Nếu truyền tham số preview = true, thì chuyển hướng đến trang Preview với tham số id là model.Id
+                    return RedirectToAction("Preview", new { id = model.Id });
+                }
+                else
+                {
+                    // Ngược lại, chuyển hướng đến trang Index hoặc trang khác tùy theo logic của ứng dụng của bạn
+                    return RedirectToAction("Index");
+                }
+
+                //return RedirectToAction("Index");
             }
             return View(model);
         }
@@ -111,6 +151,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
             var item = db.News.Find(id);
             if(item != null) 
+            {
+                db.News.Remove(item);
+                db.SaveChanges();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public ActionResult Delete_Preview(int id)
+        {
+
+            var item = db.News.Find(id);
+            if (item != null)
             {
                 db.News.Remove(item);
                 db.SaveChanges();
