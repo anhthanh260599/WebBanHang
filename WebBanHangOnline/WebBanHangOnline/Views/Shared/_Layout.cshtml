@@ -1,4 +1,13 @@
-﻿@using WebBanHangOnline.Models.Common
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+@using Microsoft.AspNet.Identity.Owin;
+@using Microsoft.Owin.Security;
+@using PayPal.Api;
+@using WebBanHangOnline.Models;
+@using WebBanHangOnline.Models.Common;
+@using WebBanHangOnline.Models.EF;
 
 <!DOCTYPE html>
 <html>
@@ -154,6 +163,18 @@
                                             </a>
                                             <ul class="account_selection" style="width:250px;">
                                                 <li><a href="/account/profile"><i class="fa fa-user-plus" aria-hidden="true"></i>Hồ sơ</a></li>
+
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                                                    var user = userManager.FindByName(User.Identity.Name);
+
+                                                    if (user != null && !string.IsNullOrEmpty(user.PasswordHash))
+                                                    {
+                                                        <li><a href="/account/changepassword"><i class="fa-solid fa-key"></i>Đổi mật khẩu</a></li>
+                                                    }
+                                                }
+                                                @*<li><a href="/account/changepassword"><i class="fa-solid fa-key"></i>Đổi mật khẩu</a></li>*@
                                                 <li><a href="/account/OrderHistory"><i class="fa-solid fa-clock-rotate-left"></i>Lịch sử đơn hàng</a></li>
                                                 <li><a href="/wishlist/Index"><i class="fa-solid fa-heart"></i>Sản phẩm yêu thích</a></li>
                                                 @if (!User.IsInRole("Customer"))

@@ -3668,6 +3668,8 @@
     <Content Include="Views\Home\Partial_TraCuuDonHangDetail.cshtml" />
     <Content Include="Views\ShoppingCart\PayPalPayment_SuccessView.cshtml" />
     <Content Include="Views\ShoppingCart\PayPalPayment_FailureView.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -276,12 +276,26 @@ namespace WebBanHangOnline.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                if(user == null)
+                {
+                    ViewBag.NoAccount = "Không tìm thấy tài khoản này";
+                    return View(model);
+                }
+
                 var Id = await UserManager.IsEmailConfirmedAsync(user.Id);
                 if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
+                }
+
+                if (string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    // User does not have a local password, which means they are using an external login service
+                    // You can display a message or handle this case accordingly
+                    ViewBag.ErrorMessage = "Tài khoản này sử dụng dịch vụ đăng nhập phía bên ngoài, vui lòng sử dụng lại dịch vụ đó để đổi mật khẩu";
+                    return View(model);
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -305,6 +319,46 @@ namespace WebBanHangOnline.Controllers
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+        //
+        // GET: /Account/ChangePassword
+        [AllowAnonymous]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ChangePassword
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("ChangePasswordConfirmation");
+            }
+
+            AddErrors(result);
+            return View(model);
+        }
+
+        // GET: /Account/ChangePasswordConfirmation
+        [Authorize]
+        public ActionResult ChangePasswordConfirmation()
         {
             return View();
         }
