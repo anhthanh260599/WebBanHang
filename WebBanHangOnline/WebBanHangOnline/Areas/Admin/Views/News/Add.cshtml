@@ -71,7 +71,7 @@
                     <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên tiêu đề</label>
-                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Nhập tên tiêu đề" })
+                            @Html.TextBoxFor(x => x.Title, new { @id = "txtTitle", @class = "form-control", @placeholder = "Nhập tên tiêu đề" })
                             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
                         </div>
 
@@ -89,7 +89,7 @@
 
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả</label>
-                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
+                            @Html.TextAreaFor(x => x.Description, new { @id = "txtDescription", @class = "form-control" })
                         </div>
 
                         <div class="form-group">
@@ -99,7 +99,7 @@
 
                         <div class="form-group">
                             <label for="exampleInputPassword1">Hiển thị</label>
-                            @Html.CheckBoxFor(x => x.IsActive, new {@checked = "checked"})
+                            @Html.CheckBoxFor(x => x.IsActive, new { @checked = "checked" })
                         </div>
 
                         <div class="form-group">
@@ -117,12 +117,11 @@
                         <div class="form-group">
                             <a href="/admin/news" class="btn btn-danger">Quay lại</a>
                             <button type="submit" class="btn btn-primary">Xác nhận</button>
-                            <button type="submit" class="btn btn-info" name="preview" value="true">Lưu và xem thử</button>
-
                         </div>
                     </div>
 
                 }
+                <button id="previewButton" class="btn btn-info">Preview</button>
 
             </div>
 
@@ -154,5 +153,37 @@
             };
             finder.popup();
         }
+
+        document.getElementById('previewButton').addEventListener('click', function () {
+            // Lấy nội dung đang được soạn thảo trong CKEditor
+            var editor = CKEDITOR.instances.txtDetail; // Sử dụng tên của CKEditor instance 'txtDetail'
+
+            // Lấy giá trị của Title và Description
+            var title = document.getElementById('txtTitle').value;
+            var description = document.getElementById('txtDescription').value;
+
+            var content = editor.getData();
+
+
+            // Tạo một cửa sổ hoặc lớp modal để hiển thị nội dung được xem trước
+
+
+            // Trong ví dụ này, tôi sử dụng cửa sổ mới để hiển thị nội dung
+            var previewWindow = window.open('', '_blank', 'width=1000,height=400');
+            previewWindow.document.open();
+
+            previewWindow.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">');
+            previewWindow.document.write('<link rel="stylesheet" type="text/css" href="../../Content/assets/styles/main_styles.css">');
+
+            previewWindow.document.write(' <div class="container"> <div class="row"> <h3 class="col-12 news_title">' + title + '</h3> </div></div>');
+            previewWindow.document.write(' <div class=container> <div class="row"><div class="col-md-12 news-description font-weight-bold">' + description + '</div><div class="col-md-12 news-detail">' + content + '</div></div> </div>');
+
+
+            //previewWindow.document.write('<div class="news-description">' + description + '</div>');
+            //previewWindow.document.write('<div class="news-detail">' + content + '</div>');
+
+            previewWindow.document.close();
+});
+
     </script>
 }
