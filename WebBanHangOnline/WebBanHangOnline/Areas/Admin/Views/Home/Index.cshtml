@@ -4,19 +4,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-
-@section naviheader {
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/home" class="nav-link">Trang chủ</a>
-        </li>
-    </ul>
-}
-
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
@@ -56,7 +43,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>@Common.FormatNumber(ViewBag.TicketAccount, 0)<sup style="font-size: 20px"> VND</sup></h3>
+                    <h3>@Common.FormatNumber(ViewBag.TicketAccount,0)<sup style="font-size: 20px"> VND</sup></h3>
 
                     <p>Ticket Account (TA)</p>
                 </div>
