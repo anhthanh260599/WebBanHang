@@ -48,7 +48,7 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">@ViewBag.Title</h3>
+            <h3 class="card-title">Chi tiết đơn hàng</h3>
 
             <div class="card-tools">
 
@@ -71,6 +71,39 @@
                     <div class="form-group">
                         <label>Tên khách hàng</label>
                         <input type="text" readonly class="form-control" value="@Model.CustomerName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Cửa hàng thực hiện</label>
+                        @if (Model.StoreID == null)
+                        {
+                            <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+
+                        }
+                        else
+                        {
+                            <input type="text" readonly class="form-control" value="@Model.Store.Name" />
+
+                        }
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Số điện thoại cửa hàng</label>
+                        @if (Model.StoreID == null)
+                        {
+                            <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+                        }
+                        else
+                        {
+                            <input type="text" readonly class="form-control" value="@Model.Store.StorePhone" />
+
+                        }
                     </div>
                 </div>
             </div>

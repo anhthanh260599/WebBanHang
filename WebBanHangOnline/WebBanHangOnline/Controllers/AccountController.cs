@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PayPal.Api;
@@ -90,8 +91,13 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult OrderHistory()
         {
-            var userID = User.Identity.GetUserId();
-            var items = db.Orders.OrderByDescending(x=>x.Id).Where(x=>x.CustomerID == userID).ToList();
+            var userId = User.Identity.GetUserId();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var user = userManager.FindById(userId);
+
+            var userEmail = user.Email;
+
+            var items = db.Orders.OrderByDescending(x=>x.Id).Where(x=>x.Email == userEmail).ToList();
             return View(items);
         }
 

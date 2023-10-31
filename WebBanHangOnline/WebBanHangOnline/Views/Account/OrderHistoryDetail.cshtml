@@ -40,6 +40,40 @@
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Cửa hàng thực hiện</label>
+                @if (Model.StoreID == null)
+                {
+                    <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+
+                }
+                else
+                {
+                    <input type="text" readonly class="form-control" value="@Model.Store.Name" />
+
+                }
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>Số điện thoại cửa hàng</label>
+                @if (Model.StoreID == null)
+                {
+                    <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+                }
+                else
+                {
+                    <input type="text" readonly class="form-control" value="@Model.Store.StorePhone" />
+
+                }
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-6">
             <div class="form-group">
@@ -145,16 +179,16 @@
         </div>
     }
 
-        <div class="row">
-            <div class="col-12">
-                <h3 class="text-center">Danh sách sản phẩm mua</h3>
-            </div>
-            <div class="col-12">
-                @Html.Action("Partial_OrderHistoryDetail", "Account", new { id = Model.Id })
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Danh sách sản phẩm mua</h3>
         </div>
+        <div class="col-12">
+            @Html.Action("Partial_OrderHistoryDetail", "Account", new { id = Model.Id })
+        </div>
+    </div>
 
-    </section>
+</section>
 
        
 
