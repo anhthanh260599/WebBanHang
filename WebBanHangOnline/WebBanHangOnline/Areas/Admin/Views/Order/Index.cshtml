@@ -150,10 +150,21 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
+                                    {
+                                        var orderId = item.Id;
+                                        var storeId = item.StoreID;
+
+                                        <button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
+                                            Điều phối đơn
+                                        </button>
+                                    }
+
+
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                                            Cập nhật
-                                        </button>*@
+            Cập nhật
+        </button>*@
 
 
                                 </td>
@@ -178,7 +189,7 @@
 
 </section>
 <!-- /.content -->
-
+<!-- /.modal-danh sách trạng thái -->
 <div class="modal fade" id="modal-default">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -211,6 +222,40 @@
     <!-- /.modal-dialog -->
 </div>
 
+
+<!-- /.modal-danh sách cửa hàng -->
+<div class="modal fade" id="modal-default-store">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Điều phối đơn cho cửa hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtOrderIDStore" value="0" />
+                <div class="form-group">
+                    <label>Cửa hàng</label>
+                    <select class="form-control" id="ddCuaHang">
+                        @foreach (var store in ViewBag.Stores)
+                        {
+                            <option value="@store.Value">@store.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 @section scripts {
     <script>
         $(document).ready(function () {
@@ -227,6 +272,37 @@
                     url: '/admin/order/UpdateTrangThai',
                     type: 'POST',
                     data: { id: id, trangThai: trangThai },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+
+            $('body').on('click', '.btnDieuPhoi', function () {
+                var id = $(this).data('id')
+                $('#txtOrderIDStore').val(id);
+                $('#modal-default-store').modal('show')
+            })
+
+            $('body').on('click', '#btnLuu', function () {
+                var orderID = $('#txtOrderIDStore').val();
+                var storeId = $('#ddCuaHang').val();
+                $.ajax({
+                    url: '/admin/order/DieuPhoiDon',
+                    type: 'POST',
+                    data: { orderID: orderID, storeId: storeId },
                     success: function (rs) {
                         if (rs.success) {
                             //alert(rs.message)
