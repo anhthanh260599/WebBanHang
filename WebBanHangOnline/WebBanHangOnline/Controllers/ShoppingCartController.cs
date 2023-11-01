@@ -170,6 +170,7 @@ namespace WebBanHangOnline.Controllers
                             Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + itemOrder.Code, contentCustomer.ToString(), itemOrder.Email);
                         }
                         //Thanh toan thanh cong
+                        ViewBag.ThanhToanThanhCong = "Cảm ơn quý khách đã sử dụng dịch vụ. Giao dịch được thực hiện thành công.";
                         ViewBag.InnerText =  $"{itemOrder.Code}";
                         ViewBag.EmailThanhToan = $"{itemOrder.Email}";
 
@@ -185,7 +186,7 @@ namespace WebBanHangOnline.Controllers
                     //displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
                     //displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
                     //displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-                    ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + Common.FormatNumber(vnp_Amount); // vnp_Amount.ToString();
+                    ViewBag.SoTienThanhToan = "Số tiền thanh toán (VND):" + Common.FormatNumber(vnp_Amount); // vnp_Amount.ToString();
                     //displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
                 }
             }
