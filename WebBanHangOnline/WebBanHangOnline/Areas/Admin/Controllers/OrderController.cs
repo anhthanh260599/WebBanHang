@@ -64,6 +64,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 db.Orders.Attach(order);
                 order.StoreID = storeId;
+                order.Status = 6;
                 db.Entry(order).Property(x=>x.StoreID).IsModified = true;
                 db.SaveChanges();
                 return Json(new { success = true, message = Message.SuccessSaveChange.ToString()});

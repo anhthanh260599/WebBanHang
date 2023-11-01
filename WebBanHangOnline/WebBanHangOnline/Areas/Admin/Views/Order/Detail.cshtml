@@ -148,51 +148,96 @@
                     </div>
                 </div>
 
-                @if (Model.Status == 1)
+                @if (Model.IsConfirm == true)
                 {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                    if (Model.Status == 1)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                            </div>
                         </div>
-                    </div>
+                    }
+                    if (Model.Status == 2)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                            </div>
+                        </div>
+                    }
+                    if (Model.Status == 3)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Giao hàng thành công" />
+                            </div>
+                        </div>
+                    }
+                    if (Model.Status == 4)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Huỷ" />
+                            </div>
+                        </div>
+                    }
+                    if (Model.Status == 5)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Đang giao hàng" />
+                            </div>
+                        </div>
+                    }
+                    if (Model.Status == 6)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Đang chuẩn bị món" />
+                            </div>
+                        </div>
+                    }
                 }
-                @if (Model.Status == 2)
+                else
                 {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                    if (Model.Status == 4)
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Huỷ" />
+                            </div>
                         </div>
-                    </div>
-                }
-                @if (Model.Status == 3)
-                {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Giao hàng thành công" />
+                    }
+
+                    else if ((Model.TypePayment == 2 && Model.Status == 1) || (Model.TypePayment == 3 && Model.Status == 1))
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                            </div>
                         </div>
-                    </div>
-                }
-                @if (Model.Status == 4)
-                {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Huỷ" />
+                    }
+                    else
+                    {
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <input type="text" readonly class="form-control" value="Chưa xác nhận" />
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
-                @if (Model.Status == 5)
-                {
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label>Trạng thái thanh toán</label>
-                            <input type="text" readonly class="form-control" value="Đang giao hàng" />
-                        </div>
-                    </div>
-                }
+
+
             </div>
 
 
