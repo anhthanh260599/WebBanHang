@@ -147,6 +147,7 @@
         let btnSubmit = document.querySelector("#btnSubmit");
         let btnDeletes = document.querySelectorAll("#btnDelete")
         let RecipeIDs = document.querySelectorAll("#RecipeID");
+        let listDelete = [];
         let formAddRecipeDetail
 
         // Lấy form Recipe
@@ -178,6 +179,11 @@
                             recipeProductID: parseInt(recipeProductID.textContent),
                             matterialID: matID
                         })
+                        let itemDelete = {
+                            recipeID: parseInt(recipeID.textContent),
+                            recipeProductID: parseInt(recipeProductID.textContent),
+                            matterialID: matID
+                        }
                         // Gọi Ajax
                         $.ajax({
                             type: "POST",
@@ -187,6 +193,7 @@
                             dataType: "json",
                             success: function (response) {
                                 if (response.success) {
+                                    listDelete.push(itemDelete);
                                     elementParent.remove();
                                     Swal.fire(
                                         'Xóa thành công!',
@@ -310,7 +317,6 @@
                                 )
                             }
                         })
-
                     }
                 })
 
@@ -348,6 +354,7 @@
                     let recipeProductID = element.parentElement.querySelector("#RecipeProductID").textContent;
                     let matterialID = element.parentElement.querySelector("#MatterialID").textContent;
                     let quantity = element.parentElement.nextElementSibling.querySelector("#Quantity")
+
                     let itemDataRecipeDetail = {
                         RecipeID: parseInt(element.textContent),
                         RecipeProductID: parseInt(recipeProductID),
@@ -362,14 +369,16 @@
                         formValueEditRecipeDetail.push(itemDataRecipeDetail);
                     }
                 })
-                console.log(formEditRecipe);
-
+                //console.log(formEditRecipe);
+                // Lọc các mục không có MatterialID giống nhau
+                const uniqueMaterials = formValueEditRecipeDetail.filter(item => {
+                    return !listDelete.some(deleteItem => deleteItem.matterialID == item.MatterialID);
+                });
                 let postData = JSON.stringify({
-                    listEditRecipeDetail: formValueEditRecipeDetail,
+                    listEditRecipeDetail: uniqueMaterials,
                     listAddRecipeDetail: formAddRecipeDetail,
                     recipe: formEditRecipe
-                });
-
+                }); 
                 $.ajax({
                     type: "POST",
                     url: '/admin/Recipe/Edit',
@@ -379,7 +388,7 @@
                     success: function (response) {
                         Swal.fire({
                             title: 'Thành công',
-                            text: "Thêm thành công",
+                            text: "Cập nhật thành công",
                             icon: 'success',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Đồng ý'

@@ -59,7 +59,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     }
                     context.SaveChanges();
                 }
-
                 return Json(new { newUrl = Url.Action("Index", "Recipe") });
             }
             catch
