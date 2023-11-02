@@ -7,11 +7,6 @@
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
 
-<style>
-    .btn-chuan-bi-mon {
-        background-color: #eeb0b0;
-    }
-</style>
 <h3 class="text-center" style="margin-top:200px;">@ViewBag.Title</h3>
 
 <section class="container">
@@ -45,50 +40,29 @@
                     <tr>
                         <td>@donHang.Code</td>
                         <td>@donHang.CustomerName</td>
-                        <td>@Common.FormatNumber(donHang.TotalAmount, 0)</td>
-                        @if (donHang.IsConfirm == true)
-                        {
-                            if (donHang.Status == 1)
+                        <td>@Common.FormatNumber(donHang.TotalAmount,0)</td>
+                        <td>
+                            @if (donHang.Status == 1)
                             {
-                                <td style="cursor:text; width:130px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
+                                <span class="btn btn-secondary">Chưa thanh toán</span>
                             }
-                            if (donHang.Status == 2)
+                            @if (donHang.Status == 2)
                             {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                <span class="btn btn-primary">Đã thanh toán</span>
                             }
-                            if (donHang.Status == 3)
+                            @if (donHang.Status == 3)
                             {
-                                <td style="cursor: text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                <span class="btn btn-success">Giao hành thành công</span>
                             }
-                            if (donHang.Status == 4)
+                            @if (donHang.Status == 4)
                             {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                <span class="btn btn-danger">Huỷ</span>
                             }
-                            if (donHang.Status == 5)
+                            @if (donHang.Status == 5)
                             {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-info">Đang giao hàng</td>
+                                <span class="btn btn-warning">Đang giao hàng</span>
                             }
-                            if (donHang.Status == 6)
-                            {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
-                            }
-                        }
-                        else
-                        {
-                            if (donHang.Status == 4)
-                            {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
-                            }
-                            else if ((donHang.TypePayment == 2 && donHang.Status == 1) || (donHang.TypePayment == 3 && donHang.Status == 1))
-                            {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
-                            }
-
-                            else
-                            {
-                                <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
-                            }
-                        }
+                        </td>
                         <td>
                             <a href="/Home/TraCuuDonHangDetail/@donHang.Id" class="btn btn-sm btn-info">Xem</a>
                         </td>
