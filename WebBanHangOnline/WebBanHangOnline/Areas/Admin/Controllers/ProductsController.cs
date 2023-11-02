@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PayPal.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(items);
         }
 
+      
         public ActionResult Add() 
         {
             ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
@@ -26,15 +28,16 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)
+        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)  
         {
-          if (ModelState.IsValid)
-          {
-                if( Images!= null && Images.Count>0)
+            try
+            {
+                ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+                if (Images != null && Images.Count > 0)
                 {
-                    for(int i = 0; i < Images.Count; i++)
+                    for (int i = 0; i < Images.Count; i++)
                     {
-                        if ( i + 1 == rDefault[0])
+                        if (i + 1 == rDefault[0])
                         {
                             model.Image = Images[i];
                             model.ProductImage.Add(new ProductImage
@@ -51,11 +54,11 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                                 ProductID = model.Id,
                                 Image = Images[i],
                                 IsDefault = false
-                            });;
-                        } 
-                            
+                            }); ;
+                        }
+
                     }
-                }    
+                }
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
                 if (string.IsNullOrEmpty(model.SeoTitle))
@@ -69,9 +72,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 db.Products.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
-          }
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
-            return View(model);
+                //return Json(new { id = model.Id });
+            }
+            catch
+            {
+                return View(model);
+            }
         }
 
         public ActionResult Edit(int id)
