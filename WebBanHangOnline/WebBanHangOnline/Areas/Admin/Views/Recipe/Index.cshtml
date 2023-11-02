@@ -64,6 +64,7 @@
                         <th>Mã công thức</th>
                         <th>Ngày tạo</th>
                         <th>Ngày chỉnh sửa</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,12 +79,16 @@
                             foreach (var item in Model)
                             {
                                 <tr id="trow_@i">
-                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.MatterialID" /></td>
+                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.ID" /></td>
                                     <td class="stt-cell">@i</td>
                                     <td>@item.Title</td>
                                     <td>@item.Code</td>
-                                    <td>@item.DateCreate</td>
-                                    <td>@item.DateEdit</td>
+                                    <td>@item.DateCreate.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                                    <td>@item.DateEdit.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Recipe", new {RecipeID = item.ID, RecipeProductID = item.ProductID})" class="btn btn-sm btn-primary">Cập nhật công thức</a>
+                                        @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
+                                    </td>
                                 </tr>
                                 i++;
                             }
