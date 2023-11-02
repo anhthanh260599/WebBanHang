@@ -28,9 +28,7 @@
             <!-- Main Content -->
 
             <div class="row">
-                <div class="col-md-12 mb-5">
-                    <a class="btn btn-danger" href="/san-pham">Tiếp tục mua hàng</a>
-                </div>
+
                 <div class="col-md-12 text-center">
 
                     <img class="text-center" width="20%" src="~/Content/template/VNPAY_Logo.png" />
@@ -38,25 +36,18 @@
 
                     @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThanhCong))
                     {
-                        <p>
-                            @ViewBag.ThanhToanThanhCong <br />
-                            Hoá đơn thanh toán sẽ được gửi đến email: <a href="https://mail.google.com/"><>@ViewBag.EmailThanhToan </a>
-
-                            Quý khách có thể theo dõi đơn <strong style="color:black;">@ViewBag.InnerText</strong> tại mục <a style="color:black;" href="~/tra-cuu">Tra Cứu</a>
-
-                        </p>
-                        <p class="text-info"><strong> @ViewBag.SoTienThanhToan VNĐ </strong></p>
+                        <p class="text-info">@ViewBag.ThanhToanThanhCong</p>
                     }
                     @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
                     {
                         <p class="text-danger">@ViewBag.ThanhToanThatBai</p>
                     }
-                    @*<p>
+                    <p>
                         Cảm ơn quý khách đã sử dụng dịch vụ. Giao dịch được thực hiện thành công.<br />
                         Hoá đơn thanh toán sẽ được gửi đến email: <a href="https://mail.google.com/"><strong>@ViewBag.EmailThanhToan</strong> </a>
                         <br />
                         Quý khách có thể theo dõi đơn <strong style="color:black;">@ViewBag.InnerText</strong> tại mục <a style="color:black;" href="~/tra-cuu">Tra Cứu</a>
-                    </p>*@
+                    </p>
                 </div>
             </div>
         </div>

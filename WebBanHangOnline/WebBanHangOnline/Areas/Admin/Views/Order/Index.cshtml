@@ -5,19 +5,6 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .btn-chuan-bi-mon {
-        background-color: #eeb0b0;
-    }
-
-    .table-detail {
-        max-width: 150px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-</style>
-
 @section naviheader {
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -91,7 +78,7 @@
                             <tr>
                                 <td>@i</td>
                                 <td>@item.Code</td>
-                                <td class="table-detail">@item.CustomerName</td>
+                                <td>@item.CustomerName</td>
                                 <td>@item.Phone</td>
                                 <td>@Common.FormatNumber(item.TotalAmount, 0)</td>
                                 <td>
@@ -121,7 +108,7 @@
                                     }
                                     if (item.Status == 3)
                                     {
-                                        <td style="cursor: text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-success">Giao hàng thành công</td>
                                     }
                                     if (item.Status == 4)
                                     {
@@ -131,22 +118,13 @@
                                     {
                                         <td style="cursor: text; width: 130px;" class="btn btn-sm btn-info">Đang giao hàng</td>
                                     }
-                                    if (item.Status == 6)
-                                    {
-                                        <td style="cursor: text; width: 130px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
-                                    }
                                 }
                                 else
                                 {
-                                    if (item.Status == 4)
-                                    {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
-                                    }
-                                    else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
+                                    if (item.TypePayment == 2 || item.TypePayment == 3)
                                     {
                                         <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
                                     }
-
                                     else
                                     {
                                         <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
@@ -161,8 +139,9 @@
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3 && item.Status != 1 && item.IsConfirm == true && item.Status != 4 && item.Status != 2)
+                                    @if (item.Status != 3)
                                     {
+
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
                                         </button>
@@ -171,7 +150,7 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5)
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
                                     {
                                         var orderId = item.Id;
                                         var storeId = item.StoreID;
@@ -180,14 +159,12 @@
                                             Điều phối đơn
                                         </button>
                                     }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-sm disabled btn-outline-success"> Điều phối đơn </button>
-                                    }
+
+
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
+            Cập nhật
+        </button>*@
 
 
                                 </td>
@@ -227,7 +204,7 @@
                 <div class="form-group">
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
-                        @*<option value="2">Đã thanh toán</option>*@
+                        <option value="2">Đã thanh toán</option>
                         <option value="5">Đang giao hàng</option>
                         <option value="3">Giao hàng thành công</option>
                         <option value="4">Huỷ</option>

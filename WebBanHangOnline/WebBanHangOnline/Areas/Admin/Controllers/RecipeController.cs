@@ -20,35 +20,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Add()
         {
-            //var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
-            //var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
-
             ViewBag.ListMaterials = db.Matterials.ToList();
             ViewBag.ListProducts = new SelectList(db.Products.ToList(), "Id", "Title");
-
             return View();
         }
 
         [HttpPost]
-        public ActionResult Add(Recipe recipe, List<RecipeDetail> listRecipeDetail)
+        [ValidateAntiForgeryToken]
+        public ActionResult Add(Recipe recipe, List<int> selectedMaterials)
         {
             try
             {
-                //var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
-                //var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
-
-                //var missingMaterials = db.Matterials.ToList().Where(material => !items.Any(item => item.MatterialID == material.Id)).ToList();
-
                 ViewBag.ListMaterials = db.Matterials.ToList();
                 ViewBag.ListProducts = new SelectList(db.Products.ToList(), "Id", "Title");
 
-                using (var context = new ApplicationDbContext())
-                {
-                    recipe.DateCreate = DateTime.Now;
-                    recipe.DateEdit = DateTime.Now;
-                    var itemProduct = db.Products.Where(s => s.Id == recipe.ProductID).FirstOrDefault();
-                    recipe.Code = "CT-" + itemProduct.ProductCode;
-                    context.Recipes.Add(recipe);
 
                     for (int i = 0; i < listRecipeDetail.Count; i++)
                     {
@@ -59,6 +44,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     }
                     context.SaveChanges();
                 }
+
                 return Json(new { newUrl = Url.Action("Index", "Recipe") });
             }
             catch
@@ -109,14 +95,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                         }
                     }
                 }
-
+               
                 db.SaveChanges();
                 return Json(new { newUrl = Url.Action("Index", "Recipe") });
             }
             catch
             {
                 return View();
-            }
+            } 
         }
 
         [HttpPost]
@@ -132,8 +118,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     return Json(new { success = true });
                 }
                 return Json(new { success = false });
-            }
-            catch
+            }catch
             {
                 return View();
             }

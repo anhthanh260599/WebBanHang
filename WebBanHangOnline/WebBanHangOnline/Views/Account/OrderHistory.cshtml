@@ -13,10 +13,6 @@
         .section_container {
         margin-top: 200px;
         }
-
-        .btn-chuan-bi-mon {
-            background-color: #eeb0b0;
-        }
     </style>
 
     <div class="container section_container">
@@ -46,63 +42,41 @@
                     <td>
                         @if (item.TypePayment == 1)
                         {
-                            <span><img style="width: 50px; height: 50px;" src="~/Content/template/cod-logo.png" /></span>
+                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/cod-logo.png" /></span>
                         }
                         @if (item.TypePayment == 2)
                         {
-                            <span><img style="width: 50px; height: 50px;" src="~/Content/template/VNPAY_Logo.png" /></span>
+                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/VNPAY_Logo.png" /></span>
                         }
                         @if (item.TypePayment == 3)
                         {
-                            <span><img style="width: 50px; height: 50px;" src="~/Content/template/paypal-logo-small.png" /></span>
+                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/paypal-logo-small.png" /></span>
                         }
                     </td>
 
-                    @if (item.IsConfirm == true)
-                    {
-                        if (item.Status == 1)
-                        {
-                            <td style="cursor:text; width:130px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
-                        }
-                        if (item.Status == 2)
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
-                        }
-                        if (item.Status == 3)
-                        {
-                            <td style="cursor: text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
-                        }
-                        if (item.Status == 4)
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
-                        }
-                        if (item.Status == 5)
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-info">Đang giao hàng</td>
-                        }
-                        if (item.Status == 6)
-                        {
-                            <td style="cursor: text; width: 130px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
-                        }
-                    }
-                    else
-                    {
-                        if (item.Status == 4)
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
-                        }
-                        else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
-                        }
 
-                        else
-                        {
-                            <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
-                        }
+                    @if (item.Status == 1)
+                    {
+                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                    }
+                    @if (item.Status == 2)
+                    {
+                    <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                    }
+                    @if (item.Status == 3)
+                    {
+                    <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                    }
+                    @if (item.Status == 4)
+                    {
+                    <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
+                    }
+                    @if (item.Status == 5)
+                    {
+                    <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
                     }
                     @*
-        <td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
+                    <td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                     <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
                     <td>
