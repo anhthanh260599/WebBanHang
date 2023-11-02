@@ -109,14 +109,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                         }
                     }
                 }
-               
+
                 db.SaveChanges();
                 return Json(new { newUrl = Url.Action("Index", "Recipe") });
             }
             catch
             {
                 return View();
-            } 
+            }
         }
 
         [HttpPost]
@@ -132,7 +132,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     return Json(new { success = true });
                 }
                 return Json(new { success = false });
-            }catch
+            }
+            catch
             {
                 return View();
             }
