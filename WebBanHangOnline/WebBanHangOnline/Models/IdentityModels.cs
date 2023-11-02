@@ -32,6 +32,8 @@ namespace WebBanHangOnline.Models
         {
         }
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<RecipeDetail> RecipeDetails { get; set; }
+
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<ToxicWord> ToxicWords { get; set; }
         public DbSet<WishList> WishLists { get; set; }

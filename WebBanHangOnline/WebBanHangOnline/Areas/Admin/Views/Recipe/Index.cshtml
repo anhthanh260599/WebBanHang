@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebBanHangOnline.Models.EF.Recipe>
+﻿﻿@model IEnumerable<WebBanHangOnline.Models.EF.Recipe>
 
 @{
     ViewBag.Title = "Danh sách công thức";
@@ -64,27 +64,32 @@
                         <th>Mã công thức</th>
                         <th>Ngày tạo</th>
                         <th>Ngày chỉnh sửa</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @using (Html.BeginForm(FormMethod.Post))
                     {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true)
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
                         if (Model != null && Model.Any())
                         {
                             var i = 1;
 
                             foreach (var item in Model)
                             {
-                                <tr id="trow_@i">
-                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.MatterialID" /></td>
-                                    <td class="stt-cell">@i</td>
-                                    <td>@item.Title</td>
-                                    <td>@item.Code</td>
-                                    <td>@item.DateCreate</td>
-                                    <td>@item.DateEdit</td>
-                                </tr>
+                    <tr id="trow_@i">
+                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.ID" /></td>
+                        <td class="stt-cell">@i</td>
+                        <td>@item.Title</td>
+                        <td>@item.Code</td>
+                        <td>@item.DateCreate.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                        <td>@item.DateEdit.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Recipe", new {RecipeID = item.ID, RecipeProductID = item.ProductID})" class="btn btn-sm btn-primary">Cập nhật công thức</a>
+                            @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
+                        </td>
+                    </tr>
                                 i++;
                             }
                         }
