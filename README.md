@@ -1,8 +1,10 @@
 Web eCommercial (Chuỗi cửa hàng)
 
-Hosting:
+Hosting: (Hiện tại web chưa cập nhật bản mới nhất, bạn có thể clone project về để demo để trải nghiệm tốt hơn)
   - link trang chủ: http://anhthanh260599-001-site1.ftempurl.com/
   - link admin: http://anhthanh260599-001-site1.ftempurl.com/admin/home
+
+Liên hệ để nhận dữ liệu mẫu: anhthanh260599@gmail.com
 
 Account đăng nhập trang admin:
 
@@ -58,6 +60,7 @@ Admin:
   - Quản lý các nội dung trang web (Hình ảnh, content,...)
   - Quản lý mã khuyến mãi
   - Điều phối đơn hàng
+  - Quản lý công thức sản phẩm
 
 Account thanh toán VNPAY Demo:
    - Ngân hàng:	NCB
