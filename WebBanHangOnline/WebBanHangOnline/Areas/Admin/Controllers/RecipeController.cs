@@ -139,5 +139,29 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public ActionResult DeleteRecipe(int recipeID, int productID)
+        {
+            try
+            {
+                //
+                var itemRecipeDetails = db.RecipeDetails.Where(s => s.RecipeID == recipeID && s.RecipeProductID == productID).ToList();
+                foreach (var recipeDetail in itemRecipeDetails)
+                {
+                    db.RecipeDetails.Remove(recipeDetail);
+                }
+                //
+                var itemRecipe = db.Recipes.Find(recipeID, productID);
+                db.Recipes.Remove(itemRecipe);
+
+                db.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

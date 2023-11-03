@@ -70,26 +70,27 @@
                 <tbody>
                     @using (Html.BeginForm(FormMethod.Post))
                     {
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true)
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
                         if (Model != null && Model.Any())
                         {
                             var i = 1;
 
                             foreach (var item in Model)
                             {
-                    <tr id="trow_@i">
-                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ProductID-@item.ID" /></td>
-                        <td class="stt-cell">@i</td>
-                        <td>@item.Title</td>
-                        <td>@item.Code</td>
-                        <td>@item.DateCreate.ToString("dd/MM/yyyy | HH:mm:ss")</td>
-                        <td>@item.DateEdit.ToString("dd/MM/yyyy | HH:mm:ss")</td>
-                        <td>
-                            <a href="@Url.Action("Edit", "Recipe", new {RecipeID = item.ID, RecipeProductID = item.ProductID})" class="btn btn-sm btn-primary">Cập nhật công thức</a>
-                            @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
-                        </td>
-                    </tr>
+                                <tr id="trow_@i">
+                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.ID-@item.ProductID" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.DateCreate.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                                    <td>@item.DateEdit.ToString("dd/MM/yyyy | HH:mm:ss")</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Recipe", new {RecipeID = item.ID, RecipeProductID = item.ProductID})" class="btn btn-sm btn-primary">Cập nhật</a>
+                                        @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
+                                        <button class="btn btn-sm btn-danger" id="btnDelete">Xóa</button>
+                                    </td>
+                                </tr>
                                 i++;
                             }
                         }
@@ -106,3 +107,63 @@
         <!-- /.card-footer-->
     </div>
 </section>
+
+@section scripts {
+    <script>
+        let btnDeletes = document.querySelectorAll("#btnDelete");
+        Array.from(btnDeletes).forEach((button) => {
+            button.onclick = e => {
+                Swal.fire({
+                    title: 'Xóa công thức?',
+                    text: "Bạn sẽ không thể khôi phục!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có, hãy xóa đi',
+                    cancelButtonText: 'Hủy bỏ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let valueRecipe = button.closest("tr").querySelector("input[name='checkitem']");
+                        let splitValue = valueRecipe.value.split('-');
+                        let recipeID = splitValue[0];
+                        let productID = splitValue[1];
+
+                        var postData = JSON.stringify({
+                            recipeID: recipeID,
+                            productID: productID
+                        })
+                        $.ajax({
+                            type: "POST",
+                            url: '/admin/Recipe/DeleteRecipe',
+                            data: postData,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.success) {
+                                    button.closest("tr").remove();
+                                    // Cập nhật stt
+                                    let sttElementValues = document.querySelectorAll(".stt-cell");
+                                    Array.from(sttElementValues).forEach((element, index) => {
+                                        element.innerHTML = index + 1;
+                                    })
+                                    // Cập nhật lại stt
+                                    Swal.fire(
+                                        'Xóa thành công!',
+                                        '',
+                                        'success'
+                                    )
+                                }
+                            }
+                        })
+                    }
+
+                })
+
+            }
+        })
+
+
+    </script>
+
+}
