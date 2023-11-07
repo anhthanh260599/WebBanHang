@@ -15,39 +15,19 @@ namespace WebBanHangOnline.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Product
-        public ActionResult Index(int? id, int? page, int? pageSize)
+        public ActionResult Index()
         {
-            int defaultPageSize = 5; // Giá trị mặc định
-
-            if (Session["pageSize"] != null)
-            {
-                defaultPageSize = (int)Session["pageSize"];
-            }
-            else
-            {
-                // Nếu không có giá trị trong Session, lưu giá trị mặc định vào Session
-                Session["pageSize"] = defaultPageSize;
-            }
-
-            var pageIndex = page ?? 1;
-            IEnumerable<Product> items = db.Products.ToList();
-
-            // Tính toán số lượng trang tối đa dựa trên số lượng items và pageSize
-            int maxPageIndex = (int)Math.Ceiling((double)items.Count() / defaultPageSize);
-
-            // Kiểm tra và cập nhật lại số trang nếu cần
-            if (pageIndex > maxPageIndex)
-            {
-                pageIndex = maxPageIndex;
-            }
-
-            items = items.ToPagedList(pageIndex, defaultPageSize);
-
-            ViewBag.PageSize = defaultPageSize;
-            ViewBag.Page = pageIndex;
-
+            var items = db.Products.ToList();
             return View(items);
 
+        }
+
+        [HttpPost]
+        public ActionResult Index(string dataSearch)
+        {
+            var items = db.Products.Where(p => p.Title.StartsWith(dataSearch)).ToList();
+
+            return Json(new { dataList = items });
         }
 
         [HttpPost]
@@ -56,7 +36,7 @@ namespace WebBanHangOnline.Controllers
             Session["pageSize"] = pageSize;
             return Json(new { success = true });
         }
-
+            
         public ActionResult Detail(string alias, int id)
         {
             var item = db.Products.Find(id);
@@ -100,5 +80,7 @@ namespace WebBanHangOnline.Controllers
             var item = db.Products.Where(x=>x.IsSale && x.IsActive).ToList();
             return PartialView(item);
         }
+
+        
     }
 }

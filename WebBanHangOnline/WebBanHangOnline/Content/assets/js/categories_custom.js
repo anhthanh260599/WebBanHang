@@ -307,8 +307,8 @@ jQuery(document).ready(function ($) {
             {
                 range: true,
                 min: 0,
-                max: 200000,
-                values: [0, 200000],
+                max: 100000,
+                values: [0, 100000],
                 slide: function (event, ui) {
                     $("#amount").val("VND " + ui.values[0] + " - VND" + ui.values[1]);
                     $("#FromAmount").val(ui.values[0]);
