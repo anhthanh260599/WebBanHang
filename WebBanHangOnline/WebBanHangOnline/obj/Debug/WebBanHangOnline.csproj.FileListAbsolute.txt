@@ -348,3 +348,5 @@ E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.CopyComplete
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.dll
 E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.pdb
+E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.dll
+E:\BTnam4\ThuongMaiDienTu\DeAn\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.xml

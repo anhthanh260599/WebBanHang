@@ -201,6 +201,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductImageController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RecipeController.cs" />
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
@@ -255,6 +256,8 @@
     <Compile Include="Models\EF\ProductCategory.cs" />
     <Compile Include="Models\EF\ProductImage.cs" />
     <Compile Include="Models\EF\Promotion.cs" />
+    <Compile Include="Models\EF\Recipe.cs" />
+    <Compile Include="Models\EF\RecipeDetail.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaPlugin.cs" />
@@ -3343,6 +3346,7 @@
     <Content Include="Content\template\sendMailCuaHang.html" />
     <Content Include="Content\template\sendMailForgotPassword.html" />
     <Content Include="Content\template\sendMailKhachHang.html" />
+    <Content Include="Content\template\sendMailKhachHang_Offline.html" />
     <Content Include="Content\template\sendMailSubscribeKH.html" />
     <Content Include="Content\template\VNPAY_Logo.png" />
     <Content Include="favicon.ico" />
@@ -3576,6 +3580,9 @@
     <Content Include="Areas\Admin\Views\StoreOrder\OrderIndex.cshtml" />
     <Content Include="Areas\Admin\Views\StoreOrder\OrderDetail.cshtml" />
     <Content Include="Areas\Admin\Views\StoreOrder\Partial_OrderDetail.cshtml" />
+    <Content Include="Areas\Admin\Views\Recipe\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Recipe\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Recipe\Index.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3589,6 +3596,7 @@
     <Content Include="Scripts\jsShopping.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Uploads\images\e12c07089e6070061ac62f1d65702193.jpg" />
+    <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
