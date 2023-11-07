@@ -116,7 +116,9 @@
                         <div class="col-md-6 text-right">
                             <div class="top_nav_right">
                                 <ul class="top_nav_menu">
-
+                                    <li style="min-width:100px;" class="account">
+                                        <a href="/Home/CustomerRequest">CSKH</a>
+                                    </li>
                                     <!-- Currency / Language / My Account -->
                                     @*<li class="currency">
                                             <a href="#">
@@ -143,7 +145,6 @@
                                             </ul>
                                         </li>*@
                                     <li style="min-width:150px;" class="account">
-
                                         @if (!Request.IsAuthenticated)
                                         {
                                             <a href="#">

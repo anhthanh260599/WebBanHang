@@ -189,6 +189,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ContactInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeSliderController.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotionController.cs" />
     <Compile Include="Areas\Admin\Controllers\RecipeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RequestTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\RevenueStatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
@@ -244,6 +246,7 @@
     <Compile Include="Models\EF\Category.cs" />
     <Compile Include="Models\EF\Contact.cs" />
     <Compile Include="Models\EF\ContactInfo.cs" />
+    <Compile Include="Models\EF\CustomerRequest.cs" />
     <Compile Include="Models\EF\Documents.cs" />
     <Compile Include="Models\EF\Logo.cs" />
     <Compile Include="Models\EF\Matterial.cs" />
@@ -259,6 +262,7 @@
     <Compile Include="Models\EF\Promotion.cs" />
     <Compile Include="Models\EF\Recipe.cs" />
     <Compile Include="Models\EF\RecipeDetail.cs" />
+    <Compile Include="Models\EF\RequestType.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
     <Compile Include="Models\EF\ShippingFee.cs" />
     <Compile Include="Models\EF\Slider.cs" />
@@ -278,7 +282,6 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
-    <Compile Include="Models\ShoppingCartViewModel.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
     <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="PayPal\Api\PayPalConfiguration.cs" />
@@ -3588,6 +3591,11 @@
     <Content Include="Areas\Admin\Views\Recipe\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ShippingFee\Add.cshtml" />
     <Content Include="Areas\Admin\Views\ShippingFee\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\RequestType\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\RequestType\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\RequestType\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerRequest\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerRequest\Detail.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3683,6 +3691,8 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
     <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
+    <Content Include="Views\Home\CustomerRequest.cshtml" />
+    <Content Include="Views\Home\CustomerRequest_SuccessSend.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
