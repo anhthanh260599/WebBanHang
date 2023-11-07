@@ -16,12 +16,14 @@ using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 using PayPal.Api;
 using System.Security.Policy;
+using Microsoft.Ajax.Utilities;
 
 namespace WebBanHangOnline.Controllers
 {
     public class ShoppingCartController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+        decimal phiShip;
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -31,6 +33,11 @@ namespace WebBanHangOnline.Controllers
 
         public ShoppingCartController()
         {
+            phiShip = db.ShippingFees.Select(x => x.Value).FirstOrDefault();
+            if(phiShip == null)
+            {
+                phiShip = 0;
+            }
         }
 
         public ShoppingCartController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -82,7 +89,6 @@ namespace WebBanHangOnline.Controllers
                 string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"]; //Chuoi bi mat
                 var vnpayData = Request.QueryString;
                 VnPayLibrary vnpay = new VnPayLibrary();
-
                 foreach (string s in vnpayData)
                 {
                     //get all querystring data
@@ -145,7 +151,7 @@ namespace WebBanHangOnline.Controllers
                             {
                                 tongTien = thanhTien;
                             }
-
+                            tongTien = tongTien + phiShip;
                             var trangThaiDon = string.Empty;
                             var hinhThucThanhToan = string.Empty;
 
@@ -163,7 +169,9 @@ namespace WebBanHangOnline.Controllers
                             contentCustomer = contentCustomer.Replace("{{Phone}}", itemOrder.Phone);
                             contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", itemOrder.Address);
                             contentCustomer = contentCustomer.Replace("{{Email}}", itemOrder.Email);
+                            contentCustomer = contentCustomer.Replace("{{GhiChu}}", itemOrder.Notes);
                             contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
+                            contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
                             contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
                             contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                             contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
@@ -241,6 +249,7 @@ namespace WebBanHangOnline.Controllers
                     order.Address = request.Address;
                     order.Phone = request.Phone;
                     order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ, 5 = Đang giao hàng
+                    order.Notes = request.Notes;
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
                     {
                         ProductID = x.ProductId,
@@ -349,6 +358,7 @@ namespace WebBanHangOnline.Controllers
                     {
                         tongTien = thanhTien;
                     }
+                    tongTien = tongTien + phiShip;
 
                     var stringTotal = tongTien.ToString();
                     var trangThaiDon = string.Empty;
@@ -383,8 +393,10 @@ namespace WebBanHangOnline.Controllers
                     contentCustomer = contentCustomer.Replace("{{Phone}}", order.Phone);
                     contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", order.Address);
                     contentCustomer = contentCustomer.Replace("{{Email}}", order.Email);
+                    contentCustomer = contentCustomer.Replace("{{GhiChu}}", order.Notes);
                     contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
                     contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                    contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
                     contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                     contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + order.Code, contentCustomer.ToString(), request.Email);
@@ -392,13 +404,17 @@ namespace WebBanHangOnline.Controllers
 
                     string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailCuaHang.html"));
                     contentAdmin = contentAdmin.Replace("{{MaDon}}", order.Code);
+                    contentAdmin = contentAdmin.Replace("{{TrangThaiDon}}", trangThaiDon);
+                    contentAdmin = contentAdmin.Replace("{{HinhThucThanhToan}}", hinhThucThanhToan);
                     contentAdmin = contentAdmin.Replace("{{NgayDat}}", order.CreateDate.ToString());
                     contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", order.CustomerName);
                     contentAdmin = contentAdmin.Replace("{{Phone}}", order.Phone);
                     contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", order.Address);
                     contentAdmin = contentAdmin.Replace("{{Email}}", order.Email);
+                    contentAdmin = contentAdmin.Replace("{{GhiChu}}", order.Notes);
                     contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
                     contentAdmin = contentAdmin.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                    contentAdmin = contentAdmin.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
                     contentAdmin = contentAdmin.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                     contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                     Common.SendMail(Message.Brand.ToString(), "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
@@ -472,7 +488,7 @@ namespace WebBanHangOnline.Controllers
                 {
                     tongTien = thanhTien;
                 }
-
+                tongTien = tongTien + phiShip;
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
@@ -494,11 +510,30 @@ namespace WebBanHangOnline.Controllers
                 contentCustomer = contentCustomer.Replace("{{Phone}}", item.Phone);
                 contentCustomer = contentCustomer.Replace("{{DiaChiNhanHang}}", item.Address);
                 contentCustomer = contentCustomer.Replace("{{Email}}", item.Email);
+                contentCustomer = contentCustomer.Replace("{{GhiChu}}", item.Notes);
                 contentCustomer = contentCustomer.Replace("{{SanPham}}", strSanPham);
                 contentCustomer = contentCustomer.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
                 contentCustomer = contentCustomer.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
                 contentCustomer = contentCustomer.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                 Common.SendMail(Message.Brand.ToString(), "Đơn hàng #" + item.Code, contentCustomer.ToString(), item.Email);
+
+                string contentAdmin = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailCuaHang.html"));
+                contentAdmin = contentAdmin.Replace("{{MaDon}}", item.Code);
+                contentAdmin = contentAdmin.Replace("{{TrangThaiDon}}", trangThaiDon);
+                contentAdmin = contentAdmin.Replace("{{HinhThucThanhToan}}", hinhThucThanhToan);
+                contentAdmin = contentAdmin.Replace("{{NgayDat}}", item.CreateDate.ToString());
+                contentAdmin = contentAdmin.Replace("{{TenKhachHang}}", item.CustomerName);
+                contentAdmin = contentAdmin.Replace("{{Phone}}", item.Phone);
+                contentAdmin = contentAdmin.Replace("{{DiaChiNhanHang}}", item.Address);
+                contentAdmin = contentAdmin.Replace("{{Email}}", item.Email);
+                contentAdmin = contentAdmin.Replace("{{GhiChu}}", item.Notes);
+                contentAdmin = contentAdmin.Replace("{{SanPham}}", strSanPham);
+                contentAdmin = contentAdmin.Replace("{{ThanhTien}}", Common.FormatNumber(thanhTien, 0));
+                contentAdmin = contentAdmin.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
+                contentAdmin = contentAdmin.Replace("{{KhuyenMai}}", Common.FormatNumber(khuyenMai, 0));
+                contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
+                Common.SendMail(Message.Brand.ToString(), "Đơn hàng mới #" + item.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
 
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -508,6 +543,8 @@ namespace WebBanHangOnline.Controllers
         public ActionResult Partial_Item_ThanhToan()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
+            decimal phiShipThanhToan = phiShip;
+            TempData["PhiShip"] = phiShipThanhToan;
             if (cart != null && cart.Items.Any())
             {
                 return PartialView(cart.Items);
@@ -763,7 +800,7 @@ namespace WebBanHangOnline.Controllers
 
             //Build URL for VNPAY
             VnPayLibrary vnpay = new VnPayLibrary();
-            var Price = (long)order.TotalAmount * 100;
+            var Price = ( (long)order.TotalAmount + (long)phiShip ) * 100;
             vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
             vnpay.AddRequestData("vnp_Command", "pay");
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
@@ -911,6 +948,8 @@ namespace WebBanHangOnline.Controllers
                     tongTien = thanhTien;
                 }
 
+                tongTien = tongTien + phiShip;
+
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
@@ -922,6 +961,8 @@ namespace WebBanHangOnline.Controllers
                 string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                 contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
                 contentCustomer = contentCustomer.Replace("{{TrangThaiDon}}", trangThaiDon);
+                contentCustomer = contentCustomer.Replace("{{GhiChu}}", itemOrder.Notes);
+                contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip,0));
                 contentCustomer = contentCustomer.Replace("{{HinhThucThanhToan}}", hinhThucThanhToan);
                 contentCustomer = contentCustomer.Replace("{{NgayDat}}", itemOrder.CreateDate.ToString());
                 contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", itemOrder.CustomerName);
@@ -958,8 +999,11 @@ namespace WebBanHangOnline.Controllers
             var orderCode = currentOrder.OrderCode;
             var totalAmount = currentOrder.Total;
             var subTotal = currentOrder.SubTotal;
+            
+            phiShip = Math.Round(phiShip/25000,2);
 
             var order = db.Orders.ToList().Where(x => x.Code == orderCode).FirstOrDefault();
+            var subtotalValue = (phiShip + Math.Round(order.TotalAmount / 25000, 2)).ToString();
 
             TempData["OrderCodePayPal"] = order.Code;
             TempData["EmailCustomerPaypal"] = order.Email;
@@ -977,7 +1021,7 @@ namespace WebBanHangOnline.Controllers
             {
                 name = order.Code,
                 currency = "USD",
-                price = Math.Round(order.TotalAmount / 25000, 2).ToString(),
+                price = subtotalValue,
                 quantity = "1",
                 sku = "1"
             });
@@ -997,7 +1041,7 @@ namespace WebBanHangOnline.Controllers
             {
                 tax = "0",
                 shipping = "0",
-                subtotal = Math.Round(order.TotalAmount / 25000, 2).ToString()
+                subtotal = subtotalValue
             };
             //Final amount with details  
             var amount = new Amount()

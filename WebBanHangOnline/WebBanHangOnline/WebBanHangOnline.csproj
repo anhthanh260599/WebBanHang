@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShippingFeeController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaPluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Models\EF\Recipe.cs" />
     <Compile Include="Models\EF\RecipeDetail.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
+    <Compile Include="Models\EF\ShippingFee.cs" />
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaPlugin.cs" />
     <Compile Include="Models\EF\SocialMediaProfiles.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\ShoppingCartViewModel.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
     <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="PayPal\Api\PayPalConfiguration.cs" />
@@ -3583,6 +3586,8 @@
     <Content Include="Areas\Admin\Views\Recipe\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Recipe\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Recipe\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShippingFee\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ShippingFee\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3596,7 +3601,6 @@
     <Content Include="Scripts\jsShopping.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Uploads\images\e12c07089e6070061ac62f1d65702193.jpg" />
-    <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -3678,6 +3682,7 @@
     <Content Include="Views\ShoppingCart\PayPalPayment_FailureView.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
+    <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
