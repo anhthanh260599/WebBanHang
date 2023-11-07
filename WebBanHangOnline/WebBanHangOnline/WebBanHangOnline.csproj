@@ -206,6 +206,7 @@
     <Compile Include="Areas\Admin\Controllers\ReviewProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShippingFeeController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaController.cs" />
     <Compile Include="Areas\Admin\Controllers\SocialMediaPluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\StoreController.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Models\EF\Recipe.cs" />
     <Compile Include="Models\EF\RecipeDetail.cs" />
     <Compile Include="Models\EF\ReviewProduct.cs" />
+    <Compile Include="Models\EF\ShippingFee.cs" />
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaPlugin.cs" />
     <Compile Include="Models\EF\SocialMediaProfiles.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\ShoppingCartViewModel.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
     <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="PayPal\Api\PayPalConfiguration.cs" />
@@ -3346,6 +3349,7 @@
     <Content Include="Content\template\sendMailCuaHang.html" />
     <Content Include="Content\template\sendMailForgotPassword.html" />
     <Content Include="Content\template\sendMailKhachHang.html" />
+    <Content Include="Content\template\sendMailKhachHang_Offline.html" />
     <Content Include="Content\template\sendMailSubscribeKH.html" />
     <Content Include="Content\template\VNPAY_Logo.png" />
     <Content Include="favicon.ico" />
@@ -3582,6 +3586,8 @@
     <Content Include="Areas\Admin\Views\Recipe\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Recipe\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Recipe\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ShippingFee\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ShippingFee\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
