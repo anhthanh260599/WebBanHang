@@ -86,5 +86,6 @@ namespace WebBanHangOnline.Models
         public int PromotionId { get; set; }
         public decimal TotalAmount { get; set; }
         public int TypePromotion { get; internal set; }
+        public decimal PhiShip { get; set; }
     }
 }

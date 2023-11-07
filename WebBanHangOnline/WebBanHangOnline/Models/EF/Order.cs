@@ -38,6 +38,7 @@ namespace WebBanHangOnline.Models.EF
         public decimal DiscountAmount { get; set; } 
         public int TypePromotion { get; set; }
         public bool IsConfirm { get; set; }
+        public string Notes { get;set; }
         public virtual Store Store { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
         public virtual Promotion Promotion { get; set; }
