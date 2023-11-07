@@ -69,6 +69,44 @@ namespace WebBanHangOnline.Controllers
             return View("Partial_Subscribe",request);
         }
 
+        public ActionResult CustomerRequest()
+        {
+            ViewBag.RequestType = new SelectList(db.RequestTypes.ToList(), "Id", "RequestTypeName");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CustomerRequest(CustomerRequest model)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.RequestType = new SelectList(db.RequestTypes.ToList(), "Id", "RequestTypeName");
+                if (model.RequestType != null) 
+                {
+                    db.CustomerRequests.Add(new CustomerRequest
+                    {
+                        CustomerName = model.CustomerName,
+                        Email = model.Email,
+                        PhoneNumber = model.PhoneNumber,
+                        CreatedDate = DateTime.Now,
+                        RequestTitle = model.RequestTitle,
+                        RequestContent = model.RequestContent,
+                        RequestTypeId = model.RequestType.Id,
+                        IsResolve = false
+                    });
+                    db.SaveChanges();
+                }
+                return RedirectToAction("CustomerRequest_SuccessSend", "Home");
+            }
+            return View("CustomerRequest");
+        }
+
+        public ActionResult CustomerRequest_SuccessSend()
+        {
+            return View();
+        }
+
         public ActionResult TraCuuDonHang(string request)
         {
             List<Order> danhSachDonHang = new List<Order>();
