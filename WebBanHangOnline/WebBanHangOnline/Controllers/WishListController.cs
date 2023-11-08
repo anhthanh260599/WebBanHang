@@ -39,7 +39,7 @@ namespace WebBanHangOnline.Controllers
             item.ProductId = productId;
             item.CustomerID = User.Identity.GetUserId();
             item.CustomerName = User.Identity.GetUserName();
-            item.CreatedDate = DateTime.Now;
+            item.CreatedDate = DateTime.Now.AddHours(15);
             db.WishLists.Add(item);
             db.SaveChanges();
             return Json(new {success = true});

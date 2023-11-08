@@ -2,10 +2,10 @@
 
 @if (Model != null)
 {
-    <div class="image">
-        <img src="@Model.Avatar" class="img-circle elevation-2" alt="User Image">
-    </div>
-    <div class="info">
-         <a href="#" class="d-block">@Model.FullName</a>
-    </div>
+    <a href="@Url.Action("Index","Home")">
+        <div class="image">
+            <img src="@Model.Avatar" class="img-circle elevation-2" alt="User Image">
+            <span class="ml-2 text-md-center">@Model.FullName</span>
+        </div>
+    </a>
 }

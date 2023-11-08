@@ -20,15 +20,6 @@
     <div class="row">
         <div class="col product_section clearfix">
 
-            <!-- Breadcrumbs -->
-
-            <div class="breadcrumbs d-flex flex-row align-items-center">
-                <ul>
-                    <li><a href="index.html">Trang chủ</a></li>
-                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i> Thanh toán</a></li>
-                </ul>
-            </div>
-
             <!-- Sidebar -->
             @*<div class="sidebar">
 
@@ -39,17 +30,31 @@
             <div class="row">
 
                 <div class="col-md-12 text-center">
-                    <h3>@ViewBag.Title</h3>
+
+                    <img class="text-center" width="20%" src="~/Content/template/VNPAY_Logo.png" />
+
 
                     @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThanhCong))
                     {
-                        <p class="text-info">@ViewBag.ThanhToanThanhCong</p>
+                        <p>
+                            @ViewBag.ThanhToanThanhCong <br />
+                            Hoá đơn thanh toán sẽ được gửi đến email: <a href="https://mail.google.com/">@ViewBag.EmailThanhToan </a>
+
+                            Quý khách có thể theo dõi đơn <strong style="color:black;">@ViewBag.InnerText</strong> tại mục <a style="color:black;" href="~/tra-cuu">Tra Cứu</a>
+
+                        </p>
+                        <p class="text-info"><strong> @ViewBag.SoTienThanhToan VNĐ </strong></p>
                     }
-                    @if  (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
+                    @if (!string.IsNullOrEmpty(ViewBag.ThanhToanThatBai))
                     {
                         <p class="text-danger">@ViewBag.ThanhToanThatBai</p>
                     }
-                    <p> @ViewBag.InnerText </p>
+                    @*<p>
+                        Cảm ơn quý khách đã sử dụng dịch vụ. Giao dịch được thực hiện thành công.<br />
+                        Hoá đơn thanh toán sẽ được gửi đến email: <a href="https://mail.google.com/"><strong>@ViewBag.EmailThanhToan</strong> </a>
+                        <br />
+                        Quý khách có thể theo dõi đơn <strong style="color:black;">@ViewBag.InnerText</strong> tại mục <a style="color:black;" href="~/tra-cuu">Tra Cứu</a>
+                    </p>*@
                 </div>
             </div>
         </div>

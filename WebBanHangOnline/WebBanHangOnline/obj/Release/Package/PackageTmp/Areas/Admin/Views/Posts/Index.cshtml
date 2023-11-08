@@ -6,6 +6,14 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+
+    .table-detail {
+        width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 
 
 @section naviheader {
@@ -84,7 +92,7 @@
                                 <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                 <td class="stt-cell">@i</td>
                                 <td><img src="@item.Image" width="100px" /></td>
-                                <td>@item.Title</td>
+                                <td class="table-detail">@item.Title</td>
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
                                 <td>

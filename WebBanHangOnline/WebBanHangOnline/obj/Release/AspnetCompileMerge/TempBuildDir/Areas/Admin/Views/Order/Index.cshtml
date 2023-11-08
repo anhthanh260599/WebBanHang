@@ -5,6 +5,19 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .btn-chuan-bi-mon {
+        background-color: #eeb0b0;
+    }
+
+    .table-detail {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
 @section naviheader {
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -78,37 +91,68 @@
                             <tr>
                                 <td>@i</td>
                                 <td>@item.Code</td>
-                                <td>@item.CustomerName</td>
-                                <td>@item.Phone</td>
+                                <td class="table-detail">@item.CustomerName</td>
+                                <td class="table-detail">@item.Phone</td>
                                 <td>@Common.FormatNumber(item.TotalAmount, 0)</td>
                                 <td>
                                     @if (item.TypePayment == 1)
                                     {
-                                        <span>COD</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/cod-logo.png" /></span>
                                     }
-                                    else
+                                    @if (item.TypePayment == 2)
                                     {
-                                        <span>VNPAY</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/VNPAY_Logo.png" /></span>
+                                    }
+                                    @if (item.TypePayment == 3)
+                                    {
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/paypal-logo-small.png" /></span>
                                     }
                                 </td>
 
+                                @if (item.IsConfirm == true)
+                                {
+                                    if (item.Status == 1)
+                                    {
+                                        <td style="cursor:text; width:130px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
+                                    }
+                                    if (item.Status == 2)
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                    }
+                                    if (item.Status == 3)
+                                    {
+                                        <td style="cursor: text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                    }
+                                    if (item.Status == 4)
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                    }
+                                    if (item.Status == 5)
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-info">Đang giao hàng</td>
+                                    }
+                                    if (item.Status == 6)
+                                    {
+                                        <td style="cursor: text; width: 130px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
+                                    }
+                                }
+                                else
+                                {
+                                    if (item.Status == 4)
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                    }
+                                    else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
+                                    }
 
-                                @if (item.Status == 1)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                                    else
+                                    {
+                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
+                                    }
                                 }
-                                @if (item.Status == 2)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
-                                }
-                                @if (item.Status == 3)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
-                                }
-                                @if (item.Status == 4)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
-                                }
+
 
                                 @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
@@ -117,9 +161,8 @@
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3)
+                                    @if (item.Status != 3 && item.Status != 1 && item.IsConfirm == true && item.Status != 4 && item.Status != 2)
                                     {
-
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
                                         </button>
@@ -127,6 +170,19 @@
                                     else
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                    }
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5)
+                                    {
+                                        var orderId = item.Id;
+                                        var storeId = item.StoreID;
+
+                                        <button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
+                                            Điều phối đơn
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-sm disabled btn-outline-success"> Điều phối đơn </button>
                                     }
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
@@ -156,7 +212,7 @@
 
 </section>
 <!-- /.content -->
-
+<!-- /.modal-danh sách trạng thái -->
 <div class="modal fade" id="modal-default">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -171,7 +227,8 @@
                 <div class="form-group">
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
-                        <option value="2">Đã thanh toán</option>
+                        @*<option value="2">Đã thanh toán</option>*@
+                        <option value="5">Đang giao hàng</option>
                         <option value="3">Giao hàng thành công</option>
                         <option value="4">Huỷ</option>
 
@@ -188,40 +245,105 @@
     <!-- /.modal-dialog -->
 </div>
 
-@section scripts {
-<script>
-    $(document).ready(function () {
-        $('body').on('click', '.btnCapNhat', function () {
-            var id = $(this).data('id')
-            $('#txtOrderID').val(id);
-            $('#modal-default').modal('show')
-        })
 
-        $('body').on('click', '#btnLuu', function () {
-            var id = $('#txtOrderID').val();
-            var trangThai = $('#ddTrangThai').val();
-            $.ajax({
-                url: '/admin/order/UpdateTrangThai',
-                type: 'POST',
-                data: { id: id, trangThai: trangThai },
-                success: function (rs) {
-                    if (rs.success) {
-                        //alert(rs.message)
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công',
-                            text: rs.message,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload(); // Reload trang sau khi người dùng nhấn OK
-                            }
-                        });
-                    }
-                }
+<!-- /.modal-danh sách cửa hàng -->
+<div class="modal fade" id="modal-default-store">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Điều phối đơn cho cửa hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtOrderIDStore" value="0" />
+                <div class="form-group">
+                    <label>Cửa hàng</label>
+                    <select class="form-control" id="ddCuaHang">
+                        @foreach (var store in ViewBag.Stores)
+                        {
+                            <option value="@store.Value">@store.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnCapNhat', function () {
+                var id = $(this).data('id')
+                $('#txtOrderID').val(id);
+                $('#modal-default').modal('show')
             })
-        })
-    });
-    </script>    
-    
+
+            $('body').on('click', '#btnLuu', function () {
+                var id = $('#txtOrderID').val();
+                var trangThai = $('#ddTrangThai').val();
+                $.ajax({
+                    url: '/admin/order/UpdateTrangThai',
+                    type: 'POST',
+                    data: { id: id, trangThai: trangThai },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+
+            $('body').on('click', '.btnDieuPhoi', function () {
+                var id = $(this).data('id')
+                $('#txtOrderIDStore').val(id);
+                $('#modal-default-store').modal('show')
+            })
+
+            $('body').on('click', '#btnLuu', function () {
+                var orderID = $('#txtOrderIDStore').val();
+                var storeId = $('#ddCuaHang').val();
+                $.ajax({
+                    url: '/admin/order/DieuPhoiDon',
+                    type: 'POST',
+                    data: { orderID: orderID, storeId: storeId },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+
 }

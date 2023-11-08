@@ -68,51 +68,56 @@
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
                     <!-- your steps content here -->
-                <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Tên tiêu đề</label>
-                        @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Nhập tên tiêu đề" })
-                        @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
-                    </div>
+                    <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tên tiêu đề</label>
+                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Nhập tên tiêu đề" })
+                            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Giá vật liệu</label>
+                            @Html.HiddenFor(x => x.Price, new { @id = "PriceMats", @class = "form-control", @placeholder = "Nhập giá", @required = "true" })
+                            <input id="textPriceMats" class="form-control" type="text" placeholder="Nhập giá" required />
+                            @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Mã nguyên liệu</label>
+                            @Html.TextBoxFor(x => x.MattsCode, new { @class = "form-control", @placeholder = "Nhập mã" })
+                            @Html.ValidationMessageFor(x => x.MattsCode, null, new { @class = "text-danger" })
+                        </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Mã nguyên liệu</label>
-                        @Html.TextBoxFor(x => x.MattsCode, new { @class = "form-control", @placeholder = "Nhập mã" })
-                        @Html.ValidationMessageFor(x => x.MattsCode, null, new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputFile">Ảnh đại diện</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                @Html.TextBoxFor(x => x.Image, new { @Id = "txtImage", @class = "form-control", @placeholder = "Chọn ảnh từ máy tính" })
-                            </div>
-                            <div class="input-group-append">
-                                <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                        <div class="form-group">
+                            <label for="exampleInputFile">Ảnh đại diện</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    @Html.TextBoxFor(x => x.Image, new { @Id = "txtImage", @class = "form-control", @placeholder = "Chọn ảnh từ máy tính" })
+                                </div>
+                                <div class="input-group-append">
+                                    <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Mô tả</label>
-                        @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
-                    </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Mô tả</label>
+                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control" })
+                        </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Chi tiết</label>
-                        @Html.TextAreaFor(x => x.Detail, new { @id = "txtDetail", @class = "form-control" })
-                    </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Chi tiết</label>
+                            @Html.TextAreaFor(x => x.Detail, new { @id = "txtDetail", @class = "form-control" })
+                        </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Hiển thị</label>
-                        @Html.CheckBoxFor(x => x.IsActive, new { @checked = "checked" })
-                    </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Hiển thị</label>
+                            @Html.CheckBoxFor(x => x.IsActive, new { @checked = "checked" })
+                        </div>
 
-                    <div class="form-group">
-                        <a href="/admin/Matterial" class="btn btn-danger">Quay lại</a>
-                        <button type="submit" class="btn btn-primary">Xác nhận</button>
+                        <div class="form-group">
+                            <a href="/admin/Matterials" class="btn btn-danger">Quay lại</a>
+                            <button type="submit" class="btn btn-primary">Xác nhận</button>
+                        </div>
                     </div>
-                </div>
 
                 }
 
@@ -131,6 +136,31 @@
 <!-- /.content -->
 
 @section scripts {
+    <script>
+        // Hàm để định dạng số thành chuỗi với dấu phẩy ngăn cách hàng nghìn
+        function myFormatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+
+        // edit text price
+        let hiddenForValue = document.querySelector("#PriceMats");
+        let textPrice = document.getElementById("textPriceMats");
+
+        textPrice.value = myFormatNumber(parseFloat(0)) + " đ";
+        textPrice.oninput = (e) => {
+            let textPriceValue = parseFloat(textPrice.value.replaceAll('.', '').replace(" đ", ""));
+            if (!isNaN(textPriceValue)) {
+                // gán vào hiddenForValue
+                hiddenForValue.value = textPriceValue;
+                console.log(hiddenForValue.value);
+
+                let textFormat = myFormatNumber(textPriceValue) + " đ";
+                textPrice.value = textFormat;
+            } else {
+                textPrice.value = ''; // Đặt giá trị là rỗng nếu không thể chuyển đổi thành số
+            }
+        }
+    </script>
     <script>
         $(document).ready(function () {
             CKEDITOR.replace('txtDetail', {

@@ -25,12 +25,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             var query = from o in db.Orders where o.Status == 3
                         join od in db.OrderDetails on o.Id equals od.OrderID
                         join p in db.Products on od.ProductID equals p.Id
+                        join promo in db.Promotions on o.PromotionId equals promo.Id
                         select new
                         {
                             CreateDate = o.CreateDate,
                             Quantity = od.Quantity,
                             Price = od.Price,
                             OriginalPrice = p.OriginalPrice,
+                            DiscountAmount = promo.DiscountAmount,
                         };
             if (!string.IsNullOrEmpty(fromDate))
             {
@@ -48,12 +50,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 Date = x.Key.Value,
                 TotalBuy = x.Sum(y=>y.Quantity * y.OriginalPrice),
-                TotalSell = x.Sum(y => y.Quantity * y.Price),
+                TotalSell = x.Sum(y => y.Quantity * y.Price - y.DiscountAmount)
             }).Select(x => new
             {
                 Date = x.Date,
                 DoanhThu = x.TotalSell,
-                LoiNhuan = x.TotalSell - x.TotalBuy
+                LoiNhuan = x.TotalSell - x.TotalBuy 
             });
             return Json(new {Data = result}, JsonRequestBehavior.AllowGet);
         }

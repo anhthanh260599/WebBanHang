@@ -7,52 +7,59 @@
 }
 
 <div class="card-body login-card-body">
-    <p class="login-box-msg">Sign in to start your session</p>
+    <div class="login-logo">
+        <a href="/admin"><b>Four</b>Coffee</a>
+        <hr class="mt-2" />
+    </div>
+
     @using (Html.BeginForm("Login", "Account", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true);
-        <div class="input-group mb-3">
-            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "Tài khoản" })
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
-            @*<input type="password" class="form-control" placeholder="Password">*@
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @placeholder = "Tài khoản" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-8">
-                <div class="icheck-primary">
-                    @*<input type="checkbox" id="remember">*@
-                    @Html.CheckBoxFor(x => x.RememberMe)
-                    <label for="remember">
-                        Remember Me
-                    </label>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-            <!-- /.col -->
-            <div class="col-4">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @Html.CheckBoxFor(x => x.RememberMe)
+                <label for="remember">
+                    Nhớ mật khẩu?
+                </label>
+            </div>
+
+            <div class="col-md-6">
+                <a class="float-right" href="#">Quên mật khẩu?</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
                 <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </div>
-            <!-- /.col -->
         </div>
+
     }
 
 
     <!-- /.social-auth-links -->
-
-    <p class="mb-1">
-        <a href="#">I forgot my password</a>
-    </p>
     @*<p class="mb-0">
             <a href="register.html" class="text-center">Register a new membership</a>
         </p>*@

@@ -102,8 +102,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             orderMatts.TotalAmount = total;
             orderMatts.Status = 1;
 
-            orderMatts.CreateDate = DateTime.Now;
-            orderMatts.ModifierDate = DateTime.Now;
+            orderMatts.CreateDate = DateTime.Now.AddHours(14);
+            orderMatts.ModifierDate = DateTime.Now.AddHours(14);
 
             using (var context = new ApplicationDbContext())
             {

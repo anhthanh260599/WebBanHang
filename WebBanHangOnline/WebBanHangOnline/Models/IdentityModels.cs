@@ -16,6 +16,8 @@ namespace WebBanHangOnline.Models
         public DateTime CreatedDate { get; set; }
         public string Address { get; set; }
         public string Avatar { get; set; }
+        //Thêm mới
+        public int CheckPoint { get; set; } //tính số lần mua hàng trên 50k
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

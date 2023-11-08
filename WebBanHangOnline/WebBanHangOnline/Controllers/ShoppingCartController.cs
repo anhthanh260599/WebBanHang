@@ -17,6 +17,8 @@ using System.Data.Entity;
 using PayPal.Api;
 using System.Security.Policy;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.EnterpriseServices.CompensatingResourceManager;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -207,7 +209,7 @@ namespace WebBanHangOnline.Controllers
             string email = Session["EmailCustomer"] as string;
             return View();
         }
-
+        
         public ActionResult Checkout()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
@@ -249,14 +251,25 @@ namespace WebBanHangOnline.Controllers
                     order.Address = request.Address;
                     order.Phone = request.Phone;
                     order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ, 5 = Đang giao hàng
-                    order.Notes = request.Notes;
+                    if(request.Notes != null)
+                    {
+                        order.Notes = request.Notes;
+                    }
+                    else
+                    {
+                        order.Notes = "Không có ghi chú";
+                    }
+
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
                     {
                         ProductID = x.ProductId,
                         Price = x.Price,
                         Quantity = x.Quantity,
                     }));
-
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        order.CustomerID = User.Identity.GetUserId();
+                    }
                     if (cart.PromotionId != 0)
                     {
                         order.PromotionId = cart.PromotionId;
@@ -264,15 +277,29 @@ namespace WebBanHangOnline.Controllers
                         order.TypePromotion = cart.TypePromotion;
                         order.DiscountAmount = cart.DiscountAmount;
                         var promotionItem = db.Promotions.Where(x => x.Id == order.PromotionId).FirstOrDefault();
-                        promotionItem.Quantity = promotionItem.Quantity - 1;
+                        
+                        //khuyến mãi
+                        //Lấy user hiện tại
+                        int check = 0;
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            var user = db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault();
+                            check = user.CheckPoint;
+                            if(promotionItem.Point <= check)
+                            {
+                                promotionItem.Quantity = promotionItem.Quantity - 1;
+                            }
+                            else
+                            {
+                                ViewBag.NotEnoughtPoint = "Không đủ điểm để sử dụng";
+
+                            }
+                        }
                     }
 
 
 
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        order.CustomerID = User.Identity.GetUserId();
-                    }
+                 
                     order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
                     Session["EmailCustomer"] = order.Email;
@@ -290,9 +317,9 @@ namespace WebBanHangOnline.Controllers
                     order.CreateBy = request.Phone;
 
                     // Cộng 14 giờ do khi publish thì sẽ bị lệch múi giờ
-                    order.ModifierDate = DateTime.Now;
+                    order.ModifierDate = DateTime.Now.AddHours(15);
                     // Tạo mã đơn hàng
-                    order.CreateDate = DateTime.Now;
+                    order.CreateDate = DateTime.Now.AddHours(15);
 
                     //Random rd = new Random();
                     //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
@@ -358,6 +385,10 @@ namespace WebBanHangOnline.Controllers
                     {
                         tongTien = thanhTien;
                     }
+
+                   
+               
+
                     tongTien = tongTien + phiShip;
 
                     var stringTotal = tongTien.ToString();
@@ -574,9 +605,29 @@ namespace WebBanHangOnline.Controllers
             // Thực hiện kiểm tra mã khuyến mãi và tính toán giảm giá
             // Trả về kết quả dưới dạng JSON, ví dụ: { success: true, tongTienCartFormatted: "1,000,000 VND" }
             var promotion = db.Promotions.FirstOrDefault(p => p.PromotionCode == maKhuyenMai && p.IsActive);
+
+            var userId = User.Identity.GetUserId();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var user = userManager.FindById(userId);
+
+            var userCheckPoint = user.CheckPoint;
+
             if (promotion != null)
             {
-                var promotionID = promotion.Id;
+                
+                if (User.Identity.IsAuthenticated)
+                {
+                    if (promotion.Point > userCheckPoint)
+                    {
+                        return Json(new { success = false });
+
+                    }
+                    else
+                    {
+                        var promotionID = promotion.Id;
+                    }
+                }
+
             }
             // Kiểm tra nếu không tìm thấy mã khuyến mãi
             if (promotion == null)

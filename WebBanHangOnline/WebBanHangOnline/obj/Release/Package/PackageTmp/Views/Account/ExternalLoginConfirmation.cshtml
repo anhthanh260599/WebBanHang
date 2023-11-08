@@ -1,36 +1,51 @@
 ﻿@model WebBanHangOnline.Models.ExternalLoginConfirmationViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Đăng ký";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>Associate your @ViewBag.LoginProvider account.</h3>
 
-    @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <h4>Association Form</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <p class="text-info">
-            You've successfully authenticated with <strong>@ViewBag.LoginProvider</strong>.
-            Please enter a user name for this site below and click the Register button to finish
-            logging in.
-        </p>
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" class="btn btn-outline-dark" value="Register" />
-            </div>
-        </div>
+<style>
+    .external-login-container {
+        margin-top: 150px;
     }
+</style>
+
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<main aria-labelledby="title" class="external-login-container">
+    <section class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @*<h2 id="title">@ViewBag.Title.</h2>*@
+                @*<h3>Liên kết với tài khoản @ViewBag.LoginProvider.</h3>*@
+
+                @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @*<h4>Xác thực</h4>*@
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <p class="text-info">
+                        Bạn đã xác thực thành công bằng  <strong>@ViewBag.LoginProvider</strong>.
+                        Vui lòng nhập tên người dùng cho trang web này bên dưới và nhấp vào nút Đăng ký để hoàn tất
+                        đăng nhập.
+                    </p>
+                    <div class="row">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="offset-md-2 col-md-10">
+                            <input type="submit" class="btn btn-outline-dark mt-2" value="Đăng ký" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </section>
 </main>
 
 @section Scripts {

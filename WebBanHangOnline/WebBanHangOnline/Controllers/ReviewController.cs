@@ -58,7 +58,7 @@ namespace WebBanHangOnline.Controllers
                         return Json(new { success = false, message = Message.PleaseDontUseBadWord.ToString() });
                     }
                 }
-                request.CreatedDate = DateTime.Now.AddHours(14);
+                request.CreatedDate = DateTime.Now.AddHours(15);
                 db.ReviewProducts.Add(request);
                 db.SaveChanges();
                 return Json(new {success = true, message = Message.SuccessReview.ToString()});
