@@ -38,5 +38,7 @@ namespace WebBanHangOnline.Models.EF
         public string StoreManagerName { get; set; }
         public string StorePhone { get; set; }
         public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<Promotion> Promotions { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
