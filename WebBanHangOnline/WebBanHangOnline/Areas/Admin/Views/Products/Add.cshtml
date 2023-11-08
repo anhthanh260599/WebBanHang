@@ -48,8 +48,6 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Thông tin thêm mới Sản phẩm</h3>
-
-
         </div>
         <div class="card-body">
             <div class="row">
@@ -110,14 +108,14 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
-                                                    @Html.TextBoxFor(x => x.Price, new { @type ="number", @min = "0" ,@class = "form-control", @placeholder = "Giá"  })
+                                                    @Html.TextBoxFor(x => x.Price, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá" })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá khuyến mãi</label>
-                                                    @Html.TextBoxFor(x => x.PriceSale, new { @type = "number", @min = "0" ,  @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.TextBoxFor(x => x.PriceSale, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -125,7 +123,7 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
-                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá nhập"})
+                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá nhập" })
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -292,7 +290,7 @@
                          text: messageError.textContent,
                          confirmButtonText: 'OK'
                      });
-            } 
+            }
 
             if (elementTitle.value == '') {
                 e.preventDefault();
@@ -311,9 +309,9 @@
                     text: 'Giá sản phẩm phải lớn hơn 0',
                     confirmButtonText: 'OK'
                 });
-            } 
+            }
 
-            
+
         }
 
         @*let btnSubmitFormProduct = document.querySelector("#btnSubmitFormProduct");
@@ -412,7 +410,7 @@
             //            }
             //        });
             //    });
-        }
+        } 
 
     </script>
 }
