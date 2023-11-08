@@ -45,8 +45,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.CreateDate = DateTime.Now;
-                model.ModifierDate = DateTime.Now;
+                model.CreateDate = DateTime.Now.AddHours(14);
+                model.ModifierDate = DateTime.Now.AddHours(14);
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Categories.Add(model);
                 db.SaveChanges();
@@ -68,7 +68,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 db.Categories.Attach(model);
-                model.ModifierDate = DateTime.Now;
+                model.ModifierDate = DateTime.Now.AddHours(14);
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Entry(model).Property(x => x.Title).IsModified = true;
                 db.Entry(model).Property(x => x.Description).IsModified = true;

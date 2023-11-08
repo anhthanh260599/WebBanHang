@@ -235,17 +235,35 @@
     <script src="~/Content/assets/js/categories_custom.js"></script>
     <script>
         // Đợi cho trang web được tải hoàn toàn
+        //$(document).ready(function () {
+        //    // Lắng nghe sự kiện khi người dùng nhập dữ liệu vào ô tìm kiếm
+        //    $('#search').on('input', function () {
+        //        var searchString = $(this).val().toLowerCase(); // Lấy nội dung của ô tìm kiếm và chuyển đổi thành chữ thường
+        //        $('.product-item').each(function () {
+        //            var productName = $(this).find('.product_name a').text().toLowerCase(); // Lấy tên sản phẩm và chuyển đổi thành chữ thường
+        //            // Kiểm tra xem tên sản phẩm có chứa chuỗi tìm kiếm không
+        //            if (productName.indexOf(searchString) === -1) {
+        //                $(this).hide(); // Ẩn sản phẩm nếu không khớp
+        //            } else {
+        //                $(this).show(); // Hiển thị sản phẩm nếu khớp
+        //            }
+        //        });
+        //    });
+        //});
         $(document).ready(function () {
-            // Lắng nghe sự kiện khi người dùng nhập dữ liệu vào ô tìm kiếm
             $('#search').on('input', function () {
                 var searchString = $(this).val().toLowerCase(); // Lấy nội dung của ô tìm kiếm và chuyển đổi thành chữ thường
-                $('.product-item').each(function () {
-                    var productName = $(this).find('.product_name a').text().toLowerCase(); // Lấy tên sản phẩm và chuyển đổi thành chữ thường
-                    // Kiểm tra xem tên sản phẩm có chứa chuỗi tìm kiếm không
-                    if (productName.indexOf(searchString) === -1) {
-                        $(this).hide(); // Ẩn sản phẩm nếu không khớp
-                    } else {
-                        $(this).show(); // Hiển thị sản phẩm nếu khớp
+                let formatSearch = stringToSlug(searchString);
+                $('.product-grid').isotope({
+                    filter: function () {
+                        var productName = $(this).find('.product_name a').text().toLowerCase(); // Lấy tên sản phẩm và chuyển đổi thành chữ thường
+                        let formatName = stringToSlug(productName);
+                        return (formatName.indexOf(formatSearch) !== -1);
+                    },
+                    animationOptions: {
+                        duration: 750,
+                        easing: 'linear',
+                        queue: false
                     }
                 });
             });

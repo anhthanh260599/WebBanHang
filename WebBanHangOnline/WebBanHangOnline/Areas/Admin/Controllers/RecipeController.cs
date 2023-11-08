@@ -44,8 +44,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                 using (var context = new ApplicationDbContext())
                 {
-                    recipe.DateCreate = DateTime.Now;
-                    recipe.DateEdit = DateTime.Now;
+                    recipe.DateCreate = DateTime.Now.AddHours(14);
+                    recipe.DateEdit = DateTime.Now.AddHours(14);
                     var itemProduct = db.Products.Where(s => s.Id == recipe.ProductID).FirstOrDefault();
                     recipe.Code = "CT-" + itemProduct.ProductCode;
                     context.Recipes.Add(recipe);
@@ -88,7 +88,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             try
             {
                 var itemRecipe = db.Recipes.Where(s => s.ProductID == recipe.ProductID && s.ID == recipe.ID).FirstOrDefault();
-                itemRecipe.DateEdit = DateTime.Now;
+                itemRecipe.DateEdit = DateTime.Now.AddHours(14);
                 db.Entry(itemRecipe).State = System.Data.Entity.EntityState.Modified;
 
                 //Edit

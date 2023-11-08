@@ -35,8 +35,6 @@ namespace WebBanHangOnline.Models.EF
         public string Description { get; set; }
         [AllowHtml]
         public string Detail { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
-
         public string Image { get; set; }
         [Required(ErrorMessage = "Vui lòng không để trống")]
         public decimal OriginalPrice { get; set; }

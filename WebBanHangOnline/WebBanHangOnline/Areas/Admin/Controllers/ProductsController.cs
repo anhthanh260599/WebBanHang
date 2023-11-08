@@ -19,8 +19,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(items);
         }
 
-      
-        public ActionResult Add() 
+
+        public ActionResult Add()
         {
             ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
             return View();
@@ -28,7 +28,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)  
+        public ActionResult Add(Product model, List<string> Images, List<int> rDefault)
         {
             try
             {
@@ -59,8 +59,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                     }
                 }
-                model.CreateDate = DateTime.Now;
-                model.ModifierDate = DateTime.Now;
+                model.CreateDate = DateTime.Now.AddHours(15);
+                model.ModifierDate = DateTime.Now.AddHours(15);
                 if (string.IsNullOrEmpty(model.SeoTitle))
                 {
                     model.SeoTitle = model.Title;
@@ -76,13 +76,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             }
             catch
             {
+
                 return View(model);
             }
         }
 
         public ActionResult Edit(int id)
         {
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
             var item = db.Products.Find(id);
             return View(item);
         }
@@ -91,43 +92,52 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Product model)
         {
-            if (ModelState.IsValid)
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            var productImage = db.ProductImage.Where(x => x.ProductID == model.Id && x.IsDefault == true).FirstOrDefault();
+            try
             {
-                model.ModifierDate = DateTime.Now;
-                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
                 db.Products.Attach(model);
-                db.Entry(model).State=System.Data.Entity.EntityState.Modified;
+                model.Image = productImage.Image;
+                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
+                model.ModifierDate = DateTime.Now;
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
+
             }
-            return View(model);
+            catch
+            {
+                return View(model);
+
+            }
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
             var item = db.Products.Find(id);
-            if(item != null)
+            if (item != null)
             {
                 db.Products.Remove(item);
                 db.SaveChanges();
-                return Json(new {success = true});
+                return Json(new { success = true });
             }
-            return Json(new {success = false});
+            return Json(new { success = false });
         }
 
         [HttpPost]
-        public ActionResult IsActive(int id) 
+        public ActionResult IsActive(int id)
         {
             var item = db.Products.Find(id);
-            if(item != null)
+            if (item != null)
             {
-                item.IsActive =! item.IsActive;
+                item.IsActive = !item.IsActive;
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return Json(new {success = true , IsActive = item.IsActive});
+                return Json(new { success = true, IsActive = item.IsActive });
             }
-            return Json(new {success = false});
+            return Json(new { success = false });
         }
 
         [HttpPost]
@@ -175,21 +185,21 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult DeleteSelected(string ids)
         {
-            if(!string.IsNullOrEmpty(ids))
+            if (!string.IsNullOrEmpty(ids))
             {
                 var items = ids.Split(',');
-                if(items!=null && items.Any())
+                if (items != null && items.Any())
                 {
-                    foreach(var item in items)
+                    foreach (var item in items)
                     {
                         var obj = db.Products.Find(Convert.ToInt32(item));
                         db.Products.Remove(obj);
                         db.SaveChanges();
                     }
-                }   
-                return Json(new {success = true});
-            }    
-            return Json(new {success =false});
+                }
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@using WebBanHangOnline.Models.Common
 @{
     ViewBag.Title = "Trang chủ Admin";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -22,6 +22,71 @@
 
 <!-- Main content -->
 <section class="content">
+
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@ViewBag.NewOrderToDay</h3>
+
+                    <p>Đơn hàng hôm nay</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <a href="/admin/order" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>@Common.FormatNumber(ViewBag.TicketAccount,0)<sup style="font-size: 20px"> VND</sup></h3>
+
+                    <p>Ticket Account (TA)</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>@ViewBag.UserAccount</h3>
+
+                    <p>Tài khoản khách hàng</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <a href="/admin/account" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>@ViewBag.TruyCapHomNay</h3>
+
+                    <p>Lượt truy cập hôm nay</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+
+    <hr />
 
     <div class="row">
         <div class="col-4">

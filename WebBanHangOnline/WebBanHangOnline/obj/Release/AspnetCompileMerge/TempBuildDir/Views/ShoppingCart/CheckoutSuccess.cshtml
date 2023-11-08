@@ -1,5 +1,5 @@
 ﻿@{
-    string email = TempData["EmailCustomer"] as string;
+    string email = Session["EmailCustomer"] as string;
 }
 
 @{
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <h4>Đặt hàng thành công, vui lòng kiểm tra email: <strong>@email</strong> để xem thông tin đơn hàng </h4>
+                    <h4>Vui lòng kiểm tra và xác nhận đơn hàng tại email: <a href="https://mail.google.com"><strong style="color:red">@email</strong></a></h4>
                 </div>
 
             </div>

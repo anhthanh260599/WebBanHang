@@ -69,7 +69,7 @@
                                     <div class="active tab-pane" id="activity">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Tên sản phẩm</label>
-                                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Tên sản phẩm" })
+                                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @id = "nameProduct", @placeholder = "Tên sản phẩm" })
                                             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
@@ -108,16 +108,14 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
-                                                    <input type="text" name="demoPrice" value="0" id="demoPrice" class="form-control auto text-right" data-a-dec="," data-a-sep=".">
-                                                    @Html.HiddenFor(x => x.Price, new { @class = "", @placeholder = "Giá" })
+                                                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá khuyến mãi</label>
-                                                    <input type="text" name="demoPriceSale" id="demoPriceSale" value="0" class="form-control auto text-right">
-                                                    @Html.HiddenFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.TextBoxFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -125,8 +123,7 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
-                                                    <input type="text" name="demoOriginalPrice" id="demoOriginalPrice" value="0" class="form-control auto text-right">
-                                                    @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
+                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -189,6 +186,9 @@
                                                     </tbody>
                                                 </table>
                                                 <input type="hidden" id="tCurrentId" value="0" />
+
+                                                @Html.HiddenFor(x => x.Image, new { })
+                                                @Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
                                             </div>
                                         </div>
                                     </div>
@@ -221,12 +221,18 @@
                                         </form>
                                     </div>
                                     <!-- /.tab-pane -->
+                                    @*                                    <div class="tab-pane" id="recipe">
+                                            <form class="form-horizontal" id="formAddRecipe">
+                                                @Html.Action("Partial_Recipe_Add", "Recipe")
+                                            </form>
+                                        </div>*@
+                                    <!-- /.tab-pane -->
                                 </div>
                                 <!-- /.tab-content -->
                             </div><!-- /.card-body -->
                             <div class="form-group">
                                 <a href="/admin/products" class="btn btn-danger">Quay lại</a>
-                                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                <button type="submit" id="btnSubmitFormProduct" class="btn btn-primary">Xác nhận</button>
                             </div>
                         </div> <!-- /.card -->
                     }
@@ -246,37 +252,46 @@
 
 @section  scripts{
     <script>
-        $(document).ready(function () {
-            $('.auto').autoNumeric('init', {
-                aSign: ' VND',
-                pSign: 's',
-                aDec: '.',
-                aSep: ',',
-                vMin: '0',
-                mDec: 0,
-                aPad: false,    // không cho nhập số 0 ở đầu
-                vMax: '1000000000' // giá trị tối đa
-            });
-            $('#demoPrice').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoPrice').autoNumeric('get');
-                $('#Price').val(demoGet);
-                $('#Price').autoNumeric('set', demoGet);
-            });
-            $('#demoPriceSale').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoPriceSale').autoNumeric('get');
-                $('#PriceSale').val(demoGet);
-                $('#PriceSale').autoNumeric('set', demoGet);
-            });
-            $('#demoOriginalPrice').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoOriginalPrice').autoNumeric('get');
-                $('#OriginalPrice').val(demoGet);
-                $('#OriginalPrice').autoNumeric('set', demoGet);
-            });
-            CKEDITOR.replace('txtDetail', {
-                customConfig: '/content/ckeditor/config.js',
-                extraAllowedContent: 'span',
-            });
+        // Validate
+        let elementNameProduct = document.querySelector("#nameProduct");
+        elementNameProduct.onblur = (e) => {
+            let error = elementNameProduct.nextElementSibling;
+            if (elementNameProduct.value == '') {
+                error.innerHTML = 'Vui lòng không để trống'
+            } else {
+                error.innerHTML = ''
+            }
+        }
 
+        @*let btnSubmitFormProduct = document.querySelector("#btnSubmitFormProduct");
+        let formAddProduct = document.querySelector("#formAddProduct");
+        let formAddRecipe = document.querySelector("#formAddRecipe");
+
+
+        formAddProduct.onsubmit = (e) => {
+                $.ajax({
+                    type: "POST",
+                    url: '/admin/Product/Add',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (rs) {
+                        var postData = JSON.stringify(rs.id);
+                        $.ajax({
+                            type: "POST",
+                            url: '/admin/Recipe/Add',
+                            data: postData,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (rs) {
+                                window.location.href = response.newUrl
+                            }
+                        })
+
+                    }
+                })
+        }*@
+
+         @*$(document).ready(function () {
            $('body').on('click', '.btnXoaAnh', function () {
                 var confirmMessage = confirm("@Message.ConfirmDeleteProductImage");
                 if (confirmMessage === true) {
@@ -299,7 +314,8 @@
                 });
             }
 
-        });
+         });
+*@
         function BrowseServer(field) {
             var finder = new CKFinder();
             finder.selectActionFunction = function (fileUrl) {
@@ -313,19 +329,19 @@
             var str = "";
             if (currentId == 1) {
                 str += `<tr id="trow_${currentId}">
-                                <td class="text-center">${currentId}</td>
-                                <td class="text-center"><img width="80" src="${url}" /> <input type='hidden' value="${url}" name="Images"/></td>
-                                <td class="text-center"><input type="radio" name="rDefault" value="${currentId}" checked="checked"/></td>
-                                <td class="text-center"><a href="#" data-id="${currentId}" class="btn btn-sm btn-danger btnXoaAnh">Xóa</a></td>
-                                </tr>`;
+                                    <td class="text-center">${currentId}</td>
+                                    <td class="text-center"><img width="80" src="${url}" /> <input type='hidden' value="${url}" name="Images"/></td>
+                                    <td class="text-center"><input type="radio" name="rDefault" value="${currentId}" checked="checked"/></td>
+                                    <td class="text-center"><a href="#" data-id="${currentId}" class="btn btn-sm btn-danger btnXoaAnh">Xóa</a></td>
+                                    </tr>`;
             }
             else {
                 str += `<tr id="trow_${currentId}">
-                                <td class="text-center">${currentId}</td>
-                                <td class="text-center"><img width="80" src="${url}" /> <input type='hidden' value="${url}" name="Images"/></td>
-                                <td class="text-center"><input type="radio" name="rDefault" value="${currentId}"/></td>
-                                <td class="text-center"><a href="#" data-id="${currentId}" class="btn btn-sm btn-danger btnXoaAnh">Xóa</a></td>
-                                </tr>`;
+                                    <td class="text-center">${currentId}</td>
+                                    <td class="text-center"><img width="80" src="${url}" /> <input type='hidden' value="${url}" name="Images"/></td>
+                                    <td class="text-center"><input type="radio" name="rDefault" value="${currentId}"/></td>
+                                    <td class="text-center"><a href="#" data-id="${currentId}" class="btn btn-sm btn-danger btnXoaAnh">Xóa</a></td>
+                                    </tr>`;
             }
             $('#tbHtml').append(str);
             $('#tCurrentId').val(currentId);

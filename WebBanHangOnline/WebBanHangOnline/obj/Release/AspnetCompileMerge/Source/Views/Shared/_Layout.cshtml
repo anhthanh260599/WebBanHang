@@ -1,4 +1,13 @@
-﻿@using WebBanHangOnline.Models.Common
+﻿@using System.Web;
+@using System.Web.Mvc;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+@using Microsoft.AspNet.Identity.Owin;
+@using Microsoft.Owin.Security;
+@using PayPal.Api;
+@using WebBanHangOnline.Models;
+@using WebBanHangOnline.Models.Common;
+@using WebBanHangOnline.Models.EF;
 
 <!DOCTYPE html>
 <html>
@@ -41,7 +50,9 @@
     <meta property="og:description" content="@ViewBag.SeoDescription" />
     <meta content="https://png.pngtree.com/template/20191203/ourlarge/pngtree-coffee-logo-design-vector-image_337940.jpg" property="og:image" itemprop="thumbnailUrl" />
     <!-- END Apply SEO -->
-
+    <!-- POPUP -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/path/to/bootstrap/js/bootstrap.min.js"></script>
 
 
     <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
@@ -50,38 +61,42 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jqueryval") <!--Render validate Thanh toán-->
 
+    <style>
+        .swal2-container {
+            z-index: 9999; /* Đặt giá trị z-index lớn hơn để đảm bảo hiển thị trên tất cả */
+        }
+
+        .footer_title {
+            text-transform: uppercase;
+        }
+
+        .footer-container {
+            padding-top: 24px;
+            padding-bottom: 36px;
+            margin-top: 36px;
+            border-top: 1px solid #dbdbdb;
+        }
+
+        .footer-link {
+            color: unset;
+        }
+
+        .footer_list_social-media {
+            display: flex;
+        }
+
+        .footer-item_social-media {
+            padding: 0 8px;
+        }
+
+        .social_media_icon {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+
 </head>
-<style>
-    .swal2-container {
-        z-index: 9999; /* Đặt giá trị z-index lớn hơn để đảm bảo hiển thị trên tất cả */
-    }
 
-    .footer_title {
-        text-transform: uppercase;
-    }
-    .footer-container {
-        padding-top: 24px;
-        padding-bottom: 36px;
-        margin-top: 36px;
-        border-top: 1px solid #dbdbdb;
-    }
-    .footer-link{
-        color: unset;
-    }
-
-    .footer_list_social-media {
-        display: flex;
-    }
-
-    .footer-item_social-media {
-        padding: 0 8px;
-    }
-
-    .social_media_icon {
-        width: 30px;
-        height: 30px;
-    }
-</style>
 <body>
 
     <div class="super_container">
@@ -101,7 +116,9 @@
                         <div class="col-md-6 text-right">
                             <div class="top_nav_right">
                                 <ul class="top_nav_menu">
-
+                                    <li style="min-width:100px;" class="account">
+                                        <a href="/Home/CustomerRequest">CSKH</a>
+                                    </li>
                                     <!-- Currency / Language / My Account -->
                                     @*<li class="currency">
                                             <a href="#">
@@ -128,11 +145,10 @@
                                             </ul>
                                         </li>*@
                                     <li style="min-width:150px;" class="account">
-
                                         @if (!Request.IsAuthenticated)
                                         {
                                             <a href="#">
-                                                Xin chào bạn
+                                                Thông tin
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
                                             <ul class="account_selection">
@@ -146,11 +162,29 @@
                                                 @User.Identity.Name
                                                 <i class="fa fa-angle-down"></i>
                                             </a>
-                                            <ul class="account_selection">
-                                                <li><a href="/account/profile"><i class="fa fa-sign-in" aria-hidden="true"></i>Hồ sơ</a></li>
+                                            <ul class="account_selection" style="width:250px;">
+                                                <li><a href="/account/profile"><i class="fa fa-user-plus" aria-hidden="true"></i>Hồ sơ</a></li>
+
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+                                                    var user = userManager.FindByName(User.Identity.Name);
+
+                                                    if (user != null && !string.IsNullOrEmpty(user.PasswordHash))
+                                                    {
+                                                        <li><a href="/account/changepassword"><i class="fa-solid fa-key"></i>Đổi mật khẩu</a></li>
+                                                    }
+                                                }
+                                                @*<li><a href="/account/changepassword"><i class="fa-solid fa-key"></i>Đổi mật khẩu</a></li>*@
                                                 <li><a href="/account/OrderHistory"><i class="fa-solid fa-clock-rotate-left"></i>Lịch sử đơn hàng</a></li>
                                                 <li><a href="/wishlist/Index"><i class="fa-solid fa-heart"></i>Sản phẩm yêu thích</a></li>
-                                                <li><a href="javascript:document.getElementById('logOffForm').submit()"><i class="fa fa-user-plus" aria-hidden="true"></i>Đăng xuất</a></li>
+                                                @if (!User.IsInRole("Customer"))
+                                                {
+                                                    <li><a href="/admin/home"><i class="fa-solid fa-user-gear"></i>Trang quản lý</a></li>
+
+                                                }
+                                                <li><a href="javascript:document.getElementById('logOffForm').submit()"> <i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</a></li>
+
                                             </ul>
                                         }
 
@@ -190,8 +224,15 @@
                             <nav class="navbar">
                                 @Html.Action("MenuTop", "Menu")
                                 <ul class="navbar_user">
-                                    <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    @*<li><a href="/tra-cuu">Tra cứu đơn hàng</a></li>*@
+                                    @if (!Request.IsAuthenticated)
+                                    {
+                                        <li><a href="/account/login"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="/account/profile"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                                    }
                                     <li class="checkout">
                                         <a href="/gio-hang">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -352,6 +393,21 @@
             js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
+        // Hàm bỏ dấu tiếng việt
+        function stringToSlug(str) {
+            // remove accents
+            var from = "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ",
+                to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+            for (var i = 0, l = from.length; i < l; i++) {
+                str = str.replace(RegExp(from[i], "gi"), to[i]);
+            }
+            str = str.toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\-]/g, '-')
+                .replace(/-+/g, '-');
+            return str;
+        }
     </script>
 
     @*@Scripts.Render("~/bundles/jquery")

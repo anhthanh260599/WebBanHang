@@ -40,6 +40,40 @@
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Cửa hàng thực hiện</label>
+                @if (Model.StoreID == null)
+                {
+                    <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+
+                }
+                else
+                {
+                    <input type="text" readonly class="form-control" value="@Model.Store.Name" />
+
+                }
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>Số điện thoại cửa hàng</label>
+                @if (Model.StoreID == null)
+                {
+                    <input type="text" readonly class="form-control" value="Chưa có cửa hàng thực hiện" />
+                }
+                else
+                {
+                    <input type="text" readonly class="form-control" value="@Model.Store.StorePhone" />
+
+                }
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-6">
             <div class="form-group">
@@ -79,42 +113,93 @@
                 <input type="text" readonly class="form-control" value="@Model.CreateDate.ToString("dd/MM/yyyy - HH:mm:ss")" />
             </div>
         </div>
+        @if (Model.IsConfirm == true)
+        {
+            if (Model.Status == 1)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                    </div>
+                </div>
+            }
+            if (Model.Status == 2)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Đã thanh toán" />
+                    </div>
+                </div>
+            }
+            if (Model.Status == 3)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Giao hàng thành công" />
+                    </div>
+                </div>
+            }
+            if (Model.Status == 4)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Huỷ" />
+                    </div>
+                </div>
+            }
+            if (Model.Status == 5)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Đang giao hàng" />
+                    </div>
+                </div>
+            }
+            if (Model.Status == 6)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Đang chuẩn bị món" />
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            if (Model.Status == 4)
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Huỷ" />
+                    </div>
+                </div>
+            }
 
-        @if (Model.Status == 1)
-        {
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Trạng thái thanh toán</label>
-                    <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+            else if ((Model.TypePayment == 2 && Model.Status == 1) || (Model.TypePayment == 3 && Model.Status == 1))
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Chưa thanh toán" />
+                    </div>
                 </div>
-            </div>
-        }
-        @if (Model.Status == 2)
-        {
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Trạng thái thanh toán</label>
-                    <input type="text" readonly class="form-control" value="Đã thanh toán" />
+            }
+            else
+            {
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Trạng thái đơn hàng</label>
+                        <input type="text" readonly class="form-control" value="Chưa xác nhận" />
+                    </div>
                 </div>
-            </div>
-        }
-        @if (Model.Status == 3)
-        {
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Trạng thái thanh toán</label>
-                    <input type="text" readonly class="form-control" value="Giao hàng thành công" />
-                </div>
-            </div>
-        }
-        @if (Model.Status == 4)
-        {
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Trạng thái thanh toán</label>
-                    <input type="text" readonly class="form-control" value="Huỷ" />
-                </div>
-            </div>
+            }
         }
     </div>
     @if (Model.PromotionCode != null)
@@ -136,16 +221,25 @@
         </div>
     }
 
-        <div class="row">
-            <div class="col-12">
-                <h3 class="text-center">Danh sách sản phẩm mua</h3>
-            </div>
-            <div class="col-12">
-                @Html.Action("Partial_OrderHistoryDetail", "Account", new { id = Model.Id })
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Ghi chú đơn hàng</label>
+                <textarea type="text" readonly class="form-control" value="@Model.Notes">@Model.Notes</textarea>
             </div>
         </div>
+    </div>
 
-    </section>
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-center">Danh sách sản phẩm mua</h3>
+        </div>
+        <div class="col-12">
+            @Html.Action("Partial_OrderHistoryDetail", "Account", new { id = Model.Id })
+        </div>
+    </div>
+
+</section>
 
        
 

@@ -207,7 +207,7 @@ namespace WebBanHangOnline.Controllers
             string email = Session["EmailCustomer"] as string;
             return View();
         }
-
+        
         public ActionResult Checkout()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
@@ -249,7 +249,15 @@ namespace WebBanHangOnline.Controllers
                     order.Address = request.Address;
                     order.Phone = request.Phone;
                     order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ, 5 = Đang giao hàng
-                    order.Notes = request.Notes;
+                    if(request.Notes != null)
+                    {
+                        order.Notes = request.Notes;
+                    }
+                    else
+                    {
+                        order.Notes = "Không có ghi chú";
+                    }
+
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
                     {
                         ProductID = x.ProductId,
@@ -290,9 +298,9 @@ namespace WebBanHangOnline.Controllers
                     order.CreateBy = request.Phone;
 
                     // Cộng 14 giờ do khi publish thì sẽ bị lệch múi giờ
-                    order.ModifierDate = DateTime.Now;
+                    order.ModifierDate = DateTime.Now.AddHours(15);
                     // Tạo mã đơn hàng
-                    order.CreateDate = DateTime.Now;
+                    order.CreateDate = DateTime.Now.AddHours(15);
 
                     //Random rd = new Random();
                     //order.Code = "DH"+ rd.Next(0,9) + rd.Next(0,9) + rd.Next(0, 9) + rd.Next(0, 9);
