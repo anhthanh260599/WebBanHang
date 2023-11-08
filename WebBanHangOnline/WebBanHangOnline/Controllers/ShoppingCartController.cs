@@ -266,7 +266,10 @@ namespace WebBanHangOnline.Controllers
                         Price = x.Price,
                         Quantity = x.Quantity,
                     }));
-
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        order.CustomerID = User.Identity.GetUserId();
+                    }
                     if (cart.PromotionId != 0)
                     {
                         order.PromotionId = cart.PromotionId;
@@ -296,10 +299,7 @@ namespace WebBanHangOnline.Controllers
 
 
 
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        order.CustomerID = User.Identity.GetUserId();
-                    }
+                 
                     order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
                     Session["EmailCustomer"] = order.Email;
@@ -387,12 +387,7 @@ namespace WebBanHangOnline.Controllers
                     }
 
                    
-                    if(tongTien >= 50000)
-                    {
-                        var user = db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault();
-                        db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault().CheckPoint++;
-                        db.SaveChanges();
-                    }
+               
 
                     tongTien = tongTien + phiShip;
 

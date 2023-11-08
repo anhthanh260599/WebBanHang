@@ -30,6 +30,15 @@
         </div>
     </div>
 
+    <div class="row mt-3">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Điểm tích lũy</label>
+                <input type="text" class="form-control" readonly name="Address" value="@Model.CheckPoint" />
+            </div>
+        </div>
+    </div>
+
     @using (Html.BeginForm("UpdateProfile", "Account"))
     {
         @Html.ValidationSummary(false)

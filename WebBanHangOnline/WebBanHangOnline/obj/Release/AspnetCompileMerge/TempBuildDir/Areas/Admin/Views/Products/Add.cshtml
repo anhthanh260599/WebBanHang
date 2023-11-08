@@ -48,11 +48,13 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Thông tin thêm mới Sản phẩm</h3>
+
+
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    @using (Html.BeginForm("Add", "Products", FormMethod.Post, new { }))
+                    @using (Html.BeginForm("Add", "Products", FormMethod.Post, new { id = "formEdit" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
@@ -101,21 +103,21 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Số lượng</label>
-                                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @Value = "1" })
+                                                    @Html.TextBoxFor(x => x.Quantity, new { @type = "number", @min = "1", @class = "form-control", @Value = "1", @requỉred = true })
                                                     @Html.ValidationMessageFor(x => x.Quantity, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
-                                                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
+                                                    @Html.TextBoxFor(x => x.Price, new { @type ="number", @min = "0" ,@class = "form-control", @placeholder = "Giá"  })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá khuyến mãi</label>
-                                                    @Html.TextBoxFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.TextBoxFor(x => x.PriceSale, new { @type = "number", @min = "0" ,  @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -123,7 +125,7 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
-                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
+                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá nhập"})
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -186,7 +188,7 @@
                                                     </tbody>
                                                 </table>
                                                 <input type="hidden" id="tCurrentId" value="0" />
-
+                                                <span id="error_message" class="text-danger"></span>
                                                 @Html.HiddenFor(x => x.Image, new { })
                                                 @Html.ValidationMessageFor(x => x.Image, null, new { @class = "text-danger" })
                                             </div>
@@ -252,6 +254,7 @@
 
 @section  scripts{
     <script>
+
         // Validate
         let elementNameProduct = document.querySelector("#nameProduct");
         elementNameProduct.onblur = (e) => {
@@ -261,6 +264,56 @@
             } else {
                 error.innerHTML = ''
             }
+        }
+
+            $(document).ready(function () {
+              CKEDITOR.replace('txtDetail', {
+            customConfig: '/Content/ckeditor/config.js',
+            extraAllowedContent: 'span',
+                });
+            });
+
+        let formSubmit = document.querySelector("#formEdit")
+        formSubmit.onsubmit = (e) => {
+            let elementImage = document.querySelector("#tCurrentId");
+            let messageError = elementImage.nextElementSibling;
+
+            let elementTitle = document.querySelector("#nameProduct");
+            let elementPrice = document.querySelector("#Price");
+            let elementOriginPrice = document.querySelector("#OriginalPrice");
+
+            console.log(elementPrice)
+            if (elementImage.value == 0 ) {
+                e.preventDefault();
+                messageError.innerHTML = 'Vui lòng không để trống hình ảnh ';
+                     Swal.fire({
+                         icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                         title: 'Thất bại',
+                         text: messageError.textContent,
+                         confirmButtonText: 'OK'
+                     });
+            } 
+
+            if (elementTitle.value == '') {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Vui lòng không đê trống tên',
+                    confirmButtonText: 'OK'
+                });
+            }
+            if (elementPrice.value == 0 || elementOriginPrice.value == 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Giá sản phẩm phải lớn hơn 0',
+                    confirmButtonText: 'OK'
+                });
+            } 
+
+            
         }
 
         @*let btnSubmitFormProduct = document.querySelector("#btnSubmitFormProduct");

@@ -1,0 +1,88 @@
+﻿@model WebBanHangOnline.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+<style>
+    /* Tùy chỉnh nút đăng nhập Facebook */
+    .facebook-login {
+        background-color: #3b5998; /* Màu nền Facebook */
+        color: #fff; /* Màu chữ trắng */
+        padding: 10px 20px; /* Điều chỉnh kích thước nút */
+        border: none; /* Loại bỏ đường viền */
+        border-radius: 5px; /* Bo góc */
+        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
+    }
+
+        .facebook-login:hover {
+            background-color: #1877f2; /* Màu nền Facebook khi di chuột qua */
+            color: #fff; /* Màu chữ trắng */
+        }
+
+    /* Tùy chỉnh nút đăng nhập Google */
+    .google-login {
+        background-color: #cf4332; /* Màu nền Google */
+        color: #fff; /* Màu chữ trắng */
+        padding: 10px 20px; /* Điều chỉnh kích thước nút */
+        border: none; /* Loại bỏ đường viền */
+        border-radius: 5px; /* Bo góc */
+        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
+    }
+
+        .google-login:hover {
+            background-color: #cf4332; /* Màu nền Google khi di chuột qua */
+            opacity: 0.8;
+            color: #fff; /* Màu chữ trắng */
+        }
+    .microsoft-login {
+        background-color: #000000; /* Màu nền Microsoft */
+        color: #fff; /* Màu chữ trắng */
+        padding: 10px 20px; /* Điều chỉnh kích thước nút */
+        border: none; /* Loại bỏ đường viền */
+        border-radius: 5px; /* Bo góc */
+        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
+    }
+
+        .microsoft-login:hover {
+            background-color: #000000; /* Màu nền Microsoft khi di chuột qua */
+            opacity: 0.8;
+            color: #fff; /* Màu chữ trắng */
+        }
+
+</style>
+<hr />
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0) {
+        <div>
+            <p class="text-danger">
+                Hiện chưa có dịch vụ nào
+            </p>
+        </div>
+    }
+    else {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { role = "form" })) {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders) {
+
+                        string providerClass = "";
+                        if (p.AuthenticationType == "Facebook")
+                        {
+                            providerClass = "facebook-login";
+                        }
+                        else if (p.AuthenticationType == "Google")
+                        {
+                            providerClass = "google-login";
+                        }
+                        else if (p.AuthenticationType == "Microsoft")
+                        {
+                            providerClass = "microsoft-login";
+                        }
+
+                        <button type="submit" class="btn btn-outline-dark w-100 @providerClass" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}

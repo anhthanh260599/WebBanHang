@@ -80,6 +80,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 db.Orders.Attach(item);
                 item.Status = trangThai;
+                if (item.TotalAmount >= 50000 && item.Status == 3) // Status = 3 là giao hàng thành công
+                {
+                    var user = db.Users.Where(x => x.Id == item.CustomerID).FirstOrDefault();
+                    db.Users.Where(x => x.Id == item.CustomerID).FirstOrDefault().CheckPoint++;
+                    db.SaveChanges();
+                }
                 db.Entry(item).Property(x=>x.Status).IsModified = true;
                 db.SaveChanges();
                 return Json(new { success = true, message = Message.SuccessSaveChange.ToString() });

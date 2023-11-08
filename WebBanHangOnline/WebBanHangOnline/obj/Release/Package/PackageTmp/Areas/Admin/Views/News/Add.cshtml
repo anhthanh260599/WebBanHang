@@ -1,0 +1,189 @@
+﻿@model WebBanHangOnline.Models.EF.News
+
+@{
+    ViewBag.Title = "Thêm mới tin túc";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader {
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/news" class="nav-link">Tin tức</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">@ViewBag.Title</a>
+        </li>
+    </ul>
+}
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin/home">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/news">Tin tức</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông tin @ViewBag.Title</h3>
+
+            <div class="card-tools">
+
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="bs-stepper-content">
+
+                @using (Html.BeginForm("Add", "News", FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <!-- your steps content here -->
+                    <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tên tiêu đề</label>
+                            @Html.TextBoxFor(x => x.Title, new { @id = "txtTitle", @class = "form-control", @placeholder = "Nhập tên tiêu đề" })
+                            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputFile">Ảnh đại diện</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    @Html.TextBoxFor(x => x.Image, new { @Id = "txtImage", @class = "form-control", @placeholder = "Chọn ảnh từ máy tính" })
+                                </div>
+                                <div class="input-group-append">
+                                    <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Mô tả</label>
+                            @Html.TextAreaFor(x => x.Description, new { @id = "txtDescription", @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Chi tiết</label>
+                            @Html.TextAreaFor(x => x.Detail, new { @id = "txtDetail", @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Hiển thị</label>
+                            @Html.CheckBoxFor(x => x.IsActive, new { @checked = "checked" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Seo Title</label>
+                            @Html.TextAreaFor(x => x.SeoTitle, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Seo Description</label>
+                            @Html.TextAreaFor(x => x.SeoDescription, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Seo Keywords</label>
+                            @Html.TextAreaFor(x => x.SeoKeywords, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <a href="/admin/news" class="btn btn-danger">Quay lại</a>
+                            <button type="submit" class="btn btn-primary">Xác nhận</button>
+                        </div>
+                    </div>
+
+                }
+                <button id="previewButton" class="btn btn-info">Preview</button>
+
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace('txtDetail', {
+                customConfig: '/Content/ckeditor/config.js',
+                extraAllowedContent: 'span',
+            });
+        });
+
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fieldUrl) {
+                document.getElementById(field).value = fieldUrl;
+            };
+            finder.popup();
+        }
+
+        document.getElementById('previewButton').addEventListener('click', function () {
+            // Lấy nội dung đang được soạn thảo trong CKEditor
+            var editor = CKEDITOR.instances.txtDetail; // Sử dụng tên của CKEditor instance 'txtDetail'
+
+            // Lấy giá trị của Title và Description
+            var title = document.getElementById('txtTitle').value;
+            var description = document.getElementById('txtDescription').value;
+
+            var content = editor.getData();
+
+
+            // Tạo một cửa sổ hoặc lớp modal để hiển thị nội dung được xem trước
+
+
+            // Trong ví dụ này, tôi sử dụng cửa sổ mới để hiển thị nội dung
+            var previewWindow = window.open('', '_blank', 'width=1000,height=400');
+            previewWindow.document.open();
+
+            previewWindow.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">');
+            previewWindow.document.write('<link rel="stylesheet" type="text/css" href="../../Content/assets/styles/main_styles.css">');
+
+            previewWindow.document.write(' <div class="container"> <div class="row"> <h3 class="col-12 news_title">' + title + '</h3> </div></div>');
+            previewWindow.document.write(' <div class=container> <div class="row"><div class="col-md-12 news-description font-weight-bold">' + description + '</div><div class="col-md-12 news-detail">' + content + '</div></div> </div>');
+
+
+            //previewWindow.document.write('<div class="news-description">' + description + '</div>');
+            //previewWindow.document.write('<div class="news-detail">' + content + '</div>');
+
+            previewWindow.document.close();
+        });
+
+    </script>
+}

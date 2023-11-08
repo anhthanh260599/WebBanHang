@@ -116,5 +116,3 @@ D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnli
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Release\WebBanHangOnline.pdb
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.dll
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.xml
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Release\WebBanHangOnline.Migrations.Thong.resources
-D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Release\WebBanHangOnline.csproj.GenerateResource.cache

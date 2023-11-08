@@ -1,0 +1,65 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Promotion>
+@using WebBanHangOnline.Models.Common
+
+@if (Model != null && Model.Any())
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên khuyến mãi</th>
+                <th>Giá trị giảm</th>
+                <th>Mã khuyến mãi</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PromotionName</td>
+                    @if (item.TypePromotion == 1)
+                    {
+                        <td>@Common.FormatNumber(item.DiscountAmount, 0) VNĐ</td>
+                    }
+                    else
+                    {
+                        <td>@Common.FormatNumber(item.DiscountAmount * 100, 0)%</td>
+                    }
+                    <td class="promotion-code">@item.PromotionCode</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-dark" onclick="copyPromotionCode(this)">Sao chép mã</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+            {
+                <p class="text-danger">Hiện tại chưa có mã giảm giá nào, vui lòng quay lại sau</p>
+            }
+
+<script>
+    function copyPromotionCode(button) {
+        // Tìm thẻ td chứa mã khuyến mãi trong cùng dòng với nút "Sao chép mã" được nhấp vào
+        var promotionCode = button.closest("tr").querySelector(".promotion-code").textContent;
+        console.log(promotionCode)
+        // Sử dụng Clipboard API để sao chép vào clipboard
+        navigator.clipboard.writeText(promotionCode)
+            .then(function () {
+                // Xử lý khi sao chép thành công (tuỳ chọn)
+                toastr.options = {
+                    positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                    closeButton: true, // Hiển thị nút X để tắt
+                };
+                toastr.success("Đã sao chép mã khuyến mãi: " + promotionCode);
+            })
+            .catch(function (error) {
+                // Xử lý khi sao chép thất bại (tuỳ chọn)
+                console.error("Lỗi khi sao chép mã khuyến mãi: " + error);
+            });
+    }
+</script>
+
+

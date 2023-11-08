@@ -1,0 +1,164 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.ProductImage>
+@using WebBanHangOnline.Models.Common
+@{
+    ViewBag.Title = "Ảnh sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<style>
+    .gallaryImage {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .gallaryImage li {
+            border: 1px solid black;
+            margin: 8px;
+            padding: 4px;
+            display: inline-block;
+        }
+
+            .gallaryImage li img {
+                margin-bottom: 4px;
+            }
+
+    /*.glImage {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+        .glImage li {*/
+            /*flex-direction:*/
+            /*display: inline-block;
+            position: relative;
+        }
+
+    .box-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }*/
+
+</style>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Ảnh sản phẩm</h3>
+
+            <div class="card-tools">
+                <input type="button" value="Tải ảnh" class="btn btn-success" onclick="BrowseServer('txtImage');" />
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="gallaryImage">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <li id="trow_@item.Id">
+                            <img src="@item.Image" width="150" />
+                            <div class="box-btn text-center">
+                                <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete"><i class="fa fa-trash"></i></a>
+                                @*@if (item.IsDefault)
+        {
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-success btnDefault"><i class="fa fa-check"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-dark btnDefault"><i class="fa fa-check"></i></a>
+                                }*@
+                                    <label class="switch">
+                                        <input type="radio" name="Default" data-id="@item.Id" class="btnDefault" @(item.IsDefault ? "checked" : "") />
+                                        <span class="slider round"></span>
+                                    </label>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+
+<script>
+    function BrowseServer(field) {
+        var finder = new CKFinder();
+        finder.selectActionFunction = function (fileUrl) {
+            AddImage(@ViewBag.productId, fileUrl);
+        };
+        finder.popup();
+    }
+    function AddImage(id, url) {
+        $.ajax({
+            url: '/admin/productimage/AddImage',
+            type: 'POST',
+            data: { productId: id, url: url },
+            success: function (rs) {
+                if (rs.Success) {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+
+        $('body').on('change', '.btnDefault', function () {
+            debugger;
+            var radio = $(this);
+            var id = radio.data("id");
+            $.ajax({
+                url: '/admin/productimage/IsDefault',
+                type: 'POST',
+                data: { id: id },
+                success: function (rs) {
+                    if (rs.success) {
+                        if (rs.IsDefault) {
+                            radio.prop('checked', true);
+                        } else {
+
+                            radio.prop('checked', false);
+                        }
+                        //radio.prop('checked', rs.IsDefault);
+                    }
+                }
+            });
+        });
+
+        $('body').on('click', '.btnDelete', function () {
+            var id = $(this).data('id');
+            var conf = confirm('@Message.ConfirmDelete');
+            if (conf === true) {
+                $.ajax({
+                    url: '/admin/productimage/delete',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            $('#trow_' + id).remove();
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

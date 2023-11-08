@@ -1,0 +1,81 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.ShoppingCartItem>
+@using WebBanHangOnline.Models.Common
+
+
+@if (Model != null && Model.Any())
+{
+    <h4 class="text-center">Thông tin giỏ hàng</h4>
+    var i = 0;
+    var tongTienCart = decimal.Zero;
+    decimal phiShipThanhToan = (decimal)TempData["PhiShip"];
+
+
+
+<table class="table table-active table-hover" style="width:100%;">
+
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        tongTienCart += item.TotalPrice;
+
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@Common.FormatNumber(item.Price, 0)</td>
+            <td>x @item.Quantity</td>
+            <td>@Common.FormatNumber(item.TotalPrice, 0)</td>
+        </tr>
+
+
+    }
+
+    <tr>
+        <th>Phí vận chuyển: </th>
+        <td></td>
+        <td></td>
+        <th>+@Common.FormatNumber(phiShipThanhToan, 0)</th>
+    </tr>
+
+    @if (TempData.ContainsKey("TongTienCartKM"))
+    {
+        var tongTienCartKM = (decimal)TempData["TongTienCartKM"];
+        var maKhuyenMai = TempData["MaKhuyenMai"] as string;
+        var giamGia = (decimal)TempData["DiscountAmount"];
+        var idMaKhuyenMai = (int)TempData["IDMaKhuyenMai"];
+        <tr>
+            <th>Mã giảm giá đã sử dụng: </th>
+            <td>@maKhuyenMai.ToUpper()</td>
+            <td></td>
+            <th>-@Common.FormatNumber(giamGia, 0)</th>
+        </tr>
+        <tr>
+            <th>Tổng tiền</th>
+            <td></td>
+            <td></td>
+            <th>@Common.FormatNumber(tongTienCartKM = tongTienCartKM + phiShipThanhToan, 0)</th>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th>Tổng tiền</th>
+            <td></td>
+            <td></td>
+            <th>@Common.FormatNumber(tongTienCart = tongTienCart + phiShipThanhToan, 0)</th>
+        </tr>
+    }
+
+
+</table>
+}
+else
+{
+
+}

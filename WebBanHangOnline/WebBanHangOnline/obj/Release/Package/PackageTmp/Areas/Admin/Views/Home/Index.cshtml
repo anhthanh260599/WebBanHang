@@ -1,0 +1,110 @@
+﻿@using WebBanHangOnline.Models.Common
+@{
+    ViewBag.Title = "Trang chủ Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Trang chủ</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@ViewBag.NewOrderToDay</h3>
+
+                    <p>Đơn hàng hôm nay</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <a href="/admin/order" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>@Common.FormatNumber(ViewBag.TicketAccount,0)<sup style="font-size: 20px"> VND</sup></h3>
+
+                    <p>Ticket Account (TA)</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>@ViewBag.UserAccount</h3>
+
+                    <p>Tài khoản khách hàng</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <a href="/admin/account" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>@ViewBag.TruyCapHomNay</h3>
+
+                    <p>Lượt truy cập hôm nay</p>
+                </div>
+                <div class="icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <a href="#" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        <!-- ./col -->
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-4">
+            <h5>Top 5 sản phẩm xem nhiều </h5>
+            @Html.Action("Partial_TopViewCount", "Home")
+        </div>
+
+
+        <div class="col-4">
+            <h5>Top 5 sản phẩm bán ra</h5>
+            @Html.Action("Partial_TopOrder", "Home")
+        </div>
+
+        <div class="col-4">
+            <h5>Top 5 sản phẩm yêu thích</h5>
+            @Html.Action("Partial_TopWishList", "Home")
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->
