@@ -19,8 +19,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(items);
         }
 
-      
-        public ActionResult Add() 
+
+        public ActionResult Add()
         {
             ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
             return View();
@@ -28,7 +28,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)  
+        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)
         {
             try
             {
@@ -59,6 +59,10 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                     }
                 }
+                else
+                {
+                    ViewBag.ErrorImage = "Vui lòng không để trống";
+                }
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
                 if (string.IsNullOrEmpty(model.SeoTitle))
@@ -82,7 +86,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Edit(int id)
         {
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
             var item = db.Products.Find(id);
             return View(item);
         }
@@ -91,16 +95,22 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Product model)
         {
-            if (ModelState.IsValid)
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            var productImage = db.ProductImage.Where(x => x.ProductID == model.Id && x.IsDefault == true).FirstOrDefault();
+            try
             {
-                model.ModifierDate = DateTime.Now;
-                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
                 db.Products.Attach(model);
-                db.Entry(model).State=System.Data.Entity.EntityState.Modified;
+                model.Image = productImage.Image;
+                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
+                model.ModifierDate = DateTime.Now;
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(model);
+            catch
+            {
+                return View(model);
+            }
         }
 
         [HttpPost]
