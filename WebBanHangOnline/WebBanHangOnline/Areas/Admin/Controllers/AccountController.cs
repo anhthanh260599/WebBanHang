@@ -145,7 +145,9 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     FullName = model.FullName, 
                     CreatedDate = DateTime.Now,
                     Avatar = "/Content/template/avatar-mac-dinh.jpg",
-                    Phone = model.Phone 
+                    Phone = model.Phone,
+                    CheckPoint = model.CheckPoint
+                    
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

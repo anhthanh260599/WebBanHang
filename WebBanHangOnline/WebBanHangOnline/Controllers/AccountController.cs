@@ -69,6 +69,7 @@ namespace WebBanHangOnline.Controllers
             item.CreatedDate = user.CreatedDate;
             item.Address = user.Address;
             item.Avatar = user.Avatar;
+            item.CheckPoint = user.CheckPoint;
             return View(item);
         }
 

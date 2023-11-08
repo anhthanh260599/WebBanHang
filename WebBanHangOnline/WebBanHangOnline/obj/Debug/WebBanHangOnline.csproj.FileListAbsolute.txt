@@ -468,6 +468,3 @@ D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnli
 D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.CopyComplete
 D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.dll
 D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.pdb
-D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.Duy.resources
-D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.csproj.GenerateResource.cache
-D:\HK1_Nam_4\Thương mại điện tử\Project\WebBanHangOnline\WebBanHangOnline\obj\Debug\WebBanHangOnline.Migrations.New.resources
