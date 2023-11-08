@@ -1,8 +1,7 @@
 Web eCommercial (Chuỗi cửa hàng)
 
-Hosting: (Hiện tại web chưa cập nhật bản mới nhất, bạn có thể clone project về để demo để trải nghiệm tốt hơn)
   - link trang chủ: https://anhthanh260599-001-site1.ftempurl.com/
-  - link admin: https://anhthanh260599-001-site1.ftempurl.com/admin/home
+  - link admin: https://anhthanh260599-001-site1.ftempurl.com/admin/home 
 
 Liên hệ để nhận dữ liệu mẫu: anhthanh260599@gmail.com
 
