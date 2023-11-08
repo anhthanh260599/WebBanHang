@@ -1,4 +1,6 @@
-﻿using PayPal.Api;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using PayPal.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public ActionResult Add()
         {
             ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
             return View();
         }
 
@@ -33,6 +37,16 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             try
             {
                 ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+                ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
+                var userId = User.Identity.GetUserId();
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var user = userManager.FindById(userId);
+                if (!User.IsInRole("Admin"))
+                {
+                    model.IsActive = false;
+                }
+
                 if (Images != null && Images.Count > 0)
                 {
                     for (int i = 0; i < Images.Count; i++)
@@ -87,6 +101,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public ActionResult Edit(int id)
         {
             ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
             var item = db.Products.Find(id);
             return View(item);
         }
@@ -96,10 +111,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public ActionResult Edit(Product model)
         {
             ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
             var productImage = db.ProductImage.Where(x => x.ProductID == model.Id && x.IsDefault == true).FirstOrDefault();
+
+            var userId = User.Identity.GetUserId();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var user = userManager.FindById(userId);
+
             try
             {
                 db.Products.Attach(model);
+                if (!User.IsInRole("Admin"))
+                {
+                    model.IsActive = false;
+                }
                 model.Image = productImage.Image;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
                 model.ModifierDate = DateTime.Now;
@@ -111,6 +136,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 return View(model);
             }
+
         }
 
         [HttpPost]

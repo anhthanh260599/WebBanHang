@@ -34,6 +34,8 @@ namespace WebBanHangOnline.Models.EF
         public string Image { get; set; }
         public bool IsActive { get; set; }
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; }
+        public string Unit { get; set; }
+        public string Packing { get; set; }//Quy cách tính
 
     }
 }

@@ -60,6 +60,7 @@ namespace WebBanHangOnline.Models.EF
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // 1 sản phẩm có nhiều chi tiết đơn hàng
         public virtual ICollection<ReviewProduct> ReviewProducts { get; set; } // 1 sản phẩm có nhiều review
         public virtual ICollection<WishList> WishLists { get; set; } // 1 sản phẩm có nhiều yêu thích
-
+        public int? StoreID { get; set; }
+        public virtual Store Store { get; set; }
     }
 }
