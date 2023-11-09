@@ -1,4 +1,6 @@
-﻿using PayPal.Api;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using PayPal.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,20 +21,32 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(items);
         }
 
-      
-        public ActionResult Add() 
+
+        public ActionResult Add()
         {
             ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)  
+        public ActionResult Add(Product model, List<string> Images,List<int> rDefault)
         {
             try
             {
                 ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+                ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
+                var userId = User.Identity.GetUserId();
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var user = userManager.FindById(userId);
+                if (!User.IsInRole("Admin"))
+                {
+                    model.IsActive = false;
+                }
+
                 if (Images != null && Images.Count > 0)
                 {
                     for (int i = 0; i < Images.Count; i++)
@@ -59,6 +73,10 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                     }
                 }
+                else
+                {
+                    ViewBag.ErrorImage = "Vui lòng không để trống";
+                }
                 model.CreateDate = DateTime.Now;
                 model.ModifierDate = DateTime.Now;
                 if (string.IsNullOrEmpty(model.SeoTitle))
@@ -82,7 +100,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Edit(int id)
         {
-            ViewBag.ProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
             var item = db.Products.Find(id);
             return View(item);
         }
@@ -91,16 +110,33 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Product model)
         {
-            if (ModelState.IsValid)
+            ViewBag.listProductCategory = new SelectList(db.ProductCategories.ToList(), "Id", "Title");
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+            var productImage = db.ProductImage.Where(x => x.ProductID == model.Id && x.IsDefault == true).FirstOrDefault();
+
+            var userId = User.Identity.GetUserId();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var user = userManager.FindById(userId);
+
+            try
             {
-                model.ModifierDate = DateTime.Now;
-                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
                 db.Products.Attach(model);
-                db.Entry(model).State=System.Data.Entity.EntityState.Modified;
+                if (!User.IsInRole("Admin"))
+                {
+                    model.IsActive = false;
+                }
+                model.Image = productImage.Image;
+                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
+                model.ModifierDate = DateTime.Now;
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(model);
+            catch
+            {
+                return View(model);
+            }
+
         }
 
         [HttpPost]

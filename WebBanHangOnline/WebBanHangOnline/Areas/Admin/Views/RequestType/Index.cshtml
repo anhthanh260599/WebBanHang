@@ -1,10 +1,20 @@
-﻿@model IEnumerable<WebBanHangOnline.Models.EF.Matterial>
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.RequestType>
 @using WebBanHangOnline.Models.Common
 
 @{
-    ViewBag.Title = "Danh sách nguyên liệu";
+    ViewBag.Title = "Danh sách loại yêu cầu";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+
+    .table-detail {
+        width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
 
 @section naviheader {
     <!-- Left navbar links -->
@@ -16,7 +26,7 @@
             <a href="/admin/home" class="nav-link">Trang chủ</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/Matterials" class="nav-link">nguyên liệu</a>
+            <a href="/admin/RequestType" class="nav-link">Loại yêu cầu</a>
         </li>
     </ul>
 }
@@ -26,12 +36,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Quản lý nguyên liệu</h1>
+                <h1>Quản lý loại yêu cầu</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item active">nguyên liệu</li>
+                    <li class="breadcrumb-item active">Loại yêu cầu</li>
                 </ol>
             </div>
         </div>
@@ -47,7 +57,7 @@
             <h3 class="card-title">@ViewBag.Title</h3>
 
             <div class="card-tools">
-                <a href="/admin/Matterials/add" class="btn btn-primary">Thêm mới</a>
+                <a href="/admin/RequestType/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -62,13 +72,7 @@
                     <tr>
                         <th><input type="checkbox" id="SelectAll" /></th>
                         <th>STT</th>
-                        <th>Ảnh đại diện</th>
-                        <th>Tên nguyên liệu</th>
-                        <th>Giá </th>
-                        <th>Hiển thị</th>
-                        <th>Số lượng</th>
-                        <th>Đơn vị</th>
-                        <th>Quy cách</th>
+                        <th>Loại yêu cầu</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -84,24 +88,13 @@
                             <tr id="trow_@item.Id">
                                 <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                 <td class="stt-cell">@i</td>
-                                <td><img src="@item.Image" width="100px" /></td>
-                                <td>@item.Title</td>
-                                <td>@String.Format("{0:N0}", item.Price) đ</td>
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
+                                <td class="table-detail">@item.RequestTypeName</td>
                                 @*<td class="text-center">
-           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-        </td>*@
-                                <td>@item.Quantity</td>
-                                <td>@item.Unit</td>
-                                <td>@item.Packing</td>
+                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                    </td>*@
+
                                 <td>
-                                    <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                    <a href="/admin/RequestType/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
                                 </td>
                             </tr>
@@ -162,7 +155,7 @@
                     var confirmMessage = confirm('@Message.ConfirmDeleteSelected');
                     if (confirmMessage === true) {
                         $.ajax({
-                            url: '/admin/Matterials/deleteSelected',
+                            url: '/admin/RequestType/deleteSelected',
                             type: 'POST',
                             data: { ids: str },
                             success: function (rs) {
@@ -212,7 +205,7 @@
                     }
                 });
                 if (str.length > 0) {
-                    // Sử dụng SweetAlert 2 để hiển thị cửa sổ xác nhận thay vì confirm
+                    // Sử dụng SweetAlert 2 để hiển thị cửa sổ xác nhận thay thế cho confirm
                     Swal.fire({
                         title: '@Message.ConfirmDeleteSelected',
                         text: '',
@@ -225,7 +218,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/admin/Matterials/deleteSelected',
+                                url: '/admin/RequestType/deleteSelected',
                                 type: 'POST',
                                 data: { ids: str },
                                 success: function (rs) {
@@ -266,7 +259,6 @@
             });
 
 
-
             $('body').on('change', '#SelectAll', function () {  // Hàm dùng để check all
                 var checkStatus = this.checked;
                 var checkbox = $(this).parents('.card-body').find('tr td input:checkbox.cbkItem');
@@ -288,7 +280,7 @@
                 if (confirmMessage === true)
                 {
                     $.ajax({
-                        url: '/admin/Matterials/delete',
+                        url: '/admin/RequestType/delete',
                         type: 'POST',
                         data: { id: id },
                         success: function (rs)
@@ -311,7 +303,7 @@
             $('body').on('click', '.btnDelete', function () {
                 var id = $(this).data("id");
 
-                // Sử dụng SweetAlert 2 để hiển thị cửa sổ xác nhận thay vì confirm
+                // Sử dụng SweetAlert 2 để hiển thị cửa sổ xác nhận thay thế cho confirm
                 Swal.fire({
                     title: '@Message.ConfirmDelete',
                     text: '',
@@ -324,14 +316,13 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '/admin/Matterials/delete',
+                            url: '/admin/RequestType/delete',
                             type: 'POST',
                             data: { id: id },
                             success: function (rs) {
                                 if (rs.success) {
 
                                     $('#trow_' + id).remove();
-
                                     // Cập nhật lại STT
                                     $('.stt-cell').each(function (index) {
                                         $(this).text(index + 1);
@@ -341,7 +332,7 @@
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Thành công',
-                                        text: 'Mục đã được xoá thành công!',
+                                        text: '@Message.SuccessDeleted',
                                         confirmButtonText: 'OK'
                                     });
                                 }
@@ -351,12 +342,13 @@
                 });
             });
 
+
             //$('body').on('click', '.btnActive', function (e) { // Hàm dùng để thay đổi trạng thái hiển thị
             //    e.preventDefault();
             //    var button = $(this); // Lưu giữ đối tượng button trong biến
             //    var id = button.data("id");
             //        $.ajax({
-            //            url: '/admin/Matterials/IsActive',
+            //            url: '/admin/RequestType/IsActive',
             //            type: 'POST',
             //            data: { id: id },
             //            success: function (rs) {
@@ -378,7 +370,7 @@
                 var id = checkbox.data("id");
 
                 $.ajax({
-                    url: '/admin/Matterials/IsActive',
+                    url: '/admin/RequestType/IsActive',
                     type: 'POST',
                     data: { id: id },
                     success: function (rs) {
@@ -398,4 +390,5 @@
 
         });
     </script>
+
 }

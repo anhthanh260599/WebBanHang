@@ -16,6 +16,8 @@ namespace WebBanHangOnline.Models
         public DateTime CreatedDate { get; set; }
         public string Address { get; set; }
         public string Avatar { get; set; }
+        //Thêm mới
+        public int CheckPoint { get; set; } //tính số lần mua hàng trên 50k
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -31,6 +33,9 @@ namespace WebBanHangOnline.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<RequestType> RequestTypes { get; set; }
+        public DbSet<CustomerRequest> CustomerRequests { get; set; }
         public DbSet<ShippingFee> ShippingFees { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<RecipeDetail> RecipeDetails { get; set; }

@@ -1,4 +1,5 @@
 ﻿@model WebBanHangOnline.Models.EF.Product
+@using WebBanHangOnline.Models.Common
 @{
     ViewBag.Title = "Cập nhật sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -57,7 +58,7 @@
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
                         @Html.HiddenFor(x => x.Id)
-                        @Html.HiddenFor(x=>x.CreateDate)
+                        @Html.HiddenFor(x => x.CreateDate)
                         <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
@@ -71,7 +72,7 @@
                                     <div class="active tab-pane" id="activity">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Tên sản phẩm</label>
-                                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Tên sản phẩm" })
+                                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @id = "nameProduct", @placeholder = "Tên sản phẩm" })
                                             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
@@ -86,7 +87,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Danh mục</label>
-                                            @Html.DropDownListFor(x => x.ProductCategoryID, ViewBag.ProductCategory as SelectList, new { @class = "form-control searchable-dropdown-list" })
+                                            @Html.DropDownListFor(x => x.ProductCategoryID, ViewBag.listProductCategory as SelectList, new { @class = "form-control searchable-dropdown-list" })
                                             @Html.ValidationMessageFor(x => x.ProductCategoryID, null, new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
@@ -103,35 +104,37 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Số lượng</label>
-                                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @Value = Model.Quantity })
+                                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @Value = "1" })
                                                     @Html.ValidationMessageFor(x => x.Quantity, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
-                                                    <input type="text" name="demoPrice" value="@Model.Price" id="demoPrice" class="form-control auto text-right" data-a-dec="," data-a-sep=".">
-                                                    @Html.HiddenFor(x => x.Price, new { @class = "", @placeholder = "Giá" })
+                                                    @Html.TextBoxFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá khuyến mãi</label>
-                                                    <input type="text" name="demoPriceSale" id="demoPriceSale" value="@Model.PriceSale" class="form-control auto text-right">
-                                                    @Html.HiddenFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.TextBoxFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
+
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
-                                                    <input type="text" name="demoOriginalPrice" id="demoOriginalPrice" value="@Model.OriginalPrice" class="form-control auto text-right">
-                                                    @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
+                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
-
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Cửa hàng</label>
+                                                @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList, "Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
+                                                @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-3">
@@ -249,33 +252,8 @@
 @section  scripts{
     <script>
         $(document).ready(function () {
-            $('.auto').autoNumeric('init', {
-                aSign: ' VND',
-                pSign: 's',
-                aDec: '.',
-                aSep: ',',
-                vMin: '0',
-                mDec: 0,
-                aPad: false,    // không cho nhập số 0 ở đầu
-                vMax: '1000000000' // giá trị tối đa
-            });
-            $('#demoPrice').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoPrice').autoNumeric('get');
-                $('#Price').val(demoGet);
-                $('#Price').autoNumeric('set', demoGet);
-            });
-            $('#demoPriceSale').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoPriceSale').autoNumeric('get');
-                $('#PriceSale').val(demoGet);
-                $('#PriceSale').autoNumeric('set', demoGet);
-            });
-            $('#demoOriginalPrice').bind('blur focusout keypress keyup', function () {
-                var demoGet = $('#demoOriginalPrice').autoNumeric('get');
-                $('#OriginalPrice').val(demoGet);
-                $('#OriginalPrice').autoNumeric('set', demoGet);
-            });
             CKEDITOR.replace('txtDetail', {
-                customConfig: '/content/ckeditor/config.js',
+                customConfig: '/Content/ckeditor/config.js',
                 extraAllowedContent: 'span',
             });
         });
