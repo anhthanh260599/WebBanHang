@@ -232,9 +232,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202311080917513_new.cs" />
-    <Compile Include="Migrations\202311080917513_new.designer.cs">
-      <DependentUpon>202311080917513_new.cs</DependentUpon>
+    <Compile Include="Migrations\202311091201460_Storage.cs" />
+    <Compile Include="Migrations\202311091201460_Storage.designer.cs">
+      <DependentUpon>202311091201460_Storage.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -272,6 +272,7 @@
     <Compile Include="Models\EF\Slider.cs" />
     <Compile Include="Models\EF\SocialMediaPlugin.cs" />
     <Compile Include="Models\EF\SocialMediaProfiles.cs" />
+    <Compile Include="Models\EF\Storage.cs" />
     <Compile Include="Models\EF\Store.cs" />
     <Compile Include="Models\EF\Subscribe.cs" />
     <Compile Include="Models\EF\SystemSetting.cs" />
@@ -3732,8 +3733,8 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202311080917513_new.resx">
-      <DependentUpon>202311080917513_new.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202311091201460_Storage.resx">
+      <DependentUpon>202311091201460_Storage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
