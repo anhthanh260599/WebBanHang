@@ -278,7 +278,6 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
-    <Compile Include="Models\ShoppingCartViewModel.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
     <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="PayPal\Api\PayPalConfiguration.cs" />
