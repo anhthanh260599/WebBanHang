@@ -54,6 +54,7 @@ namespace WebBanHangOnline.Models.EF
         public string SeoTitle { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; } // 1 sản phẩm có nhiều ảnh

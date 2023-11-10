@@ -108,14 +108,16 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
-                                                    @Html.TextBoxFor(x => x.Price, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá" })
+                                                    @Html.HiddenFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
+                                                    <input id="textPriceProduct" class="form-control" type="text" placeholder="Giá" required />
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá khuyến mãi</label>
-                                                    @Html.TextBoxFor(x => x.PriceSale, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    @Html.HiddenFor(x => x.PriceSale, new { @class = "form-control", @placeholder = "Khuyến mãi" })
+                                                    <input id="textPriceSale" class="form-control" type="text" placeholder="Giá" />
                                                     @Html.ValidationMessageFor(x => x.PriceSale, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -123,15 +125,21 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
-                                                    @Html.TextBoxFor(x => x.OriginalPrice, new { @type = "number", @min = "0", @class = "form-control", @placeholder = "Giá nhập" })
+                                                    @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
+                                                    <input id="textPriceOriginalPrice" class="form-control" type="text" placeholder="Giá" required />
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Cửa hàng</label>
-                                                @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList,"Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
-                                                @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
-                                            </div>
+
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Cửa hàng</label>
+                                                    @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList, "Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
+                                                    @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
+                                                </div>
+                                            }
+
                                         </div>
                                         <div class="row">
                                             <div class="col-3">
@@ -161,14 +169,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-3">
+                                            @*<div class="col-3">
                                                 <div class="form-group">
                                                     <div class="custom-control custom-switch">
                                                         @Html.CheckBoxFor(x => x.IsSale, new { @class = "custom-control-input", @id = "IsSaleCheckbox" })
                                                         <label for="IsSaleCheckbox" class="custom-control-label">Khuyến mãi</label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
                                     <!-- /.tab-pane -->
@@ -258,6 +266,81 @@
 
 @section  scripts{
     <script>
+        // Hàm để định dạng số thành chuỗi với dấu phẩy ngăn cách hàng nghìn
+        function myFormatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
+
+        }
+
+        // Field Price
+        let hiddenForValuePrice = document.querySelector("#Price");
+        let textPrice = document.querySelector("#textPriceProduct");
+
+        if (hiddenForValuePrice.value == '') {
+            textPrice.value = '';
+        } else {
+            textPrice.value = myFormatNumber(parseFloat(hiddenForValuePrice.value)).replace('.', ',') + " đ";
+        }
+
+        textPrice.oninput = (e) => {
+            let textPriceValue = parseFloat(textPrice.value.replaceAll(',', '').replace(" đ", ""));
+            if (!isNaN(textPriceValue)) {
+                // gán vào hiddenForValue
+                hiddenForValuePrice.value = textPriceValue;
+
+                let textFormat = myFormatNumber(textPriceValue).replace('.', ',') + " đ";
+                textPrice.value = textFormat;
+            } else {
+                textPrice.value = ''; // Đặt giá trị là rỗng nếu không thể chuyển đổi thành số
+            }
+        }
+
+        // Field Original Price
+        let hiddenForValueOriginalPrice = document.querySelector("#OriginalPrice");
+        let textOriginalPrice = document.querySelector("#textPriceOriginalPrice");
+
+        if (hiddenForValueOriginalPrice.value == '') {
+            textOriginalPrice.value = '';
+        } else {
+            textOriginalPrice.value = myFormatNumber(parseFloat(hiddenForValueOriginalPrice.value)).replace('.', ',') + " đ";
+        }
+
+        textOriginalPrice.oninput = (e) => {
+            let textPriceValue = parseFloat(textOriginalPrice.value.replaceAll(',', '').replace(" đ", ""));
+            if (!isNaN(textPriceValue)) {
+                // gán vào hiddenForValue
+                hiddenForValueOriginalPrice.value = textPriceValue;
+
+                let textFormat = myFormatNumber(textPriceValue).replace('.', ',') + " đ";
+                textOriginalPrice.value = textFormat;
+            } else {
+                textOriginalPrice.value = ''; // Đặt giá trị là rỗng nếu không thể chuyển đổi thành số
+            }
+        }
+
+        // Field Price Sale
+        let hiddenForValuePriceSale = document.querySelector("#PriceSale");
+        let textPriceSale = document.querySelector("#textPriceSale");
+
+        if (hiddenForValuePriceSale.value == '') {
+            textPriceSale.value = '';
+        } else {
+            textPriceSale.value = myFormatNumber(parseFloat(hiddenForValuePriceSale.value)).replace('.', ',') + " đ";
+        }
+
+        textPriceSale.oninput = (e) => {
+            let textPriceValue = parseFloat(textPriceSale.value.replaceAll(',', '').replace(" đ", ""));
+            if (!isNaN(textPriceValue)) {
+                // gán vào hiddenForValue
+                hiddenForValuePriceSale.value = textPriceValue;
+                let textFormat = myFormatNumber(textPriceValue).replace('.', ',') + " đ";
+                textPriceSale.value = textFormat;
+            } else {
+                textPriceSale.value = ''; // Đặt giá trị là rỗng nếu không thể chuyển đổi thành số
+                hiddenForValuePriceSale.value = '';
+            }
+        }
+
 
         // Validate
         let elementNameProduct = document.querySelector("#nameProduct");
@@ -316,8 +399,6 @@
                     confirmButtonText: 'OK'
                 });
             }
-
-
         }
 
         @*let btnSubmitFormProduct = document.querySelector("#btnSubmitFormProduct");

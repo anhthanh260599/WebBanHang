@@ -89,74 +89,105 @@
                         foreach (var item in Model)
                         {
 
-                            //var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
-
-                            <tr id="trow_@item.Id">
-                                <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
-                                <td class="stt-cell">@i</td>
-                                <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
-                                <td>@item.Title</td>
-                                <td>@item.ProductCategory.Title</td>
-                                <td>@item.Quantity</td>
-                                <td class="auto">@item.Price</td>
-                                <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
-
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnHome" @(item.IsHome ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnHot" @(item.IsHot ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnFeature" @(item.IsFeature ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
-                                <td>
-                                    @if (item.IsSale == true)
-                                    {
-                                        <button style="cursor:text;" class="btn btn-success">Đang khuyến mãi</button>
-                                    }
-
-                                </td>
-
-                                @if (item.StoreID != null)
-                                {
+                            if (item.IsApprovedByAdmin == false)
+                            {
+                                <tr id="trow_@item.Id">
+                                    <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
+                                    <td>@item.Title</td>
+                                    <td>@item.ProductCategory.Title</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@Common.FormatNumber(item.Price, 0)</td>
+                                    <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="btn btn-sm btn-warning">Đang chờ duyệt</td>
+                                    <td></td>
                                     <td>@item.Store.Name</td>
-                                }
-                                else
-                                {
-                                    <td>Tất cả cửa hàng</td>
-                                }
+                                    <td>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnApprovedProductStore">Duyệt</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr id="trow_@item.Id">
+                                    <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
+                                    <td>@item.Title</td>
+                                    <td>@item.ProductCategory.Title</td>
+                                    <td>@item.Quantity</td>
+                                    <td class="auto">@Common.FormatNumber(item.Price, 0)</td>
+                                    <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
+
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" data-id="@item.Id" class="btnHome" @(item.IsHome ? "checked" : "") />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" data-id="@item.Id" class="btnHot" @(item.IsHot ? "checked" : "") />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        <label class="switch">
+                                            <input type="checkbox" data-id="@item.Id" class="btnFeature" @(item.IsFeature ? "checked" : "") />
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </td>
+
+                                    <td>
+                                        @if (item.IsSale == true)
+                                        {
+                                            <button style="cursor:text;" class="btn btn-success">Đang khuyến mãi</button>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @if (item.StoreID != null)
+                                        {
+                                            <span> @item.Store.Name</span>
+                                        }
+                                        else
+                                        {
+                                            <span> Tất cả</span>
+                                        }
+                                    </td>
 
 
-                                @*<td class="text-center">
-           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-        </td>*@
 
 
-                                <td>
-                                    <a href="/admin/products/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
-                                </td>
-                            </tr>
+                                    @*<td class="text-center">
+                                           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                        </td>*@
+
+
+                                    <td>
+                                        <a href="/admin/products/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
+                                    </td>
+                                </tr>
+
+                            }
+
                             i++;
                         }
                     }
@@ -265,6 +296,39 @@
                     alert("@Message.RecordNotChecked")
                 }
             });*@
+
+            $('body').on('click', '.btnApprovedProductStore', function () {
+                var id = $(this).data("id");
+
+                Swal.fire({
+                    title: 'Bạn có muốn duyệt sản phẩm này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Products/IsApprove',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                Swal.fire({
+                                    icon: rs.success ? 'success' : 'error',
+                                    title: rs.success ? 'Thành công' : 'Lỗi',
+                                    text: rs.success ? 'Sản phẩm đã được duyệt' : 'Có lỗi xảy ra khi duyệt sản phẩm.',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                });
+            });
 
             $('body').on('click', '#btnDeleteSelected', function (e) { // Hàm dùng để Xoá các mục đã chọn
                 e.preventDefault();
