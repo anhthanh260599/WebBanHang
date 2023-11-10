@@ -127,11 +127,16 @@
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Cửa hàng</label>
-                                                @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList,"Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
-                                                @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
-                                            </div>
+
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Cửa hàng</label>
+                                                    @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList, "Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
+                                                    @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
+                                                </div>
+                                            }
+
                                         </div>
                                         <div class="row">
                                             <div class="col-3">
@@ -161,14 +166,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-3">
+                                            @*<div class="col-3">
                                                 <div class="form-group">
                                                     <div class="custom-control custom-switch">
                                                         @Html.CheckBoxFor(x => x.IsSale, new { @class = "custom-control-input", @id = "IsSaleCheckbox" })
                                                         <label for="IsSaleCheckbox" class="custom-control-label">Khuyến mãi</label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </div>
                                     <!-- /.tab-pane -->
