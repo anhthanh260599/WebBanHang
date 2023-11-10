@@ -10,6 +10,7 @@
                 <th>Tên khuyến mãi</th>
                 <th>Giá trị giảm</th>
                 <th>Mã khuyến mãi</th>
+                <th>Điểm tích luỹ cần</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                         <td>@Common.FormatNumber(item.DiscountAmount * 100, 0)%</td>
                     }
                     <td class="promotion-code">@item.PromotionCode</td>
+                    <td>@item.Point</td>
                     <td>
                         <button class="btn btn-sm btn-outline-dark" onclick="copyPromotionCode(this)">Sao chép mã</button>
                     </td>
