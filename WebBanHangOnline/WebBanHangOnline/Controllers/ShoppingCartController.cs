@@ -259,6 +259,12 @@ namespace WebBanHangOnline.Controllers
                         Quantity = x.Quantity,
                     }));
 
+
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        order.CustomerID = User.Identity.GetUserId();
+                    }
+
                     if (cart.PromotionId != 0)
                     {
                         order.PromotionId = cart.PromotionId;
@@ -288,10 +294,6 @@ namespace WebBanHangOnline.Controllers
 
 
 
-                    if (User.Identity.IsAuthenticated)
-                    {
-                        order.CustomerID = User.Identity.GetUserId();
-                    }
                     order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
                     Session["EmailCustomer"] = order.Email;
