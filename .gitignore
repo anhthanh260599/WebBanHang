@@ -20,3 +20,6 @@
 /WebBanHangOnline/WebBanHangOnline/Migrations/202311080859125_New.Designer.cs
 /WebBanHangOnline/WebBanHangOnline/Migrations/202311080859125_New.resx
 /.gitignore
+*.vsidx
+/.gitignore
+/.gitignore
