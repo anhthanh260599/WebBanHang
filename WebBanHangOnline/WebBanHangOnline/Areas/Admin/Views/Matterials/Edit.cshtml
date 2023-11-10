@@ -1,7 +1,7 @@
 ﻿@model WebBanHangOnline.Models.EF.Matterial
 
 @{
-    ViewBag.Title = "Cập nhật tin túc";
+    ViewBag.Title = "Cập nhật nguyên vật liệu";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -48,7 +48,7 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Thông tin @ViewBag.Title</h3>
+            <h3 class="card-title">Chi tiết nguyên vật liệu</h3>
 
             <div class="card-tools">
 
@@ -165,16 +165,16 @@
         // edit text price
         let hiddenForValue = document.querySelector("#PriceMats");
         let textPrice = document.getElementById("textPriceMats");
-       
-        textPrice.value = myFormatNumber(parseFloat(hiddenForValue.value)) + " đ";
+
+        textPrice.value = myFormatNumber(parseFloat(hiddenForValue.value)).replace('.',',') + " đ";
         textPrice.oninput = (e) => {
-            let textPriceValue = parseFloat(textPrice.value.replaceAll('.', '').replace(" đ", ""));
+            let textPriceValue = parseFloat(textPrice.value.replaceAll(',', '').replace(" đ", ""));
             if (!isNaN(textPriceValue)) {
                 // gán vào hiddenForValue
                 hiddenForValue.value = textPriceValue;
                 console.log(hiddenForValue.value);
 
-                let textFormat = myFormatNumber(textPriceValue) + " đ";
+                let textFormat = myFormatNumber(textPriceValue).replace('.', ',') + " đ";
                 textPrice.value = textFormat;
             } else {
                 textPrice.value = ''; // Đặt giá trị là rỗng nếu không thể chuyển đổi thành số

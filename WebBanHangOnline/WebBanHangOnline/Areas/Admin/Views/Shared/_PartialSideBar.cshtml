@@ -1,382 +1,385 @@
 ﻿    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            @*<div class="image">
-            <img src="" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-            @if (Request.IsAuthenticated)
-            {
-                <a href="#" class="d-block">@User.Identity.Name</a>
-            }
-        </div>*@
-            @{
-                var profileHtml = Html.Action("Partial_Profile", "Account", new { area = "Admin" });
-            }
-            @Html.Raw(profileHtml)
-        </div>
-
-        <!-- SidebarSearch Form -->
-        <!--<div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        @*<div class="image">
+                <img src="" class="img-circle elevation-2" alt="User Image">
             </div>
-        </div>-->
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
-                <li class="nav-item">
-                    <a href="/admin/home" class="nav-link">
-                        <i class="fa-solid fa-house"></i>
-                        <p>
-                            Trang chủ
-                            @*<i class="right fas fa-angle-left"></i>*@
-                        </p>
-                    </a>
-                </li>
+            <div class="info">
+                @if (Request.IsAuthenticated)
+                {
+                    <a href="#" class="d-block">@User.Identity.Name</a>
+                }
+            </div>*@
+        @{
+            var profileHtml = Html.Action("Partial_Profile", "Account", new { area = "Admin" });
+        }
+        @Html.Raw(profileHtml)
+    </div>
 
-                <li class="nav-item">
-                    <a href="/admin/category" class="nav-link">
-                        <i class="fa-solid fa-bars"></i>
-                        <p>
-                            Danh mục
-                            @*<i class="right fas fa-angle-left"></i>*@
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/admin/news" class="nav-link">
-                        <i class="fa-solid fa-newspaper"></i>
-                        <p>
-                            Tin tức
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+    <!-- SidebarSearch Form -->
+    <!--<div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                    <i class="fas fa-search fa-fw"></i>
+                </button>
+            </div>
+        </div>
+    </div>-->
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+            <li class="nav-item">
+                <a href="/admin/home" class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    <p>
+                        Trang chủ
+                        @*<i class="right fas fa-angle-left"></i>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/posts" class="nav-link">
-                        <i class="fa-regular fa-clipboard"></i>
-                        <p>
-                            Bài viết
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/category" class="nav-link">
+                    <i class="fa-solid fa-bars"></i>
+                    <p>
+                        Danh mục
+                        @*<i class="right fas fa-angle-left"></i>*@
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/news" class="nav-link">
+                    <i class="fa-solid fa-newspaper"></i>
+                    <p>
+                        Tin tức
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/order" class="nav-link">
-                        <i class="fa-solid fa-file-invoice"></i>
-                        <p>
-                            Đơn hàng
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/posts" class="nav-link">
+                    <i class="fa-regular fa-clipboard"></i>
+                    <p>
+                        Bài viết
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/promotion" class="nav-link">
-                        <i class="fa-solid fa-tag"></i>
-                        <p>
-                            Khuyến mãi trên đơn hàng
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/order" class="nav-link">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <p>
+                        Đơn hàng
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
-                        <i class="fa-solid fa-mug-hot"></i>
-                        <p>
-                            Quản lý sản phẩm
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/admin/productcategory" class="nav-link">
-                                <i class="fa-solid fa-ellipsis"></i>
-                                <p>Danh mục sản phẩm</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/admin/products" class="nav-link">
-                                <i class="fa-solid fa-mug-saucer"></i>
-                                <p>Sản phẩm</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("Index", "Recipe")" class="nav-link">
-                                <i class="fa-solid fa-leaf"></i>
-                                <p>Công thức</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/promotion" class="nav-link">
+                    <i class="fa-solid fa-tag"></i>
+                    <p>
+                        Khuyến mãi trên đơn hàng
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa-solid fa-truck-pickup"></i>
-                        <p>
-                            Quản lý nguyên vật liệu
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/admin/matterials" class="nav-link">
-                                <i class="fa-solid fa-cubes"></i>
-                                <p>Danh sách nguyên vật liệu</p>
-                            </a>
-                        </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
+                    <i class="fa-solid fa-mug-hot"></i>
+                    <p>
+                        Quản lý sản phẩm
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/admin/productcategory" class="nav-link">
+                            <i class="fa-solid fa-ellipsis"></i>
+                            <p>Danh mục sản phẩm</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/products" class="nav-link">
+                            <i class="fa-solid fa-mug-saucer"></i>
+                            <p>Sản phẩm</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Recipe")" class="nav-link">
+                            <i class="fa-solid fa-leaf"></i>
+                            <p>Công thức</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-truck-pickup"></i>
+                    <p>
+                        Quản lý nguyên vật liệu
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/admin/matterials" class="nav-link">
+                            <i class="fa-solid fa-cubes"></i>
+                            <p>Danh sách nguyên vật liệu</p>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Store"))
+                    {
                         <li class="nav-item">
                             <a href="/admin/storeOrder" class="nav-link">
                                 <i class="fa-solid fa-boxes-packing"></i>
                                 <p>Đặt nguyên vật liệu</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="@Url.Action("OrderIndex", "storeOrder")" class="nav-link">
-                                <i class="fa-solid fa-box-open"></i>
-                                <p>Quản lý đơn NVL</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    }
+                    <li class="nav-item">
+                        <a href="@Url.Action("OrderIndex", "storeOrder")" class="nav-link">
+                            <i class="fa-solid fa-box-open"></i>
+                            <p>Quản lý đơn NVL</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/role" class="nav-link">
-                        <i class="fa-solid fa-user-lock"></i>
-                        <p>
-                            Phân quyền
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/role" class="nav-link">
+                    <i class="fa-solid fa-user-lock"></i>
+                    <p>
+                        Phân quyền
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/account" class="nav-link">
-                        <i class="fa-solid fa-user"></i>
-                        <p>
-                            Tài khoản
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/account" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <p>
+                        Tài khoản
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="/admin/revenuestatistics" class="nav-link">
-                        <i class="fa-solid fa-chart-simple"></i>
-                        <p>
-                            Thống kê doanh thu
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
-
-
-                <li class="nav-item">
-                    <a href="/admin/Documents" class="nav-link">
-                        <i class="fa-solid fa-file-import"></i>
-                        <p>
-                            Quản lý Tài liệu
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/admin/Subscribe" class="nav-link">
-                        <i class="fa-solid fa-bell"></i>
-                        <p>
-                            Quản lý Subscribe
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/revenuestatistics" class="nav-link">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <p>
+                        Thống kê doanh thu
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
 
-                <li class="nav-item">
+            <li class="nav-item">
+                <a href="/admin/Documents" class="nav-link">
+                    <i class="fa-solid fa-file-import"></i>
+                    <p>
+                        Quản lý Tài liệu
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
-                    <a href="/admin/ShippingFee/UpdateShippingFee" class="nav-link">
-                        <i class="fa-solid fa-dolly"></i>                        <p>
-                            Cập nhật phí vận chuyển
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
-                        <i class="fa-solid fa-hand-holding-hand"></i>
-                        <p>
-                            Chăm sóc khách hàng
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item">
-                            <a href="/admin/RequestType" class="nav-link">
-                                <i class="fa-regular fa-file-lines"></i>
-                                <p>
-                                    Loại yêu cầu
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="/admin/CustomerRequest" class="nav-link">
-                                <i class="fa-solid fa-headset"></i>
-                                <p>
-                                    Danh sách yêu cầu
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
-                        <i class="fa-regular fa-comments"></i>
-                        <p>
-                            Quản lý bình luận
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item">
-                            <a href="/admin/reviewproduct" class="nav-link">
-                                <i class="fa-solid fa-ranking-star"></i>
-                                <p>
-                                    Quản lý đánh giá
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="/admin/ToxicWords" class="nav-link">
-                                <i class="fa-solid fa-biohazard"></i>
-                                <p>
-                                    Quản lý từ ngữ tiêu cực
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+            <li class="nav-item">
+                <a href="/admin/Subscribe" class="nav-link">
+                    <i class="fa-solid fa-bell"></i>
+                    <p>
+                        Quản lý Subscribe
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
 
 
+            <li class="nav-item">
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fa-solid fa-file-pen"></i>
-                        <p>
-                            Quản lý Nội dung
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="/admin/homeslider" class="nav-link">
-                                <i class="fa-solid fa-sliders"></i>
-                                <p>
-                                    Quản lý home slider
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+                <a href="/admin/ShippingFee/UpdateShippingFee" class="nav-link">
+                    <i class="fa-solid fa-dolly"></i>                        <p>
+                        Cập nhật phí vận chuyển
+                    </p>
+                </a>
+            </li>
 
-                        <li class="nav-item">
-                            <a href="/admin/store" class="nav-link">
-                                <i class="fa-solid fa-store"></i>
-                                <p>
-                                    Quản lý Cửa hàng
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <p>
+                        Chăm sóc khách hàng
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
 
-                        <li class="nav-item">
-                            <a href="/admin/socialmedia" class="nav-link">
-                                <i class="fa-solid fa-share-nodes"></i>
-                                <p>
-                                    Quản lý Mạng xã hội
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="/admin/RequestType" class="nav-link">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <p>
+                                Loại yêu cầu
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a href="/admin/socialmediaplugin" class="nav-link">
-                                <i class="fa-solid fa-laptop-code"></i>
-                                <p>
-                                    Quản lý Plugin Mạng xã hội
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="/admin/CustomerRequest" class="nav-link">
+                            <i class="fa-solid fa-headset"></i>
+                            <p>
+                                Danh sách yêu cầu
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-                        <li class="nav-item">
-                            <a href="/admin/contactinfo" class="nav-link">
-                                <i class="fa-solid fa-building"></i>
-                                <p>
-                                    Quản lý thông tin công ty
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    @*<i class="nav-icon fas fa-tachometer-alt"></i>*@
+                    <i class="fa-regular fa-comments"></i>
+                    <p>
+                        Quản lý bình luận
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
 
-                        <li class="nav-item">
-                            <a href="/admin/Logo" class="nav-link">
-                                <i class="fa-solid fa-eye"></i>
-                                <p>
-                                    Quản lý Logo
-                                    @*<span class="right badge badge-danger">New</span>*@
-                                </p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="/admin/reviewproduct" class="nav-link">
+                            <i class="fa-solid fa-ranking-star"></i>
+                            <p>
+                                Quản lý đánh giá
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
 
-
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="javascript:document.getElementById('logOffForm').submit()" class="nav-link">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <p>
-                            Đăng xuất
-                            @*<span class="right badge badge-danger">New</span>*@
-                        </p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="/admin/ToxicWords" class="nav-link">
+                            <i class="fa-solid fa-biohazard"></i>
+                            <p>
+                                Quản lý từ ngữ tiêu cực
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
 
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-file-pen"></i>
+                    <p>
+                        Quản lý Nội dung
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/admin/homeslider" class="nav-link">
+                            <i class="fa-solid fa-sliders"></i>
+                            <p>
+                                Quản lý home slider
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/store" class="nav-link">
+                            <i class="fa-solid fa-store"></i>
+                            <p>
+                                Quản lý Cửa hàng
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/socialmedia" class="nav-link">
+                            <i class="fa-solid fa-share-nodes"></i>
+                            <p>
+                                Quản lý Mạng xã hội
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/socialmediaplugin" class="nav-link">
+                            <i class="fa-solid fa-laptop-code"></i>
+                            <p>
+                                Quản lý Plugin Mạng xã hội
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/contactinfo" class="nav-link">
+                            <i class="fa-solid fa-building"></i>
+                            <p>
+                                Quản lý thông tin công ty
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/Logo" class="nav-link">
+                            <i class="fa-solid fa-eye"></i>
+                            <p>
+                                Quản lý Logo
+                                @*<span class="right badge badge-danger">New</span>*@
+                            </p>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:document.getElementById('logOffForm').submit()" class="nav-link">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <p>
+                        Đăng xuất
+                        @*<span class="right badge badge-danger">New</span>*@
+                    </p>
+                </a>
+            </li>
+
+
+        </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
+
+@if (Request.IsAuthenticated)
+{
+    <div style="display:none;">
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logOffForm" }))
+        {
+            @Html.AntiForgeryToken()
+        }
     </div>
-    <!-- /.sidebar -->
-
-    @if (Request.IsAuthenticated)
-    {
-        <div style="display:none;">
-            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @id = "logOffForm" }))
-            {
-                @Html.AntiForgeryToken()
-            }
-        </div>
-    }
+}
