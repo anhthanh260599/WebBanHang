@@ -130,6 +130,11 @@
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Cửa hàng</label>
+                                                @Html.DropDownListFor(x => x.StoreID, ViewBag.StoreList as SelectList, "Tất cả cửa hàng", new { @class = "form-control searchable-dropdown-list" })
+                                                @Html.ValidationMessageFor(x => x.StoreID, null, new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-3">

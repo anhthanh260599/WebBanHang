@@ -76,6 +76,7 @@
                         <th>Hot</th>
                         <th>Nổi bật</th>
                         <th>Khuyến mãi</th>
+                        <th>Cửa hàng</th>
 
 
                         <th style="width:150px;"></th>
@@ -136,10 +137,19 @@
 
                                 </td>
 
+                                @if (item.StoreID != null)
+                                {
+                                    <td>@item.Store.Name</td>
+                                }
+                                else
+                                {
+                                    <td>Tất cả cửa hàng</td>
+                                }
+
 
                                 @*<td class="text-center">
-                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-                                    </td>*@
+           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+        </td>*@
 
 
                                 <td>

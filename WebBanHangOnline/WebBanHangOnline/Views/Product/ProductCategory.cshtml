@@ -161,6 +161,10 @@
                                                 <div style="display:none;" class="in_product_price"> @item.Price</div>
                                             }
                                         </div>
+                                        @if (item.StoreID != null)
+                                        {
+                                            <p style="font-size:12px;padding-left:24px;padding-top:24px;" class="float-left text-danger">Sản phẩm giới hạn</p>
+                                        }
                                         <p style="font-size:12px;padding-right:24px;padding-top:24px;" class="text-md-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
                                     </div>
                                     <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="@item.Id">Thêm vào giỏ hàng</a></div>

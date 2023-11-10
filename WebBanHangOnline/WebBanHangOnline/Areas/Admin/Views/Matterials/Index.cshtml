@@ -66,6 +66,9 @@
                         <th>Tên nguyên liệu</th>
                         <th>Giá </th>
                         <th>Hiển thị</th>
+                        <th>Số lượng</th>
+                        <th>Đơn vị</th>
+                        <th>Quy cách</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -92,9 +95,11 @@
                                 </td>
 
                                 @*<td class="text-center">
-                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-                                    </td>*@
-
+           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+        </td>*@
+                                <td>@item.Quantity</td>
+                                <td>@item.Unit</td>
+                                <td>@item.Packing</td>
                                 <td>
                                     <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
