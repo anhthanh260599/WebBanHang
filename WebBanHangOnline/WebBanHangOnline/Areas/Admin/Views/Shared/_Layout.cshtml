@@ -138,6 +138,9 @@
             .switch input:checked + .slider:before {
                 transform: translateX(26px);
             }
+        .action-list {
+            width: 150px;
+        }
     </style>
 </head>
 
@@ -507,7 +510,9 @@
                         "next": "Tiếp theo",
                         "previous": "Trước"
                     }
-                }
+                },
+                "scrollX": true
+
             });
             $(function () {
                 $('.searchable-dropdown-list').chosen();
