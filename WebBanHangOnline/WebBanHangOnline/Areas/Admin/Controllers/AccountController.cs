@@ -74,6 +74,15 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return PartialView(item);
         }
 
+
+        public ActionResult Partial_AdminPage_LoginName()
+        {
+            var user = UserManager.FindByName(User.Identity.Name);
+            var item = new CreateAccountrViewModel();
+            item.FullName = user.FullName;
+            return PartialView(item);
+        }
+
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
