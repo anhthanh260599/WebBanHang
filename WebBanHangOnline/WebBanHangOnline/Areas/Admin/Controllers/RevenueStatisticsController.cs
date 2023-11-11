@@ -26,8 +26,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult GetStatistical (string fromDate, string toDate)
         {
-
-
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             var currentUser = userManager.FindById(User.Identity.GetUserId());
             var storeID = db.Orders.Where(x => x.Store.UserID == currentUser.Id).Select(x => x.Store.Id).ToList();
@@ -79,10 +77,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                                              .Where(y => DbFunctions.TruncateTime(y.CreateDate) == x.Key.Value)
                                              .Sum(y => y.Quantity * y.OriginalPrice),
                                   TotalSell = x.Sum(y => y.TotalAmount),
+                                  TongSoHoaDon = x.Count()
                               })
                               .Select(x => new
                               {
                                   Date = x.Date,
+                                  SoHoaDon = x.TongSoHoaDon,
                                   DoanhThu = x.TotalSell,
                                   LoiNhuan = x.TotalSell - x.TotalBuy
                               });
