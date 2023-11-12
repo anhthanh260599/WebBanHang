@@ -25,6 +25,13 @@
                     };
                     toastr.success(rs.message);
                 }
+                else {
+                    toastr.options = {
+                        positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                        closeButton: true, // Hiển thị nút X để tắt
+                    };
+                    toastr.error(rs.message);
+                }
             }
         });
     })

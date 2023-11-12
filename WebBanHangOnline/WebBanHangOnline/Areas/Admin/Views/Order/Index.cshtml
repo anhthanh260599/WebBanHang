@@ -164,7 +164,7 @@
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3 && item.Status != 1 && item.IsConfirm == true && item.Status != 4 && item.Status != 2)
+                                    @if (item.Status != 3 && item.Status != 4 && item.IsConfirm == true)
                                     {
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
