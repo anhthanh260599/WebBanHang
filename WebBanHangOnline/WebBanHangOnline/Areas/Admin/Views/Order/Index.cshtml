@@ -174,7 +174,7 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5)
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
                                     {
                                         var orderId = item.Id;
                                         var storeId = item.StoreID;
@@ -193,8 +193,8 @@
                                     }
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
+            Cập nhật
+        </button>*@
 
 
                                 </td>
