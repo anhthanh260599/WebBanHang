@@ -73,6 +73,29 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public ActionResult TuChoiDon(int id)
+        {
+            var item = db.Orders.Find(id);
+            if (item != null)
+            {
+                db.Orders.Attach(item);
+                if(item.TypePayment == 1) // Nếu thanh toán COD thì set Status = 1
+                {
+                    item.Status = 1;
+                }
+                else // còn lại thì Status = 2 (do thanh toán online)
+                {
+                    item.Status = 2;
+                }
+                item.StoreID = null;
+                db.Entry(item).Property(x => x.Status).IsModified = true;
+                db.SaveChanges();
+                return Json(new { success = true, message = Message.SuccessSaveChange.ToString() });
+            }
+            return Json(new { success = false, message = Message.FailureSaveChange.ToString() });
+        }
+
+        [HttpPost]
         public ActionResult UpdateTrangThai(int id, int trangThai)
         {
             var item = db.Orders.Find(id);
