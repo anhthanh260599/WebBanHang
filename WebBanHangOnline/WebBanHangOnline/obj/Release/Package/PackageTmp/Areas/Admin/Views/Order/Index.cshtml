@@ -16,6 +16,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .action-list-order {
+        width:250px;
+    }
 </style>
 
 @section naviheader {
@@ -56,8 +59,8 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">@ViewBag.Title</h3>
-
+            <h3 class="card-title">@ViewBag.Title</h3> <br />
+            <strong class="text-info">Lưu ý: Mã đơn có màu đỏ thì đơn đó có sản phẩm riêng của cửa hàng đó</strong>
             <div class="card-tools">
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -90,7 +93,17 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@item.Code</td>
+                                <td>
+                                    @if (item.OrderDetails.Any(x => x.Product.StoreID != null))
+                                    {
+                                        <span class="text-danger">@item.Code</span>
+                                    }
+                                    else
+                                    {
+                                        @item.Code
+                                    }
+
+                                </td>
                                 <td class="table-detail">@item.CustomerName</td>
                                 <td class="table-detail">@item.Phone</td>
                                 <td>@Common.FormatNumber(item.TotalAmount, 0)</td>
@@ -157,11 +170,11 @@
                                 @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
-                                <td>
+                                <td class="action-list-order">
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3 && item.Status != 1 && item.IsConfirm == true && item.Status != 4 && item.Status != 2)
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Store")) && item.IsConfirm == true && item.Status == 6)
                                     {
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
@@ -171,7 +184,7 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5)
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
                                     {
                                         var orderId = item.Id;
                                         var storeId = item.StoreID;
@@ -180,14 +193,24 @@
                                             Điều phối đơn
                                         </button>
                                     }
+                                    else if (User.IsInRole("Store") && item.Status == 6)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger btnTuChoiDon" data-id="@item.Id">
+                                            Từ chối
+                                        </button>
+                                    }
+                                    else if (User.IsInRole("Store"))
+                                    {
+                                    
+                                    }
                                     else
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-outline-success"> Điều phối đơn </button>
                                     }
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
+            Cập nhật
+        </button>*@
 
 
                                 </td>
@@ -312,6 +335,40 @@
                     }
                 })
             })
+
+               $('body').on('click', '.btnTuChoiDon', function () {
+                   var id = $(this).data("id");
+
+                   Swal.fire({
+                       title: 'Bạn có muốn từ chối đơn hàng này không?',
+                       icon: 'warning',
+                       showCancelButton: true,
+                       confirmButtonText: 'Có',
+                       cancelButtonText: 'Không'
+                   }).then((result) => {
+                       if (result.isConfirmed) {
+                           $.ajax({
+                               url: '/admin/Order/TuChoiDon',
+                               type: 'POST',
+                               data: { id: id },
+                               success: function (rs) {
+                                   Swal.fire({
+                                       icon: rs.success ? 'success' : 'error',
+                                       title: rs.success ? 'Thành công' : 'Lỗi',
+                                       text: rs.success ? 'Từ chối đơn thành công' : 'Có lỗi xảy ra khi từ chối đơn hàng.',
+                                       confirmButtonText: 'OK',
+                                   }).then((result) => {
+                                       if (result.isConfirmed) {
+                                           location.reload();
+                                       }
+                                   });
+
+                               }
+                           });
+                       }
+                   });
+               });
+
 
             $('body').on('click', '.btnDieuPhoi', function () {
                 var id = $(this).data('id')

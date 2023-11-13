@@ -82,29 +82,30 @@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
                                 @if (item.Status == 1)
                                 {
-                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Đặt hàng thành công</td>
+                                    <td style="cursor:text; width: 140px;" class="btn btn-sm btn-secondary">Đặt hàng thành công</td>
                                 }
                                 @if (item.Status == 2)
                                 {
-                                    <td style="cursor:text;" class="btn btn-sm btn-warning">Đang giao hàng</td>
+                                    <td style="cursor: text; width: 140px;" class="btn btn-sm btn-warning">Đang giao hàng</td>
                                 }
                                 @if (item.Status == 3)
                                 {
-                                    <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                    <td style="cursor: text; width: 140px;" class="btn btn-sm btn-success">Giao hàng thành công</td>
                                 }
                                 <td>
                                     <a href="@Url.Action("OrderDetail", "StoreOrder", new { id = item.Id })" class="btn btn-sm btn-info">Xem</a>
-
-                                    @if (item.Status != 3)
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
                                     {
-
-                                        <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                                            Cập nhật
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                        if (item.Status != 3)
+                                        {
+                                            <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
+                                                Cập nhật
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
+                                        }
                                     }
                                 </td>
                             </tr>
@@ -163,38 +164,38 @@
 
 @section scripts {
     <script>
-    $(document).ready(function () {
-        $('body').on('click', '.btnCapNhat', function () {
-            var id = $(this).data('id')
-            $('#txtOrderID').val(id);
-            $('#modal-default').modal('show')
-        })
-
-        $('body').on('click', '#btnLuu', function () {
-            var id = $('#txtOrderID').val();
-            var trangThai = $('#ddTrangThai').val();
-            $.ajax({
-                url: '/admin/StoreOrder/UpdateTrangThai',
-                type: 'POST',
-                data: { id: id, trangThai: trangThai },
-                success: function (rs) {
-                    if (rs.success) {
-                        //alert(rs.message)
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công',
-                            text: rs.message,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload(); // Reload trang sau khi người dùng nhấn OK
-                            }
-                        });
-                    }
-                }
+        $(document).ready(function () {
+            $('body').on('click', '.btnCapNhat', function () {
+                var id = $(this).data('id')
+                $('#txtOrderID').val(id);
+                $('#modal-default').modal('show')
             })
-        })
-    });
+
+            $('body').on('click', '#btnLuu', function () {
+                var id = $('#txtOrderID').val();
+                var trangThai = $('#ddTrangThai').val();
+                $.ajax({
+                    url: '/admin/StoreOrder/UpdateTrangThai',
+                    type: 'POST',
+                    data: { id: id, trangThai: trangThai },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+        });
     </script>
 
 }
