@@ -30,5 +30,7 @@ namespace WebBanHangOnline.Models.EF
         public int TypePromotion { get; set; }
         public bool IsActive { get; set; }
         public int Point { get; set; }//số điểm cần để dùng mã giảm giá
+        public int? StoreID { get; set; }
+        public virtual Store Store { get; set; }
     }
 }

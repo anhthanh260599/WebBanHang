@@ -19,7 +19,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Index()
         {
-            var items = db.Matterials.Where(x => x.IsActive).ToList();
+            var items = db.Matterials.ToList();
             return View(items);
         }
 

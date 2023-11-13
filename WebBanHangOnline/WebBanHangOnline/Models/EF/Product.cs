@@ -52,12 +52,14 @@ namespace WebBanHangOnline.Models.EF
         public string SeoTitle { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
+        public bool IsApprovedByAdmin { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; } // 1 sản phẩm có nhiều ảnh
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // 1 sản phẩm có nhiều chi tiết đơn hàng
         public virtual ICollection<ReviewProduct> ReviewProducts { get; set; } // 1 sản phẩm có nhiều review
         public virtual ICollection<WishList> WishLists { get; set; } // 1 sản phẩm có nhiều yêu thích
-
+        public int? StoreID { get; set; }
+        public virtual Store Store { get; set; }
     }
 }
