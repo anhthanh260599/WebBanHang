@@ -49,14 +49,14 @@ Admin:
       + Hot
       + Khuyến mãi
       + Nổi bật
-      + ....
+      + Duyệt sản phẩm
   - Quản lý nguyên vật liệu
   - Phân quyền
-  - Thống kê doanh thu
+  - Thống kê doanh thu, In báo cáo Excel
   - Quản lý tài liệu (công thức, nội quy)
   - Quản lý Subscribe
   - Quản lý đánh giá / từ ngữ tiêu cực
-  - Quản lý các nội dung trang web (Hình ảnh, content,...)
+  - Quản lý các nội dung trang web (Hình ảnh, content,...), Preview
   - Quản lý mã khuyến mãi
   - Điều phối đơn hàng
   - Quản lý công thức sản phẩm
