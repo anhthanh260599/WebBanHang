@@ -119,6 +119,11 @@ namespace WebBanHangOnline.Controllers
                             itemOrder.Status = 2;//đã thanh toán
                             itemOrder.IsConfirm = true;
 
+                            if(itemOrder.StoreID != null)
+                            {
+                                itemOrder.Status = 6;
+                            } 
+
                             db.Orders.Attach(itemOrder);
                             db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
@@ -157,7 +162,7 @@ namespace WebBanHangOnline.Controllers
                             var trangThaiDon = string.Empty;
                             var hinhThucThanhToan = string.Empty;
 
-                            if (itemOrder.Status == 2)
+                            if (itemOrder.Status == 2 || itemOrder.Status == 6)
                             {
                                 trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                                 hinhThucThanhToan = "VNPAY";
@@ -982,6 +987,11 @@ namespace WebBanHangOnline.Controllers
                 itemOrder.Status = 2;//đã thanh toán
                 itemOrder.IsConfirm = true;
 
+                if(itemOrder.StoreID != null)
+                {
+                    itemOrder.Status = 6;
+                }
+
                 db.Orders.Attach(itemOrder);
                 db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1022,7 +1032,7 @@ namespace WebBanHangOnline.Controllers
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
-                if (itemOrder.Status == 2)
+                if (itemOrder.Status == 2 || itemOrder.Status == 6)
                 {
                     trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                     hinhThucThanhToan = "PayPal";
