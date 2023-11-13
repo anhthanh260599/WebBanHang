@@ -76,6 +76,10 @@
                             <h2>@Model.Title</h2>
                             <p>@Model.Description</p>
                             <p>Số lượt xem: @Model.ViewCount</p>
+                            @if (Model.StoreID != null)
+                            {
+                                <p class="text-danger">Chỉ có ở cửa hàng @Model.Store.Name thuộc @Model.Store.Province</p>
+                            }
                         </div>
                         @*<div class="free_delivery d-flex flex-row align-items-center justify-content-center">
                             <span class="ti-truck"></span><span>free delivery</span>

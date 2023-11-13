@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Danh sách Khuyến mãi";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
 }
 
 @section naviheader {
@@ -69,6 +69,7 @@
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
                         <th>Số lượng còn lại</th>
+                        <th>Điểm cần để sử dụng</th>
 
                         <th></th>
                     </tr>
@@ -113,8 +114,8 @@
                                 <td>@item.DateFrom.ToString("dd/MM/yyyy")</td>
                                 <td>@item.DateTo.AddDays(-1).ToString("dd/MM/yyyy")</td>
                                 <td>@item.Quantity</td>
-
-                                <td>
+                                <td>@item.Point</td>
+                                <td class="action-list">
                                     <a href="/admin/Promotion/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
                                 </td>

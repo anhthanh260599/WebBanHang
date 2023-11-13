@@ -21,7 +21,17 @@
                 var thanhTien = item.Price * item.Quantity;
                 <tr>
                     <td>@i</td>
-                    <td>@item.Product.Title</td>
+                    <td>
+                        @if (item.Product.StoreID != null)
+                        {
+                            <span>@item.Product.Title <span class="text-danger"> (Chỉ có tại @item.Order.Store.Name)</span></span>
+                        }
+                        else
+                        {
+                            @item.Product.Title
+
+                        }
+                    </td>
                     <td>@Common.FormatNumber(item.Price,0) đ</td>
                     <td>@item.Quantity</td>
                     <td>@Common.FormatNumber(thanhTien, 0) đ</td>

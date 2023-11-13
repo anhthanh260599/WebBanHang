@@ -72,6 +72,7 @@
                         <th>Tên nguyên liệu</th>
                         <th>Giá</th>
                         <th>Số lượng</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,16 +87,35 @@
                             foreach (var item in Model)
                             {
                                 <tr id="trow_@item.Id">
-                                    <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
-                                    <td class="stt-cell">@i</td>
-                                    <td><img src="@item.Image" width="100px" /></td>
-                                    <td id="code_Matts">@item.MattsCode</td>
-                                    <td id="title_Matts">@item.Title</td>
-                                    <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td>
-                                    <td>
-                                        <input width="50px" type="number" data-id="@item.Id" min="0" required />
-                                        <p class="message_error"></p>
-                                    </td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" /></td>
+                                        <td class="stt-cell">@i</td>
+                                        <td><img src="@item.Image" width="100px" /></td>
+                                        <td id="code_Matts">@item.MattsCode</td>
+                                        <td id="title_Matts">@item.Title</td>
+                                        <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td>
+                                        <td>
+                                            <input type="number" data-id="@item.Id" min="0" required />
+                                            <p class="message_error"></p>
+                                        </td>
+                                        <td style="width: 130px;" class="btn btn-success">Bình thường</td>
+                                    }
+                                    else
+                                    {
+                                        <td><input type="checkbox" name="checkitem" class="cbkItem" value="@item.Id" disabled /></td>
+                                        <td class="stt-cell">@i</td>
+                                        <td><img src="@item.Image" width="100px" /></td>
+                                        <td id="code_Matts">@item.MattsCode</td>
+                                        <td id="title_Matts">@item.Title</td>
+                                        <td id="price_Matts">@String.Format("{0:N0}", @item.Price) đ</td>
+                                        <td>
+                                            <input type="number" data-id="@item.Id" min="0" disabled />
+                                            <p class="message_error"></p>
+                                        </td>
+                                        <td style="width: 130px;" class="btn btn-danger">Tạm thời không thể đặt hàng</td>
+
+                                    }
                                 </tr>
                                 i++;
                             }
