@@ -16,12 +16,24 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         // GET: Admin/Matterials
         public ActionResult Index()
         {
+            var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var currentUser = userManager.FindById(currentUserId);
+
             var items = db.Matterials.OrderByDescending(x => x.Id).ToList();
+            if (User.IsInRole("Store"))
+            {
+                //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
+                items = db.Matterials.Where(x => x.Store.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+            }
+
             return View(items);
         }
 
         public ActionResult Add()
         {
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
             return View();
         }
 
@@ -31,12 +43,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
                 // Lấy thông tin người dùng hiện tại
                 var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
 
                 // Sử dụng DbContext để tìm ApplicationUser có UserId tương ứng
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-                var currentUser = userManager.FindById(currentUserId);
+                var currentUser = userManager.FindById(currentUserId);  
 
                 if (currentUser != null)
                 {
@@ -61,6 +75,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
             var item = db.Matterials.Find(id);
             return View(item);
         }
@@ -71,6 +87,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
+
                 db.Matterials.Attach(model);
 
                 // Lấy thông tin người dùng hiện tại

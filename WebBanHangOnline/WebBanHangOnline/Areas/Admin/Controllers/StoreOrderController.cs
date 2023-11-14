@@ -96,7 +96,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             }
             else if (store == null)
             {
-                orderMatts.Address = "FourC Sư Vạn Hạnh";
+                orderMatts.Address = "Vui lòng liên hệ cửa hàng";
             }
 
             orderMatts.TotalAmount = total;

@@ -65,58 +65,73 @@
             <div class="bs-stepper-content">
                 @using (Html.BeginForm(FormMethod.Post))
                 {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
- <!-- your steps content here -->
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Tên công thức</label>
-                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Nhập tên công thức" })
-                            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <!-- your steps content here -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Tên công thức</label>
+                                @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Nhập tên công thức" })
+                                @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Chọn sản phẩm</label>
+                                @*@Html.DropDownListFor(x => x.Title, new { @class = "form-control", @placeholder = "Chọn sản phẩm" })*@
+                                @Html.DropDownListFor(x => x.ProductID, ViewBag.ListProducts as SelectList, new { @class = "form-control searchable-dropdown-list", @id = "productDropdown" })
+                                @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Chọn sản phẩm</label>
-                            @*@Html.DropDownListFor(x => x.Title, new { @class = "form-control", @placeholder = "Chọn sản phẩm" })*@
-                            @Html.DropDownListFor(x => x.ProductID, ViewBag.ListProducts as SelectList, new { @class = "form-control searchable-dropdown-list", @id = "productDropdown" })
-                            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Chọn nguyên vật liệu</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Nhập số lượng</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Đơn vị</label>
+                        </div><div class="col-sm-2">
+                            <label>Qui cách</label>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label>Chọn nguyên vật liệu</label>
-                    </div>
-                    <div class="col-sm-6">
-                        <label>Nhập số lượng</label>
-                    </div>
-                </div>
-                <div class="row">
-                    @foreach (var material in ViewBag.ListMaterials as List<WebBanHangOnline.Models.EF.Matterial>)
+                    <div class="row">
+                        @foreach (var material in ViewBag.ListMaterials as List<WebBanHangOnline.Models.EF.Matterial>)
                         {
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>
-                                <input class="mr-3" type="checkbox" name="selectedMaterials" value="@material.Id" />
-                                <span>@material.Title</span> <br />
-                                <span class="text-danger error-message"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6" id="inputValueRecipe">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Nhập số lượng" />
-                            <span class="text-danger error-message"></span>
-                        </div>
-                    </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>
+                                        <input class="mr-3" type="checkbox" name="selectedMaterials" value="@material.Id" />
+                                        <span>@material.Title</span> <br />
+                                        <span class="text-danger error-message"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" placeholder="Nhập số lượng" min="0" />
+                                    <span class="text-danger error-message"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="@material.Unit" readonly />
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" value="@material.Packing" readonly />
+                                </div>
+                            </div>
                         }
-                </div>
-                <div class="form-group">
-                    <a href="/admin/Recipe" class="btn btn-danger">Quay lại</a>
-                    <button type="button" id="btnSubmitRecipe" class="btn btn-primary">Xác nhận</button>
-                </div>
+                    </div>
+                    <div class="form-group">
+                        <a href="/admin/Recipe" class="btn btn-danger">Quay lại</a>
+                        <button type="button" id="btnSubmitRecipe" class="btn btn-primary">Xác nhận</button>
+                    </div>
                 }
             </div>
 
