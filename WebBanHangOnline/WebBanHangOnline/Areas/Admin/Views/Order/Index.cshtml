@@ -16,8 +16,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     .action-list-order {
-        width:250px;
+        width: 250px;
     }
 </style>
 
@@ -116,43 +117,43 @@
                                 {
                                     if (item.Status == 1)
                                     {
-                                        <td style="cursor:text; width:130px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
+                                        <td style="cursor:text; width:100px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
                                     }
                                     if (item.Status == 2)
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
                                     }
                                     if (item.Status == 3)
                                     {
-                                        <td style="cursor: text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-success">Giao hàng thành công</td>
                                     }
                                     if (item.Status == 4)
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-danger">Huỷ</td>
                                     }
                                     if (item.Status == 5)
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-info">Đang giao hàng</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-info">Đang giao hàng</td>
                                     }
                                     if (item.Status == 6)
                                     {
-                                        <td style="cursor: text; width: 130px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
+                                        <td style="cursor: text; width: 100px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
                                     }
                                 }
                                 else
                                 {
                                     if (item.Status == 4)
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-danger">Huỷ</td>
                                     }
                                     else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
                                     }
 
                                     else
                                     {
-                                        <td style="cursor: text; width: 130px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
+                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
                                     }
                                 }
 
@@ -179,9 +180,12 @@
                                         var orderId = item.Id;
                                         var storeId = item.StoreID;
 
-                                        <button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
-                                            Điều phối đơn
-                                        </button>
+                                        @*<button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
+                Điều phối đơn
+            </button>*@
+                                        @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
+                                        <a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
+
                                     }
                                     else if (User.IsInRole("Store"))
                                     {
@@ -193,10 +197,8 @@
                                     }
 
                                     @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
-
-
+            Cập nhật
+        </button>*@
                                 </td>
                             </tr>
                             i++;
@@ -254,7 +256,7 @@
 
 
 <!-- /.modal-danh sách cửa hàng -->
-<div class="modal fade" id="modal-default-store">
+<!--<div class="modal fade" id="modal-default-store">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -267,23 +269,23 @@
                 <input type="hidden" id="txtOrderIDStore" value="0" />
                 <div class="form-group">
                     <label>Cửa hàng</label>
-                    <select class="form-control" id="ddCuaHang">
-                        @foreach (var store in ViewBag.Stores)
-                        {
-                            <option value="@store.Value">@store.Text</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
-            </div>
+                    <select class="form-control" id="ddCuaHang">-->
+@*@foreach (var store in ViewBag.Stores)
+    {
+        <option value="@store.Value">@store.Text</option>
+    }*@
+<!--</select>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
-</div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+    </div>
+</div>-->
+<!-- /.modal-content -->
+<!--</div>-->
+<!-- /.modal-dialog -->
+<!--</div>-->
 
 
 @section scripts {

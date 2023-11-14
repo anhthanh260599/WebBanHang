@@ -1,0 +1,57 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.RecipeDetail>
+@using WebBanHangOnline.Models.Common
+
+
+    
+<fieldset class="border p-2">
+    <legend style="font-weight:600;" class="w-auto">Danh sách nguyên vật liệu cần dùng</legend>
+    <table id="tableMats" class="table table-hover">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên nguyên vật liệu</th>
+                <th>Số lượng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int i = 1;
+                foreach (var item in Model)
+                {
+
+                    <tr>
+                        @if (ViewBag.ErrorNullRecipe == true)
+                        {
+                            <td></td>
+                            <td><span class="text-danger">Không có công thức cho món: @ViewBag.ErrorNullRecipeName</span></td>
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@i</td>
+                            <td>@item.Matterial.Title (@item.Recipe.Product.Title)</td>
+                            <td>@item.Quantity</td>
+                        }
+
+                    </tr>
+                    i++;
+                }
+            }
+            else
+            {
+                <tr>
+                    @if (ViewBag.ErrorNullRecipe == true)
+                    {
+                        <td></td>
+                        <td><span class="text-danger">Không có công thức cho món: @ViewBag.ErrorNullRecipeName</span></td>
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</fieldset>
+
+
+

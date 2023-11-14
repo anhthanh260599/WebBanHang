@@ -71,6 +71,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Edit(int RecipeID, int RecipeProductID)
         {
+            ViewBag.TitleProduct = db.Products.Where(s => s.Id == RecipeProductID).Select(s => s.Title).FirstOrDefault();
             /*ViewBag.ListMaterials = db.Matterials.ToList();*/
             var items = db.RecipeDetails.Where(s => s.RecipeID == RecipeID && s.RecipeProductID == RecipeProductID).ToList();
             // Lọc ra danh sách Materials không tồn tại trong items

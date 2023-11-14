@@ -23,7 +23,7 @@ namespace WebBanHangOnline.Models.EF
         public int MatterialID { get; set; }
 
         [Required(ErrorMessage = "Vui lòng không để trống")]
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public virtual Matterial Matterial { get; set; }
         public virtual Recipe Recipe { get; set; }

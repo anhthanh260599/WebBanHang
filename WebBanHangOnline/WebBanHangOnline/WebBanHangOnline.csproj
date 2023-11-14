@@ -232,10 +232,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202311111540396_Thong.cs" />
-    <Compile Include="Migrations\202311111540396_Thong.designer.cs">
-      <DependentUpon>202311111540396_Thong.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -3602,6 +3598,8 @@
     <Content Include="Areas\Admin\Views\CustomerRequest\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerRequest\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Partial_AdminPage_LoginName.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\CoordinationDetail.cshtml" />
+    <Content Include="Areas\Admin\Views\Order\Partial_Detail_Materials.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3732,11 +3730,6 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202311111540396_Thong.resx">
-      <DependentUpon>202311111540396_Thong.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
