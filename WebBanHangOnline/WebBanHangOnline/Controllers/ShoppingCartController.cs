@@ -119,6 +119,11 @@ namespace WebBanHangOnline.Controllers
                             itemOrder.Status = 2;//đã thanh toán
                             itemOrder.IsConfirm = true;
 
+                            if(itemOrder.StoreID != null)
+                            {
+                                itemOrder.Status = 6;
+                            } 
+
                             db.Orders.Attach(itemOrder);
                             db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
@@ -157,7 +162,7 @@ namespace WebBanHangOnline.Controllers
                             var trangThaiDon = string.Empty;
                             var hinhThucThanhToan = string.Empty;
 
-                            if (itemOrder.Status == 2)
+                            if (itemOrder.Status == 2 || itemOrder.Status == 6)
                             {
                                 trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                                 hinhThucThanhToan = "VNPAY";
@@ -259,6 +264,23 @@ namespace WebBanHangOnline.Controllers
                         Quantity = x.Quantity,
                     }));
 
+                    int storeID = 0; // Giá trị mặc định khi không có StoreID
+                    foreach (var item in cart.Items)
+                    {
+                        if (item.ProductStoreID != 0)
+                        {
+                            storeID = item.ProductStoreID;
+                            order.StoreID = storeID;
+                            break; // Đã tìm thấy một sản phẩm có StoreID khác 0, thoát khỏi vòng lặp
+                        }
+                    }
+
+                    if (order.StoreID != null)
+                    {
+                        order.Status = 6;
+                    }
+
+                    //order.StoreID = storeID;
 
                     if (User.Identity.IsAuthenticated)
                     {
@@ -309,7 +331,7 @@ namespace WebBanHangOnline.Controllers
 
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
-
+                    
                     // Cộng 14 giờ do khi publish thì sẽ bị lệch múi giờ
                     order.ModifierDate = DateTime.Now;
                     // Tạo mã đơn hàng
@@ -378,14 +400,6 @@ namespace WebBanHangOnline.Controllers
                     if (order.PromotionId == null)
                     {
                         tongTien = thanhTien;
-                    }
-
-                   
-                    if(tongTien >= 50000)
-                    {
-                        var user = db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault();
-                        db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault().CheckPoint++;
-                        db.SaveChanges();
                     }
 
                     tongTien = tongTien + phiShip;
@@ -522,7 +536,7 @@ namespace WebBanHangOnline.Controllers
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
-                item.Status = 1;
+                //item.Status = 1;
                 item.IsConfirm = true;
 
                 if (item.IsConfirm == true)
@@ -742,7 +756,6 @@ namespace WebBanHangOnline.Controllers
         [HttpPost]
         public ActionResult AddToCart(int id, int quantity)
         {
-            //Message messages = new Message();
             var code = new { success = false, message = Message.NoMessage.ToString(), code = -1, Count = 0 }; // Giá trị ban đầu
             var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
             if (checkProduct != null)
@@ -752,32 +765,43 @@ namespace WebBanHangOnline.Controllers
                 {
                     cart = new ShoppingCart();
                 }
-                var cartItemsExists = cart.Items.FirstOrDefault(x => x.ProductId == id);
-                if (cartItemsExists != null)
+                // Kiểm tra xem trong Cart đã có sản phẩm và có StoreID != 0 chưa
+                if (cart.Items.Any(item => item.ProductStoreID != 0 && item.ProductStoreID != checkProduct.StoreID && checkProduct.StoreID.HasValue))
                 {
-
+                    // Nếu đã có sản phẩm có StoreID khác 0 trong Cart, có thể xử lý thông báo hoặc thực hiện các bước khác tùy thuộc vào yêu cầu của bạn.
+                    code = new { success = false, message = "Không thể thêm sản phẩm từ 2 cừa hàng khác nhau", code = -1, Count = cart.Items.Count };
+                    return Json(code);
                 }
-                ShoppingCartItem item = new ShoppingCartItem
+                else
                 {
-                    ProductId = checkProduct.Id,
-                    Alias = checkProduct.Alias,
-                    ProductName = checkProduct.Title,
-                    CategoryName = checkProduct.ProductCategory.Title,
-                    Quantity = quantity
-                };
-                if (checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault) != null)
-                {
-                    item.ProductImg = checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault).Image;
+                    var cartItemsExists = cart.Items.FirstOrDefault(x => x.ProductId == id);
+                    if (cartItemsExists != null)
+                    {
+                        // Có thể xử lý trường hợp sản phẩm đã tồn tại trong giỏ hàng ở đây nếu cần
+                    }
+                    ShoppingCartItem item = new ShoppingCartItem
+                    {
+                        ProductId = checkProduct.Id,
+                        Alias = checkProduct.Alias,
+                        ProductName = checkProduct.Title,
+                        CategoryName = checkProduct.ProductCategory.Title,
+                        Quantity = quantity,
+                        ProductStoreID = checkProduct.StoreID.HasValue ? checkProduct.StoreID.Value : 0 // Giá trị mặc định khi không có StoreID
+                    };
+                    if (checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault) != null)
+                    {
+                        item.ProductImg = checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault).Image;
+                    }
+                    item.Price = checkProduct.Price;
+                    if (checkProduct.PriceSale > 0)  // nếu sản phẩm có giảm giá, thì lấy giá tiền = giá đã giảm
+                    {
+                        item.Price = (decimal)checkProduct.PriceSale;
+                    }
+                    item.TotalPrice = item.Quantity * item.Price;
+                    cart.AddToCart(item, quantity); // Hàm AddToCart này bên class Shoping Cart
+                    Session["Cart"] = cart; // Khi thành công thì lưu lại Session
+                    code = new { success = true, message = Message.SuccessAddToCart.ToString(), code = 1, Count = cart.Items.Count }; // Thành công thì in ra thông báo
                 }
-                item.Price = checkProduct.Price;
-                if (checkProduct.PriceSale > 0)  // nếu sản phẩm có giảm giá, thì lấy giá tiền = giá đã giảm
-                {
-                    item.Price = (decimal)checkProduct.PriceSale;
-                }
-                item.TotalPrice = item.Quantity * item.Price;
-                cart.AddToCart(item, quantity); // Hàm AddToCart này bên class Shoping Cart
-                Session["Cart"] = cart; // Khi thành công thì lưu lại Session
-                code = new { success = true, message = Message.SuccessAddToCart.ToString(), code = 1, Count = cart.Items.Count }; // Thành công thì in ra thông báo
             }
             return Json(code);
         }
@@ -963,6 +987,11 @@ namespace WebBanHangOnline.Controllers
                 itemOrder.Status = 2;//đã thanh toán
                 itemOrder.IsConfirm = true;
 
+                if(itemOrder.StoreID != null)
+                {
+                    itemOrder.Status = 6;
+                }
+
                 db.Orders.Attach(itemOrder);
                 db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1003,7 +1032,7 @@ namespace WebBanHangOnline.Controllers
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
-                if (itemOrder.Status == 2)
+                if (itemOrder.Status == 2 || itemOrder.Status == 6)
                 {
                     trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                     hinhThucThanhToan = "PayPal";
