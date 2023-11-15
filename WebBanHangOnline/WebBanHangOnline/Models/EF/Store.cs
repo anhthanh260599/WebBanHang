@@ -40,7 +40,6 @@ namespace WebBanHangOnline.Models.EF
         public virtual ApplicationUser User { get; set; }
         public virtual ICollection<Promotion> Promotions { get; set; }
         public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<Store> Stores { get; set; }
         public virtual ICollection<Storage> Storages { get; set; }
     }
 }
