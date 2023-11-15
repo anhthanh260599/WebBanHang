@@ -17,7 +17,7 @@ namespace WebBanHangOnline.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            var items = db.Products.ToList();
+            var items = db.Products.Where(x=>x.IsActive).ToList();
             return View(items);
 
         }
@@ -25,7 +25,7 @@ namespace WebBanHangOnline.Controllers
         [HttpPost]
         public ActionResult Index(string dataSearch)
         {
-            var items = db.Products.Where(p => p.Title.StartsWith(dataSearch)).ToList();
+            var items = db.Products.Where(p => p.Title.StartsWith(dataSearch) && p.IsActive).ToList();
 
             return Json(new { dataList = items });
         }
@@ -58,7 +58,7 @@ namespace WebBanHangOnline.Controllers
 
             if (id > 0)
             {
-                items = items.Where(x => x.ProductCategory.Id == id).ToList();
+                items = items.Where(x => x.ProductCategory.Id == id && x.IsActive).ToList();
             }
             var cate = db.ProductCategories.Find(id);
             if (cate != null)
