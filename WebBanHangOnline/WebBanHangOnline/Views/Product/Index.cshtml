@@ -38,6 +38,7 @@
             <!-- Main Content -->
 
             <div class="main_content">
+                @Html.DropDownList("StoreList", ViewBag.StoreList as SelectList, "-- Chọn cửa hàng --", new { @class = "form-control searchable-dropdown-list" })
 
                 <!-- Products -->
 
@@ -46,12 +47,9 @@
                         <div class="col">
 
                             <!-- Product Sorting -->
-
-
                             <!-- Product Grid -->
-
-                            <div class="product-grid">
-
+                            <h2 id="nullStoreID" class="text-gray text-center mt-5" style="opacity: 0.5;">Vui lòng chọn cửa hàng!!</h2>
+                            <div style="display:none" class="product-grid">
                                 @if (Model != null && Model.Any())
                                 {
                                     foreach (var item in Model)
@@ -101,6 +99,8 @@
 
                                                 <div class="product_info">
                                                     <h6 class="product_name"><a href="/chi-tiet/@item.Alias-p@(item.Id)">@item.Title</a></h6>
+                                                    <div style="display:none;" class="in_product_storeID">@item.StoreID</div>
+
                                                     @if (item.PriceSale > 0)
                                                     {
 
@@ -112,6 +112,7 @@
                                                         <div class="product_price">@Common.FormatNumber(item.Price, 0)</div>
                                                         <div style="display:none;" class="in_product_price"> @item.Price</div>
                                                     }
+
                                                 </div>
                                                 @if (item.StoreID != null)
                                                 {
@@ -124,6 +125,7 @@
 
                                     }
                                 }
+
 
                                 <!-- Product 2 -->
                                 <!-- Sản phẩm mới thì dùng cái này  IsNew-->
@@ -171,11 +173,15 @@
             $('#search').on('input', function () {
                 var searchString = $(this).val().toLowerCase(); // Lấy nội dung của ô tìm kiếm và chuyển đổi thành chữ thường
                 let formatSearch = stringToSlug(searchString);
+                let selectStoreID = document.querySelector("#StoreList").value;
+
                 $('.product-grid').isotope({
                     filter: function () {
                         var productName = $(this).find('.product_name a').text().toLowerCase(); // Lấy tên sản phẩm và chuyển đổi thành chữ thường
                         let formatName = stringToSlug(productName);
-                        return (formatName.indexOf(formatSearch) !== -1);
+                        let storeProductID = $(this).find('.in_product_storeID').text();
+
+                        return (parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '' && formatName.indexOf(formatSearch) !== -1);
                     },
                     animationOptions: {
                         duration: 750,
@@ -184,6 +190,49 @@
                     }
                 });
             });
+
+
+            // Xử lý chọn cửa hàng
+            let elementSelectStore = document.querySelector("#StoreList");
+            elementSelectStore.onchange = (e) => {
+                let selectStoreID = e.target.value;
+
+                // Ứng dụng Singleton
+                updateStoreSingleton(parseInt(selectStoreID))
+
+                if (selectStoreID != 0) {
+                    
+                    $(".product-grid").css({ 'display': 'block' });
+                    $("#nullStoreID").css({ 'display': 'none' });
+                    $('.product-grid').isotope({
+                        filter: function () {
+                            let storeProductID = $(this).find('.in_product_storeID').text();
+                            return (parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
+                        },
+                        animationOptions: {
+                            duration: 750,
+                            easing: 'linear',
+                            queue: false
+                        }
+                    });
+                } else {
+                    $(".product-grid").css({ 'display': 'none' });
+                    $("#nullStoreID").css({ 'display': 'block' });
+                }
+            }
+
+            // Ứng dụng Singleton
+            function updateStoreSingleton(selectedValue) {
+                // Sử dụng Ajax để gửi giá trị mới đến server
+                $.ajax({
+                    url: '/Product/UpdateStoreId',
+                    type: 'POST',
+                    data: { newStoreId: selectedValue },
+                    success: function (data) {
+                        console.log(data.dataID);
+                    }
+                });
+            }
         });
     </script>
 }

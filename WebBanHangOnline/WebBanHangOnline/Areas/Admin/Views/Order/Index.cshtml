@@ -185,38 +185,24 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
+                                    @*@if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
                                     {
                                         var orderId = item.Id;
-                                        var storeId = item.StoreID;
+                                        var storeId = item.StoreID;*@
 
                                         @*<button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
                 Điều phối đơn
             </button>*@
                                         @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
-                                        <a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
+                                        @*<a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
 
-                                    }
-                                    else if (User.IsInRole("Store") && item.Status == 6)
+                                    }*@
+                                    @if (User.IsInRole("Store") && item.Status == 6)
                                     {
                                         <button type="button" class="btn btn-sm btn-danger btnTuChoiDon" data-id="@item.Id">
                                             Từ chối
                                         </button>
                                     }
-                                    else if (User.IsInRole("Store"))
-                                    {
-                                    
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-sm disabled btn-outline-success"> Điều phối đơn </button>
-                                    }
-
-                                    @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
-
-
                                 </td>
                             </tr>
                             i++;

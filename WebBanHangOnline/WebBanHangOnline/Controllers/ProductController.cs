@@ -1,4 +1,5 @@
 ﻿using PagedList;
+using PayPal.Api;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
+using WebBanHangOnline.Models.MySingleton;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -17,18 +19,20 @@ namespace WebBanHangOnline.Controllers
         // GET: Product
         public ActionResult Index()
         {
+            var storeList = db.Stores.ToList().Select(s => new
+            {
+                Id = s.Id,
+                DisplayName = $"{s.Name} -- {s.Address}, {s.District}, {s.Ward}, {s.Province}"
+            });
+
+
+            ViewBag.StoreList = new SelectList(storeList, "Id", "DisplayName");
+
             var items = db.Products.ToList();
             return View(items);
 
         }
 
-        [HttpPost]
-        public ActionResult Index(string dataSearch)
-        {
-            var items = db.Products.Where(p => p.Title.StartsWith(dataSearch)).ToList();
-
-            return Json(new { dataList = items });
-        }
 
         [HttpPost]
         public ActionResult SavePageSize(int pageSize)
@@ -81,6 +85,16 @@ namespace WebBanHangOnline.Controllers
             return PartialView(item);
         }
 
-        
+
+        // Hàm ứng dụng singleton
+        [HttpPost]
+        public ActionResult UpdateStoreId(int newStoreId)
+        {
+            // Cập nhật StoreSingleton với giá trị mới
+            StoreSingleton.Instance.Id = newStoreId;
+
+            return Json(new { success = true, dataID = StoreSingleton.Instance.Id });
+        }
+
     }
 }
