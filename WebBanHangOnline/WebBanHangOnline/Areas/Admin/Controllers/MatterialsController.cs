@@ -20,13 +20,18 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             var currentUser = userManager.FindById(currentUserId);
 
-            var items = db.Matterials.OrderByDescending(x => x.Id).ToList();
+            var quantity = db.Storages.OrderByDescending(x => x.Id).ToList();
+            List<Matterial> items = new List<Matterial>();
             if (User.IsInRole("Store"))
             {
                 //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
-                items = db.Matterials.Where(x => x.Store.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+                quantity = db.Storages.Where(x => x.Stores.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+                    for (int i = 0; i < quantity.Count; i++)
+                    {
+                        var itemMaterial = db.Matterials.Where(x => x.Id == quantity[i].MaterialID);
+                        items.Add((Matterial)itemMaterial);
+                    }
             }
-
             return View(items);
         }
 

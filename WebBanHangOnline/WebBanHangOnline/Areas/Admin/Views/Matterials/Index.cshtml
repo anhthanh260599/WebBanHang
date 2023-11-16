@@ -72,8 +72,7 @@
                             <th>Giá </th>
                             // Nếu người dùng có vai trò "Admin" hoặc "Người điều phối đơn", hiển thị toàn bộ danh sách Order
                             <th>Hiển thị</th>
-                            <th>Số lượng</th>
-                            <th>Đơn vị</th>
+                            @*<th>Số lượng</th>*@
                             <th>Quy cách</th>
                             <th></th>
                         }
@@ -84,8 +83,7 @@
                             <th>Tên nguyên liệu</th>
                             <th>Giá </th>
                             <th>Trạng thái</th>
-                            <th>Số lượng</th>
-                            <th>Đơn vị</th>
+                            @*<th>Số lượng</th>*@
                             <th>Quy cách</th>
                             @*<th></th>*@
                         }
@@ -107,7 +105,7 @@
                                     <td><img src="@item.Image" width="100px" /></td>
                                     <td>@item.Title</td>
                                     <td>@String.Format("{0:N0}", item.Price) đ</td>
-                                    <td>
+                                    @*<td>
                                         @{
 
                                             if (item.Quantity == 0)
@@ -119,12 +117,11 @@
                                                 <span style="width: 140px;" class="btn btn-success">Còn nguyên vật liệu</span>
                                             }
                                         }
-                                    </td>
+                                    </td>*@
                                     @*<td class="text-center">
                                            <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
                                         </td>*@
-                                    <td>@item.Quantity</td>
-                                    <td>@item.Unit</td>
+                                    @*<td>@item.Quantity</td>*@
                                     <td>@item.Packing</td>
                                     @*<td>
                                             <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
@@ -154,8 +151,7 @@
                                     @*<td class="text-center">
                                            <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
                                         </td>*@
-                                    <td>@item.Quantity</td>
-                                    <td>@item.Unit</td>
+                                    @*<td>@item.Quantity</td>*@
                                     <td>@item.Packing</td>
                                     <td>
                                         <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>

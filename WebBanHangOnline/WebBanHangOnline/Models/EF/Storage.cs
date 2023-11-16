@@ -8,15 +8,17 @@ using System.Web;
 namespace WebBanHangOnline.Models.EF
 {
     [Table("tb_Storage")]
-    public class Storage : CommonAbstract
+    public class Storage
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        public int StoreID { get; set; }
-        public int MatterialID { get; set; }
-        public int Quantity { get; set; }
-        public virtual Store Store { get; set; }
-        public virtual Matterial Matterial { get; set; }
+        [Required]
+        public int StoreId { get; set; }
+        [Required]
+        public int MaterialID { get; set; }
+        public virtual Store Stores { get; set; }
+        public virtual Store Materials { get; set; }
     }
 }

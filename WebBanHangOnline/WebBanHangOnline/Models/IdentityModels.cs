@@ -69,5 +69,6 @@ namespace WebBanHangOnline.Models
         {
             return new ApplicationDbContext();
         }
+        public DbSet<Storage> Storages { get; set; }
     }
 }

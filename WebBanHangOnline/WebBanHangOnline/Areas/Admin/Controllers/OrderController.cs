@@ -117,59 +117,59 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return Json(new { success = false, message = Message.FailureSaveChange.ToString() });
         }
 
-        public ActionResult CoordinationDetail(int id)
-        {
+        //public ActionResult CoordinationDetail(int id)
+        //{
 
-            ViewBag.TotalProductOrder = db.OrderDetails.Where(x => x.OrderID == id).Count();
+        //    ViewBag.TotalProductOrder = db.OrderDetails.Where(x => x.OrderID == id).Count();
 
-            List<RecipeDetail> recipeDetails = new List<RecipeDetail>();
-            List<Store> listStore = new List<Store>();
-            var itemsOrderDetails = db.OrderDetails.Where(x => x.OrderID == id).ToList();
+        //    List<RecipeDetail> recipeDetails = new List<RecipeDetail>();
+        //    List<Store> listStore = new List<Store>();
+        //    var itemsOrderDetails = db.OrderDetails.Where(x => x.OrderID == id).ToList();
 
-            // Lấy ra danh sách nguyên vật liệu
-            var totalMaterials = db.Matterials.ToList();
+        //    // Lấy ra danh sách nguyên vật liệu
+        //    var totalMaterials = db.Matterials.ToList();
 
-            // Lấy ra danh sách nvl cần dùng recipeDetails
-            var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
-            foreach (OrderDetail orderDetail in items)
-            {
-                var itemsProductRecipe = db.RecipeDetails.Where(s => s.RecipeProductID == orderDetail.ProductID).ToList();
-                if (itemsProductRecipe != null)
-                {
-                    for (int i = 0; i < itemsProductRecipe.Count; i++)
-                    {
-                        var itemProductRecipe = itemsProductRecipe[i];
-                        recipeDetails.Add(itemProductRecipe);
-                    }
-                }
-            }
-            //Lấy ra danh sách cửa hàng có đủ nguyên vật liệu
-            foreach (Store store in db.Stores.ToList())
-            {
-                bool hasEnoughMaterials = true;
+        //    // Lấy ra danh sách nvl cần dùng recipeDetails
+        //    var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
+        //    foreach (OrderDetail orderDetail in items)
+        //    {
+        //        var itemsProductRecipe = db.RecipeDetails.Where(s => s.RecipeProductID == orderDetail.ProductID).ToList();
+        //        if (itemsProductRecipe != null)
+        //        {
+        //            for (int i = 0; i < itemsProductRecipe.Count; i++)
+        //            {
+        //                var itemProductRecipe = itemsProductRecipe[i];
+        //                recipeDetails.Add(itemProductRecipe);
+        //            }
+        //        }
+        //    }
+        //    //Lấy ra danh sách cửa hàng có đủ nguyên vật liệu
+        //    foreach (Store store in db.Stores.ToList())
+        //    {
+        //        bool hasEnoughMaterials = true;
 
-                foreach (RecipeDetail recipeDetail in recipeDetails)
-                {
-                    // Lấy ra nvl 
-                    var storeMaterial = totalMaterials.Where(m => m.Id == recipeDetail.MatterialID && m.StoreID == store.Id).FirstOrDefault();
-                    // Kiểm tra số lượng
-                    if (storeMaterial == null || storeMaterial.Quantity < recipeDetail.Quantity)
-                    {
-                        hasEnoughMaterials = false;
-                        break;
-                    }
-                }
-                if (hasEnoughMaterials)
-                {
-                    listStore.Add(store);
-                }
-            }
+        //        foreach (RecipeDetail recipeDetail in recipeDetails)
+        //        {
+        //            // Lấy ra nvl 
+        //            var storeMaterial = totalMaterials.Where(m => m.Id == recipeDetail.MatterialID && m.StoreID == store.Id).FirstOrDefault();
+        //            // Kiểm tra số lượng
+        //            //if (storeMaterial == null || storeMaterial.Quantity < recipeDetail.Quantity)
+        //            //{
+        //            //    hasEnoughMaterials = false;
+        //            //    break;
+        //            //}
+        //        }
+        //        if (hasEnoughMaterials)
+        //        {
+        //            listStore.Add(store);
+        //        }
+        //    }
 
-            ViewBag.ListStore = new SelectList(listStore, "Id", "Name");
+        //    ViewBag.ListStore = new SelectList(listStore, "Id", "Name");
 
-            var item = db.Orders.Find(id);
-            return View(item);
-        }
+        //    var item = db.Orders.Find(id);
+        //    return View(item);
+        //}
 
         public ActionResult Partial_Detail_Materials(int id)
         {
