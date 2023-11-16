@@ -38,7 +38,9 @@
             <!-- Main Content -->
 
             <div class="main_content">
+                <h5 class="sidebar_title mb-3">Cửa hàng:</h5>
                 @Html.DropDownList("StoreList", ViewBag.StoreList as SelectList, "-- Chọn cửa hàng --", new { @class = "form-control searchable-dropdown-list" })
+                <h6 class="text-info mt-3">* Lưu ý: Sản phẩm độc quyền là sản phẩm chỉ có bán tại cửa hàng đó</h6>
 
                 <!-- Products -->
 
@@ -48,7 +50,9 @@
 
                             <!-- Product Sorting -->
                             <!-- Product Grid -->
-                            <h2 id="nullStoreID" class="text-gray text-center mt-5" style="opacity: 0.5;">Vui lòng chọn cửa hàng!!</h2>
+                            <div id="nullStoreID" class="text-gray text-center mt-5" style="opacity: 0.5;">
+                                <h2>Vui lòng chọn cửa hàng!!</h2>
+                            </div>
                             <div style="display:none" class="product-grid">
                                 @if (Model != null && Model.Any())
                                 {
@@ -116,7 +120,7 @@
                                                 </div>
                                                 @if (item.StoreID != null)
                                                 {
-                                                    <p style="font-size:12px;padding-left:24px;padding-top:24px;" class="float-left text-danger">Sản phẩm giới hạn</p>
+                                                    <p style="font-size:12px;padding-left:24px;padding-top:24px;" class="float-left text-danger">Sản phẩm độc quyền</p>
                                                 }
                                                 <p style="font-size:12px;padding-right:24px;padding-top:24px;" class="float-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
                                             </div>
@@ -130,19 +134,19 @@
                                 <!-- Product 2 -->
                                 <!-- Sản phẩm mới thì dùng cái này  IsNew-->
                                 @*<div class="product-item women">
-                                        <div class="product product_filter">
-                                            <div class="product_image">
-                                                <img src="images/product_2.png" alt="">
-                                            </div>
-                                            <div class="favorite"></div>
-                                            <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
-                                            <div class="product_info">
-                                                <h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
-                                                <div class="product_price">$610.00</div>
-                                            </div>
-                                        </div>
-                                        <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
-                                    </div>*@
+                            <div class="product product_filter">
+                                <div class="product_image">
+                                    <img src="images/product_2.png" alt="">
+                                </div>
+                                <div class="favorite"></div>
+                                <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+                                <div class="product_info">
+                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
+                                    <div class="product_price">$610.00</div>
+                                </div>
+                            </div>
+                            <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
+                        </div>*@
 
 
                             </div>
@@ -197,16 +201,22 @@
             elementSelectStore.onchange = (e) => {
                 let selectStoreID = e.target.value;
 
-                // Ứng dụng Singleton
-                updateStoreSingleton(parseInt(selectStoreID))
-
+                let btnAddToCart = document.querySelectorAll(".btnAddToCart");
+                btnAddToCart.forEach((btn) => {
+                    btn.onclick = (e) => {
+                        // Ứng dụng Singleton
+                        updateStoreSingleton(parseInt(selectStoreID))
+                    }
+                })
+                
                 if (selectStoreID != 0) {
-                    
+
                     $(".product-grid").css({ 'display': 'block' });
                     $("#nullStoreID").css({ 'display': 'none' });
                     $('.product-grid').isotope({
                         filter: function () {
                             let storeProductID = $(this).find('.in_product_storeID').text();
+                            
                             return (parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
                         },
                         animationOptions: {
@@ -233,6 +243,8 @@
                     }
                 });
             }
+
+
         });
     </script>
 }

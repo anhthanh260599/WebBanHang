@@ -19,6 +19,7 @@ using System.Security.Policy;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.EnterpriseServices.CompensatingResourceManager;
+using WebBanHangOnline.Models.MySingleton;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -36,7 +37,7 @@ namespace WebBanHangOnline.Controllers
         public ShoppingCartController()
         {
             phiShip = db.ShippingFees.Select(x => x.Value).FirstOrDefault();
-            if(phiShip == null)
+            if (phiShip == null)
             {
                 phiShip = 0;
             }
@@ -119,10 +120,15 @@ namespace WebBanHangOnline.Controllers
                             itemOrder.Status = 2;//đã thanh toán
                             itemOrder.IsConfirm = true;
 
-                            if(itemOrder.StoreID != null)
-                            {
-                                itemOrder.Status = 6;
-                            } 
+                            // Điều phối đơn xuống cửa hàng
+                            int storeID = StoreSingleton.Instance.Id; // Lấy ra id của cửa hàng mà khách hàng chọn
+                            itemOrder.StoreID = storeID;
+                            itemOrder.Status = 6;
+
+                            //if (itemOrder.StoreID != null)
+                            //{
+                            //    itemOrder.Status = 6;
+                            //}
 
                             db.Orders.Attach(itemOrder);
                             db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
@@ -186,7 +192,7 @@ namespace WebBanHangOnline.Controllers
                         }
                         //Thanh toan thanh cong
                         ViewBag.ThanhToanThanhCong = "Cảm ơn quý khách đã sử dụng dịch vụ. Giao dịch được thực hiện thành công.";
-                        ViewBag.InnerText =  $"{itemOrder.Code}";
+                        ViewBag.InnerText = $"{itemOrder.Code}";
                         ViewBag.EmailThanhToan = $"{itemOrder.Email}";
 
                         //log.InfoFormat("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", orderId, vnpayTranId);
@@ -232,6 +238,12 @@ namespace WebBanHangOnline.Controllers
             {
                 ViewBag.User = user;
             }
+
+            // Ứng dụng Singleton
+            int storeID = StoreSingleton.Instance.Id;
+            var itemStore = db.Stores.Where(s => s.Id == storeID).FirstOrDefault();
+            ViewBag.StoreByID = $"{itemStore.Name} -- {itemStore.Address}, {itemStore.District}, {itemStore.Ward}, {itemStore.Province}";
+
             return PartialView();
         }
 
@@ -294,7 +306,7 @@ namespace WebBanHangOnline.Controllers
                         order.TypePromotion = cart.TypePromotion;
                         order.DiscountAmount = cart.DiscountAmount;
                         var promotionItem = db.Promotions.Where(x => x.Id == order.PromotionId).FirstOrDefault();
-                        
+
                         //khuyến mãi
                         //Lấy user hiện tại
                         int check = 0;
@@ -302,7 +314,7 @@ namespace WebBanHangOnline.Controllers
                         {
                             var user = db.Users.Where(x => x.Id == order.CustomerID).FirstOrDefault();
                             check = user.CheckPoint;
-                            if(promotionItem.Point <= check)
+                            if (promotionItem.Point <= check)
                             {
                                 promotionItem.Quantity = promotionItem.Quantity - 1;
                             }
@@ -331,7 +343,7 @@ namespace WebBanHangOnline.Controllers
 
                     order.TypePayment = request.TypePayment;
                     order.CreateBy = request.Phone;
-                    
+
                     // Cộng 14 giờ do khi publish thì sẽ bị lệch múi giờ
                     order.ModifierDate = DateTime.Now;
                     // Tạo mã đơn hàng
@@ -579,11 +591,17 @@ namespace WebBanHangOnline.Controllers
                 contentAdmin = contentAdmin.Replace("{{TongTien}}", Common.FormatNumber(tongTien, 0));
                 Common.SendMail(Message.Brand.ToString(), "Đơn hàng mới #" + item.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["Email"]);
 
+                // Điều phối đơn xuống cửa hàng
+                int storeID = StoreSingleton.Instance.Id; // Lấy ra id của cửa hàng mà khách hàng chọn
+                item.StoreID = storeID;
+                item.Status = 6;
+
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             return View();
         }
+
         public ActionResult Partial_Item_ThanhToan()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
@@ -627,7 +645,7 @@ namespace WebBanHangOnline.Controllers
 
             if (promotion != null)
             {
-                
+
                 if (User.Identity.IsAuthenticated)
                 {
                     if (promotion.Point > userCheckPoint)
@@ -768,8 +786,9 @@ namespace WebBanHangOnline.Controllers
                 // Kiểm tra xem trong Cart đã có sản phẩm và có StoreID != 0 chưa
                 if (cart.Items.Any(item => item.ProductStoreID != 0 && item.ProductStoreID != checkProduct.StoreID && checkProduct.StoreID.HasValue))
                 {
+
                     // Nếu đã có sản phẩm có StoreID khác 0 trong Cart, có thể xử lý thông báo hoặc thực hiện các bước khác tùy thuộc vào yêu cầu của bạn.
-                    code = new { success = false, message = "Không thể thêm sản phẩm từ 2 cừa hàng khác nhau", code = -1, Count = cart.Items.Count };
+                    code = new { success = false, message = "Không thể thêm sản phẩm giới hạn từ 2 cừa hàng khác nhau", code = -1, Count = cart.Items.Count };
                     return Json(code);
                 }
                 else
@@ -874,7 +893,7 @@ namespace WebBanHangOnline.Controllers
 
             //Build URL for VNPAY
             VnPayLibrary vnpay = new VnPayLibrary();
-            var Price = ( (long)order.TotalAmount + (long)phiShip ) * 100;
+            var Price = ((long)order.TotalAmount + (long)phiShip) * 100;
             vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
             vnpay.AddRequestData("vnp_Command", "pay");
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
@@ -987,10 +1006,16 @@ namespace WebBanHangOnline.Controllers
                 itemOrder.Status = 2;//đã thanh toán
                 itemOrder.IsConfirm = true;
 
-                if(itemOrder.StoreID != null)
-                {
-                    itemOrder.Status = 6;
-                }
+
+                // Điều phối đơn xuống cửa hàng
+                int storeID = StoreSingleton.Instance.Id; // Lấy ra id của cửa hàng mà khách hàng chọn
+                itemOrder.StoreID = storeID;
+                itemOrder.Status = 6;
+
+                //if (itemOrder.StoreID != null)
+                //{
+                //    itemOrder.Status = 6;
+                //}
 
                 db.Orders.Attach(itemOrder);
                 db.Entry(itemOrder).State = System.Data.Entity.EntityState.Modified;
@@ -1041,7 +1066,7 @@ namespace WebBanHangOnline.Controllers
                 contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
                 contentCustomer = contentCustomer.Replace("{{TrangThaiDon}}", trangThaiDon);
                 contentCustomer = contentCustomer.Replace("{{GhiChu}}", itemOrder.Notes);
-                contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip,0));
+                contentCustomer = contentCustomer.Replace("{{PhiShip}}", Common.FormatNumber(phiShip, 0));
                 contentCustomer = contentCustomer.Replace("{{HinhThucThanhToan}}", hinhThucThanhToan);
                 contentCustomer = contentCustomer.Replace("{{NgayDat}}", itemOrder.CreateDate.ToString());
                 contentCustomer = contentCustomer.Replace("{{TenKhachHang}}", itemOrder.CustomerName);
@@ -1078,8 +1103,8 @@ namespace WebBanHangOnline.Controllers
             var orderCode = currentOrder.OrderCode;
             var totalAmount = currentOrder.Total;
             var subTotal = currentOrder.SubTotal;
-            
-            phiShip = Math.Round(phiShip/25000,2);
+
+            phiShip = Math.Round(phiShip / 25000, 2);
 
             var order = db.Orders.ToList().Where(x => x.Code == orderCode).FirstOrDefault();
             var subtotalValue = (phiShip + Math.Round(order.TotalAmount / 25000, 2)).ToString();
