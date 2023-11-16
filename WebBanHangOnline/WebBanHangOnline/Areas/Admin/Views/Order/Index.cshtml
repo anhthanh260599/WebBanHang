@@ -61,7 +61,12 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">@ViewBag.Title</h3> <br />
-            <strong class="text-info">Lưu ý: Mã đơn có màu đỏ thì đơn đó có sản phẩm riêng của cửa hàng đó</strong>
+            <strong class="text-info">Lưu ý: Mã đơn có màu đỏ thì đơn đó có sản phẩm riêng của cửa hàng đó</strong><br />
+            @if (User.IsInRole("Admin"))
+            {
+                <strong class="text-info">Lưu ý: Đơn hàng có món độc quyền thì không thể điều phối sang cửa hàng khác</strong>
+
+            }
             <div class="card-tools">
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -149,6 +154,10 @@
                                     {
                                         <td style="cursor: text; width: 100px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
                                     }
+                                    if (item.Status == 7)
+                                    {
+                                        <td style="cursor: text; width: 100px; " class="btn btn-sm btn-danger">Cửa hàng không nhận đơn</td>
+                                    }
                                 }
                                 else
                                 {
@@ -185,38 +194,37 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
-                                    {
-                                        var orderId = item.Id;
-                                        var storeId = item.StoreID;
+                                    @*@if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
+                                        {
+                                            var orderId = item.Id;
+                                            var storeId = item.StoreID;*@
 
-                                        @*<button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
-                Điều phối đơn
-            </button>*@
-                                        @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
-                                        <a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
+                                    @*<button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
+                                            Điều phối đơn
+                                        </button>*@
+                                    @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
+                                    @*<a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
 
-                                    }
-                                    else if (User.IsInRole("Store") && item.Status == 6)
+                                        }*@
+                                    @if (User.IsInRole("Store") && item.Status == 6)
                                     {
                                         <button type="button" class="btn btn-sm btn-danger btnTuChoiDon" data-id="@item.Id">
                                             Từ chối
                                         </button>
                                     }
-                                    else if (User.IsInRole("Store"))
+                                    @if (User.IsInRole("Admin") && item.Status == 7) // status = 7 nghĩa là đơn bị cửa hàng từ chối
                                     {
-                                    
+                                        var orderId = item.Id;
+                                        var storeId = item.StoreID;
+                                        @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
+                                        <button type="button" class="btn btn-sm btn-danger btnHuyDon" data-id="@orderId">Hủy đơn</button>
+                                        if (item.OrderDetails.All(x => x.Product.StoreID == null)) // đơn hàng không có sản phẩm độc quyền thì có thể điều phối
+                                        {
+                                            <button type="button" class="mt-2 btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">Điều phối đơn</button>
+
+                                        }
+
                                     }
-                                    else
-                                    {
-                                        <button type="button" class="btn btn-sm disabled btn-outline-success"> Điều phối đơn </button>
-                                    }
-
-                                    @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
-
-
                                 </td>
                             </tr>
                             i++;
@@ -274,7 +282,7 @@
 
 
 <!-- /.modal-danh sách cửa hàng -->
-<!--<div class="modal fade" id="modal-default-store">
+<div class="modal fade" id="modal-default-store">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -287,23 +295,23 @@
                 <input type="hidden" id="txtOrderIDStore" value="0" />
                 <div class="form-group">
                     <label>Cửa hàng</label>
-                    <select class="form-control" id="ddCuaHang">-->
-@*@foreach (var store in ViewBag.Stores)
-    {
-        <option value="@store.Value">@store.Text</option>
-    }*@
-<!--</select>
+                    <select class="form-control" id="ddCuaHang">
+                        @foreach (var store in ViewBag.Stores)
+                        {
+                            <option value="@store.Value">@store.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+            </div>
         </div>
+        @*/.modal-content*@
     </div>
-    <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-        <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
-    </div>
-</div>-->
-<!-- /.modal-content -->
-<!--</div>-->
-<!-- /.modal-dialog -->
-<!--</div>-->
+    @*/.modal-dialog*@
+</div>
 
 
 @section scripts {
@@ -340,39 +348,72 @@
                 })
             })
 
-               $('body').on('click', '.btnTuChoiDon', function () {
-                   var id = $(this).data("id");
+            $('body').on('click', '.btnTuChoiDon', function () {
+                var id = $(this).data("id");
 
-                   Swal.fire({
-                       title: 'Bạn có muốn từ chối đơn hàng này không?',
-                       icon: 'warning',
-                       showCancelButton: true,
-                       confirmButtonText: 'Có',
-                       cancelButtonText: 'Không'
-                   }).then((result) => {
-                       if (result.isConfirmed) {
-                           $.ajax({
-                               url: '/admin/Order/TuChoiDon',
-                               type: 'POST',
-                               data: { id: id },
-                               success: function (rs) {
-                                   Swal.fire({
-                                       icon: rs.success ? 'success' : 'error',
-                                       title: rs.success ? 'Thành công' : 'Lỗi',
-                                       text: rs.success ? 'Từ chối đơn thành công' : 'Có lỗi xảy ra khi từ chối đơn hàng.',
-                                       confirmButtonText: 'OK',
-                                   }).then((result) => {
-                                       if (result.isConfirmed) {
-                                           location.reload();
-                                       }
-                                   });
+                Swal.fire({
+                    title: 'Bạn có muốn từ chối đơn hàng này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Order/TuChoiDon',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                Swal.fire({
+                                    icon: rs.success ? 'success' : 'error',
+                                    title: rs.success ? 'Thành công' : 'Lỗi',
+                                    text: rs.success ? 'Từ chối đơn thành công' : 'Có lỗi xảy ra khi từ chối đơn hàng.',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
 
-                               }
-                           });
-                       }
-                   });
-               });
+                            }
+                        });
+                    }
+                });
+            });
 
+            // hủy đơn
+
+            $('body').on('click', '.btnHuyDon', function () {
+                var id = $(this).data("id");
+                Swal.fire({
+                    title: 'Bạn muốn hủy đơn này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Order/HuyDon',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                Swal.fire({
+                                    icon: rs.success ? 'success' : 'error',
+                                    title: rs.success ? 'Thành công' : 'Lỗi',
+                                    text: rs.success ? 'Hủy đơn thành công' : 'Có lỗi xảy ra khi hủy đơn hàng.',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                });
+            });
 
             $('body').on('click', '.btnDieuPhoi', function () {
                 var id = $(this).data('id')
