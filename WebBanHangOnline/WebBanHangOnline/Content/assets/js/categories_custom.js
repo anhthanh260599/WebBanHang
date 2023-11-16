@@ -320,7 +320,6 @@ jQuery(document).ready(function ($) {
                     let maxValue = $("#slider-range").slider("option", "max");
                     let minValue = $("#slider-range").slider("option", "min");
 
-                    console.log(ui.value);
                     if (ui.value > (maxValue - 10000)) {
                         $("#amount").val(formatMinvalue + " VND  -  " + maxValue.toLocaleString('en-US') + " VND");
                     } else if (ui.value < 9000) {
@@ -328,6 +327,8 @@ jQuery(document).ready(function ($) {
                     } else {
                         $("#amount").val(formatMinvalue + " VND  -  " + formatMaxvalue + " VND");
                     }
+                    let selectStoreID = document.querySelector("#StoreList").value;
+
                     //handle event
                     $('.product-grid').isotope({
                         filter: function () {
@@ -335,8 +336,10 @@ jQuery(document).ready(function ($) {
                             var priceMin = parseFloat(priceRange.split('-')[0].replace('VND', ''));
                             var priceMax = parseFloat(priceRange.split('-')[1].replace('VND', ''));
                             var itemPrice = $(this).find(".in_product_price").clone().children().remove().end().text();
+                            let storeProductID = $(this).find('.in_product_storeID').text();
 
-                            return (parseFloat(itemPrice) / 1000 > priceMin) && (parseFloat(itemPrice) / 1000 < priceMax);
+                            return (parseFloat(itemPrice) / 1000 > priceMin) && (parseFloat(itemPrice) / 1000 < priceMax && parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
+
                         },
                         animationOptions: {
                             duration: 750,
