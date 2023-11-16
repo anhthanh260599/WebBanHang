@@ -28,7 +28,7 @@ namespace WebBanHangOnline.Controllers
 
             ViewBag.StoreList = new SelectList(storeList, "Id", "DisplayName");
 
-            var items = db.Products.ToList();
+            var items = db.Products.Where(x=>x.IsActive).ToList();
             return View(items);
 
         }
@@ -62,7 +62,7 @@ namespace WebBanHangOnline.Controllers
 
             if (id > 0)
             {
-                items = items.Where(x => x.ProductCategory.Id == id).ToList();
+                items = items.Where(x => x.ProductCategory.Id == id && x.IsActive).ToList();
             }
             var cate = db.ProductCategories.Find(id);
             if (cate != null)

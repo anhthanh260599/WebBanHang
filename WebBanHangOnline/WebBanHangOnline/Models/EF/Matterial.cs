@@ -18,7 +18,6 @@ namespace WebBanHangOnline.Models.EF
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        public int Quantity { get; set; }
         [Required]
         [StringLength(250)]
         public string Title { get; set; }
@@ -37,7 +36,6 @@ namespace WebBanHangOnline.Models.EF
         public virtual Store Store { get; set; }
 
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; }
-        public string Unit { get; set; }
         public string Packing { get; set; }//Quy cách tính
         public virtual ICollection<Storage> Storages { get; set; }
     }
