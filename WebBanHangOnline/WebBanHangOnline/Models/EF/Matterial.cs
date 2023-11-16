@@ -32,9 +32,6 @@ namespace WebBanHangOnline.Models.EF
 
         public string Image { get; set; }
         public bool IsActive { get; set; }
-        public int? StoreID { get; set; }
-        public virtual Store Store { get; set; }
-
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; }
         public string Packing { get; set; }//Quy cách tính
         public virtual ICollection<Storage> Storages { get; set; }
