@@ -63,16 +63,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 var currentUser = userManager.FindById(User.Identity.GetUserId());
                 var storeID = db.Stores.Where(x=>x.UserID == currentUser.Id).Select(x=>x.Id).FirstOrDefault();
 
-                if (User.IsInRole("Store")) // Nếu là cửa hàng thêm sản phẩm thì phải đợi Admin duyệt
-                {
-                    model.IsActive = false;
-                    model.IsApprovedByAdmin = false;
-                    model.StoreID = storeID;
-                }
-                else 
-                {
-                    model.IsApprovedByAdmin = true; // Nếu là admin thì tự động duyệt
-                }
+                
 
                 if(model.PriceSale != null && model.IsSale == false)
                 {
@@ -119,6 +110,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 {
                     model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);
                 }
+
+                if (User.IsInRole("Store")) // Nếu là cửa hàng thêm sản phẩm thì phải đợi Admin duyệt
+                {
+                    model.IsActive = false;
+                    model.IsApprovedByAdmin = false;
+                    model.StoreID = storeID;
+                }
+                else
+                {
+                    NullProduct newModel = (NullProduct)model;
+                    model = newModel;
+                    model.IsApprovedByAdmin = true; // Nếu là admin thì tự động duyệt
+                }
+
                 db.Products.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
