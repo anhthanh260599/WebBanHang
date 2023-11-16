@@ -57,6 +57,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return PartialView(items);
         }
 
+        [HttpPost]
         public ActionResult DieuPhoiDon(int orderID, int storeId)
         {
             var order = db.Orders.Find(orderID);
@@ -79,16 +80,34 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (item != null)
             {
                 db.Orders.Attach(item);
-                if(item.TypePayment == 1) // Nếu thanh toán COD thì set Status = 1
-                {
-                    item.Status = 1;
-                }
-                else // còn lại thì Status = 2 (do thanh toán online)
-                {
-                    item.Status = 2;
-                }
+                //if (item.TypePayment == 1) // Nếu thanh toán COD thì set Status = 1
+                //{
+                //    item.Status = 1;
+                //}
+                //else // còn lại thì Status = 2 (do thanh toán online)
+                //{
+                //    item.Status = 2;
+                //}
+                item.Status = 7;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+
+                db.SaveChanges();
+                return Json(new { success = true, message = Message.SuccessSaveChange.ToString() });
+            }
+            return Json(new { success = false, message = Message.FailureSaveChange.ToString() });
+        }
+
+        [HttpPost]
+        public ActionResult HuyDon(int id)
+        {
+            var item = db.Orders.Find(id);
+            if (item != null)
+            {
+                db.Orders.Attach(item);
                 item.StoreID = null;
-                db.Entry(item).Property(x => x.Status).IsModified = true;
+                item.Status = 4;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+
                 db.SaveChanges();
                 return Json(new { success = true, message = Message.SuccessSaveChange.ToString() });
             }
@@ -115,90 +134,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
             }
             return Json(new { success = false, message = Message.FailureSaveChange.ToString() });
-        }
-
-        public ActionResult CoordinationDetail(int id)
-        {
-
-            ViewBag.TotalProductOrder = db.OrderDetails.Where(x => x.OrderID == id).Count();
-
-            List<RecipeDetail> recipeDetails = new List<RecipeDetail>();
-            List<Store> listStore = new List<Store>();
-            var itemsOrderDetails = db.OrderDetails.Where(x => x.OrderID == id).ToList();
-
-            // Lấy ra danh sách nguyên vật liệu
-            var totalMaterials = db.Matterials.ToList();
-
-            // Lấy ra danh sách nvl cần dùng recipeDetails
-            var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
-            foreach (OrderDetail orderDetail in items)
-            {
-                var itemsProductRecipe = db.RecipeDetails.Where(s => s.RecipeProductID == orderDetail.ProductID).ToList();
-                if (itemsProductRecipe != null)
-                {
-                    for (int i = 0; i < itemsProductRecipe.Count; i++)
-                    {
-                        var itemProductRecipe = itemsProductRecipe[i];
-                        recipeDetails.Add(itemProductRecipe);
-                    }
-                }
-            }
-            //Lấy ra danh sách cửa hàng có đủ nguyên vật liệu
-            foreach (Store store in db.Stores.ToList())
-            {
-                bool hasEnoughMaterials = true;
-
-                foreach (RecipeDetail recipeDetail in recipeDetails)
-                {
-                    // Lấy ra nvl 
-                    //var storeMaterial = totalMaterials.Where(m => m.Id == recipeDetail.MatterialID && m.StoreID == store.Id).FirstOrDefault();
-                    // Kiểm tra số lượng
-                    //if (storeMaterial == null || storeMaterial.Quantity < recipeDetail.Quantity)
-                    //{
-                    //    hasEnoughMaterials = false;
-                    //    break;
-                    //}
-                }
-                if (hasEnoughMaterials)
-                {
-                    listStore.Add(store);
-                }
-            }
-
-            ViewBag.ListStore = new SelectList(listStore, "Id", "Name");
-
-            var item = db.Orders.Find(id);
-            return View(item);
-        }
-
-        public ActionResult Partial_Detail_Materials(int id)
-        {
-            List<RecipeDetail> recipeDetails = new List<RecipeDetail>();
-            // Lấy ra product id;
-            var items = db.OrderDetails.Where(x => x.OrderID == id).ToList();
-            foreach (OrderDetail orderDetail in items)
-            {
-                var itemsProductRecipe = db.RecipeDetails.Where(s => s.RecipeProductID == orderDetail.ProductID).ToList();
-                if (itemsProductRecipe != null)
-                {
-                    for (int i = 0; i < itemsProductRecipe.Count; i++)
-                    {
-                        var itemProductRecipe = itemsProductRecipe[i];
-                        recipeDetails.Add(itemProductRecipe);
-                    }
-
-                }
-                else
-                {
-                    ViewBag.ErrorNullRecipe = true;
-                    ViewBag.ErrorNullRecipeName = orderDetail.Product.Title;
-
-                    break;
-                }
-
-            }
-
-            return PartialView(recipeDetails);
         }
     }
 }
