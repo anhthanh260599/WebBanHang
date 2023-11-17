@@ -98,7 +98,7 @@
                                     {
                                         if (item.Status != 3)
                                         {
-                                            <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
+                                            <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id" data-store-id="@item.StoreID">
                                                 Cập nhật
                                             </button>
                                         }
@@ -142,6 +142,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="txtOrderID" value="0" />
+                <input type="hidden" id="store-id" value="0" />
                 <div class="form-group">
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
@@ -167,17 +168,21 @@
         $(document).ready(function () {
             $('body').on('click', '.btnCapNhat', function () {
                 var id = $(this).data('id')
+                var storeId = $(this).data('store-id'); // Lấy giá trị StoreID
                 $('#txtOrderID').val(id);
+                // Truyền giá trị StoreID vào modal
+                $('#modal-default').data('store-id', storeId);
                 $('#modal-default').modal('show')
             })
 
             $('body').on('click', '#btnLuu', function () {
                 var id = $('#txtOrderID').val();
+                var storeId = $('#modal-default').data('store-id'); // Lấy giá trị StoreID từ modal
                 var trangThai = $('#ddTrangThai').val();
                 $.ajax({
                     url: '/admin/StoreOrder/UpdateTrangThai',
                     type: 'POST',
-                    data: { id: id, trangThai: trangThai },
+                    data: { id: id, trangThai: trangThai, storeId: storeId },
                     success: function (rs) {
                         if (rs.success) {
                             //alert(rs.message)

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
+using System.Diagnostics;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
@@ -51,8 +52,17 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(Matterial model)
+        public ActionResult Add(MaterialQuantityViewModel model)
         {
+            Matterial insert = new Matterial();
+            insert.Title = model.Title;
+            insert.MattsCode = model.MattsCode;
+            insert.Description = model.Description;
+            insert.Price = model.Price;
+            insert.Image = model.Image;
+            insert.Packing = model.Packing;
+            insert.Detail = model.Detail;
+            insert.IsActive = model.IsActive;
             if (ModelState.IsValid)
             {
                 ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
@@ -67,18 +77,26 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 if (currentUser != null)
                 {
                     // Gán giá trị FullName của người dùng hiện tại cho CreateBy của đối tượng News
-                    model.CreateBy = currentUser.FullName;
+                    insert.CreateBy = currentUser.FullName;
                 }
                 else
                 {
                     // Xử lý trường hợp không tìm thấy người dùng
                     // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
-                    model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
+                    insert.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
-                model.CreateDate = DateTime.Now;
-                model.ModifierDate = DateTime.Now;
-                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
-                db.Matterials.Add(model);
+                insert.CreateDate = DateTime.Now;
+                insert.ModifierDate = DateTime.Now;
+                insert.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(insert.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
+                db.Matterials.Add(insert);
+                db.SaveChanges();
+                var newest = db.Matterials.OrderByDescending(m => m.Id).FirstOrDefault();
+                int tempID = newest.Id;
+                Storage storage = new Storage();
+                storage.StoreId = 0;
+                storage.MaterialID = tempID;
+                storage.Quantity = model.Quantity;
+                db.Storages.Add(storage);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -90,18 +108,47 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
 
             var item = db.Matterials.Find(id);
-            return View(item);
+            
+            //Lấy ra cửa hàng
+            var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var currentUser = userManager.FindById(currentUserId);
+            var quantity = db.Storages.OrderByDescending(x => x.Id).ToList();
+            var store = db.Stores.Where(x => x.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+            var currentStore = store.FirstOrDefault();
+            if (User.IsInRole("Admin"))
+            {
+                quantity = db.Storages.Where(x => x.StoreId == 0).OrderByDescending(x => x.Id).ToList();
+            }
+            if (User.IsInRole("Store"))
+            {
+                //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
+                quantity = db.Storages.Where(x => x.StoreId == currentStore.Id).OrderByDescending(x => x.Id).ToList();
+            }
+            var storage = quantity.Where(x => x.MaterialID == id).ToList();
+            MaterialQuantityViewModel model = new MaterialQuantityViewModel(item, storage[0]);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Matterial model)
+        public ActionResult Edit(MaterialQuantityViewModel model)
         {
             if (ModelState.IsValid)
             {
                 ViewBag.StoreList = new SelectList(db.Stores.ToList(), "Id", "Name");
 
-                db.Matterials.Attach(model);
+                var edit = db.Matterials.Find(model.Id);
+                edit.Title = model.Title;
+                edit.MattsCode = model.MattsCode;
+                edit.Description = model.Description;
+                edit.Price = model.Price;
+                edit.Image = model.Image;
+                edit.Packing = model.Packing;
+                edit.Detail = model.Detail;
+                edit.IsActive = model.IsActive;
+
+                db.Matterials.Attach(edit);
 
                 // Lấy thông tin người dùng hiện tại
                 var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
@@ -110,22 +157,38 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
                 var currentUser = userManager.FindById(currentUserId);
 
+                //Lấy ra cửa hàng
+                var quantity = db.Storages.OrderByDescending(x => x.Id).ToList();
+                var store = db.Stores.Where(x => x.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+                var currentStore = store.FirstOrDefault();
+                if (User.IsInRole("Admin"))
+                {
+                    quantity = db.Storages.Where(x => x.StoreId == 0).OrderByDescending(x => x.Id).ToList();
+                }
+                if (User.IsInRole("Store"))
+                {
+                    //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
+                    quantity = db.Storages.Where(x => x.StoreId == currentStore.Id).OrderByDescending(x => x.Id).ToList();
+                }
+                var storage = quantity.Where(x => x.MaterialID == edit.Id).ToList();
+                var currenrStorage = storage.Where(x => x.StoreId == currentStore.Id).ToList();
+                var update = currenrStorage[0];
+
                 if (currentUser != null)
                 {
                     // Gán giá trị FullName của người dùng hiện tại cho CreateBy của đối tượng News
-                    model.CreateBy = currentUser.FullName;
+                    edit.CreateBy = currentUser.FullName;
                 }
                 else
                 {
                     // Xử lý trường hợp không tìm thấy người dùng
                     // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
-                    model.CreateBy = "Người dùng không tồn tại"; // Ví dụ
+                    edit.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
-
-
-                model.ModifierDate = DateTime.Now;
-                model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
-                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                edit.ModifierDate = DateTime.Now;
+                edit.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(edit.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
+                db.Entry(edit).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(update).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -137,9 +200,12 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
 
             var item = db.Matterials.Find(id);
+            var storage = db.Storages.Where(s => s.MaterialID == id).ToList();
             if (item != null)
             {
                 db.Matterials.Remove(item);
+                for(int i = 0; i < storage.Count; i++)
+                    db.Storages.Remove(storage[i]);
                 db.SaveChanges();
                 return Json(new { success = true });
             }
@@ -172,7 +238,10 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     foreach (var item in items)
                     {
                         var obj = db.Matterials.Find(Convert.ToInt32(item));
+                        var storage = db.Storages.Where(s => s.MaterialID == obj.Id).ToList();
                         db.Matterials.Remove(obj);
+                        for (int i = 0; i < storage.Count; i++)
+                            db.Storages.Remove(storage[i]);
                         db.SaveChanges();
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -8,7 +9,7 @@ using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Models
 {
-    public class MaterialQuantityViewModel
+    public class MaterialQuantityViewModel : CommonAbstract
     {
         public int Id { get; set; }
         [Required]
@@ -29,6 +30,9 @@ namespace WebBanHangOnline.Models
         public string Packing { get; set; }//Quy cách tính
         public int Quantity { get; set; }
 
+        public MaterialQuantityViewModel()
+        {
+        }
         public MaterialQuantityViewModel(Matterial matterial, Storage storage)
         {
             Id = matterial.Id;
