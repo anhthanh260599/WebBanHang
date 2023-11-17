@@ -14,11 +14,10 @@ namespace WebBanHangOnline.Models.EF
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        [Required]
         public int StoreId { get; set; }
-        [Required]
         public int MaterialID { get; set; }
         public virtual Store Stores { get; set; }
         public virtual Store Materials { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -6,3 +6,6 @@
 *.gitignore
 /.gitignore
 /.gitignore
+/WebBanHangOnline/WebBanHangOnline/Migrations
+/WebBanHangOnline/WebBanHangOnline/obj/Debug
+/.gitignore

@@ -19,20 +19,27 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             var currentUser = userManager.FindById(currentUserId);
-
             var quantity = db.Storages.OrderByDescending(x => x.Id).ToList();
-            List<Matterial> items = new List<Matterial>();
+            var store = db.Stores.Where(x => x.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+            var currentStore = store.FirstOrDefault();
+            List<MaterialQuantityViewModel> viewModel = new List<MaterialQuantityViewModel>();
+            if (User.IsInRole("Admin"))
+            {
+                quantity = db.Storages.Where(x => x.StoreId == 0).OrderByDescending(x => x.Id).ToList();
+            }
             if (User.IsInRole("Store"))
             {
                 //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
-                quantity = db.Storages.Where(x => x.Stores.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
-                    for (int i = 0; i < quantity.Count; i++)
-                    {
-                        var itemMaterial = db.Matterials.Where(x => x.Id == quantity[i].MaterialID);
-                        items.Add((Matterial)itemMaterial);
-                    }
+                quantity = db.Storages.Where(x => x.StoreId == currentStore.Id).OrderByDescending(x => x.Id).ToList();
             }
-            return View(items);
+            for (int i = 0; i < quantity.Count; i++)
+            {
+                var materialId = quantity[i].MaterialID;
+                var itemMaterial = db.Matterials.Where(x => x.Id == materialId).ToList();
+                var viewModel1 = new MaterialQuantityViewModel(itemMaterial[0], quantity[i]);
+                viewModel.Add(viewModel1);
+            }
+            return View(viewModel);
         }
 
         public ActionResult Add()
