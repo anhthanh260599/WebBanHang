@@ -20,6 +20,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.EnterpriseServices.CompensatingResourceManager;
 using WebBanHangOnline.Models.MySingleton;
+using Newtonsoft.Json;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -774,7 +775,7 @@ namespace WebBanHangOnline.Controllers
         [HttpPost]
         public ActionResult AddToCart(int id, int quantity)
         {
-            var code = new { success = false, message = Message.NoMessage.ToString(), code = -1, Count = 0 }; // Giá trị ban đầu
+            var code = new { success = false, message = Message.NoMessage.ToString(), code = -1, Count = 0}; // Giá trị ban đầu
             var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
             if (checkProduct != null)
             {
@@ -825,6 +826,20 @@ namespace WebBanHangOnline.Controllers
             return Json(code);
         }
 
+        [HttpGet]
+        public ActionResult GetCartJson()
+        {
+            ShoppingCart cart = (ShoppingCart)Session["Cart"];
+            return Json(cart, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SetCartInSession(ShoppingCart cartData)
+        {
+            Session["Cart"] = cartData;
+            return Json(new { success = true});
+
+        }
 
 
         [HttpPost]
