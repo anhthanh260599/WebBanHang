@@ -41,6 +41,5 @@ namespace WebBanHangOnline.Models.EF
         public virtual ICollection<Promotion> Promotions { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Storage> Storages { get; set; }
-        public int Quantity { get; set; }
     }
 }

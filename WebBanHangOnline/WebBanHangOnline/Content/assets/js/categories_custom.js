@@ -320,13 +320,21 @@ jQuery(document).ready(function ($) {
                     let maxValue = $("#slider-range").slider("option", "max");
                     let minValue = $("#slider-range").slider("option", "min");
 
-                    if (ui.value > (maxValue - 10000)) {
+                    if (ui.value >= (maxValue - 10000)) {
                         $("#amount").val(formatMinvalue + " VND  -  " + maxValue.toLocaleString('en-US') + " VND");
                     } else if (ui.value < 9000) {
-                        $("#amount").val(formatMinvalue + " VND  -  " + minValue.toLocaleString('en-US') + " VND");
+                        if (ui.values[1] <= maxValue) {
+                            $("#amount").val(minValue.toLocaleString('en-US') + " VND  -  " + formatMaxvalue + " VND");
+
+                        } else {
+                            $("#amount").val(formatMinvalue + " VND  -  " + minValue.toLocaleString('en-US') + " VND");
+                        }
                     } else {
                         $("#amount").val(formatMinvalue + " VND  -  " + formatMaxvalue + " VND");
                     }
+
+
+
                     let selectStoreID = document.querySelector("#StoreList").value;
 
                     //handle event
@@ -338,8 +346,7 @@ jQuery(document).ready(function ($) {
                             var itemPrice = $(this).find(".in_product_price").clone().children().remove().end().text();
                             let storeProductID = $(this).find('.in_product_storeID').text();
 
-                            return (parseFloat(itemPrice) / 1000 > priceMin) && (parseFloat(itemPrice) / 1000 < priceMax && parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
-
+                            return (parseFloat(itemPrice) / 1000 > priceMin) && (parseFloat(itemPrice) / 1000 < priceMax) && (parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
                         },
                         animationOptions: {
                             duration: 750,
