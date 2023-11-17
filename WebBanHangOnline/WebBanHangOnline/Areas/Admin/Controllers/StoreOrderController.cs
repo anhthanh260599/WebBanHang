@@ -139,8 +139,27 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public ActionResult UpdateTrangThai(int id, int trangThai)
+        public ActionResult UpdateTrangThai(int id, int trangThai, int storeId)
         {
+            if(trangThai == 3)
+            {
+                var detail = db.OrderDetailMatts.Where(x => x.OrderMattsID == id).ToList();
+                int quantity = 0;
+                int material = 0;
+                //Lấy storege của cửa hàng
+                var storage = db.Storages.Where(x => x.StoreId == storeId).ToList();
+                var currentStorage = storage.ToList();
+                for (int i=0; i<detail.Count; i++)
+                {
+                    material = detail[i].MatterialID;
+                    quantity = detail[i].Quantity;
+                    currentStorage = storage.Where(x => x.MaterialID == material).ToList();
+                    quantity = quantity + currentStorage[0].Quantity;
+                    currentStorage[0].Quantity = quantity;
+                    db.Entry(currentStorage[0]).Property(x => x.Quantity).IsModified = true;
+                }
+            }
+
             var item = db.OrderMatts.Find(id);
             if (item != null)
             {
