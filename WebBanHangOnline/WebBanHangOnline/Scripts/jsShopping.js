@@ -14,7 +14,7 @@
         $.ajax({
             url: '/shoppingcart/AddToCart',
             type: 'POST',
-            data: { id: id, quantity : quantity },
+            data: { id: id, quantity: quantity },
             success: function (rs) {
                 if (rs.success) {
                     $('#checkout_items').html(rs.Count);
@@ -24,6 +24,19 @@
                         closeButton: true, // Hiển thị nút X để tắt
                     };
                     toastr.success(rs.message);
+                    //Cập nhật lại LOCAL STORAGE
+                    $.ajax({
+                        url: '/shoppingcart/GetCartJson',
+                        type: 'GET',
+                        success: function (cartData) {
+                            console.log(cartData);
+                             //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+                            if (cartData.Items.length !== 0) {
+                                // Lưu dữ liệu vào Local Storage
+                                localStorage.setItem('cart', JSON.stringify(cartData));
+                            }
+                        }
+                    });
                 }
                 else {
                     toastr.options = {
@@ -59,8 +72,21 @@
                             $(this).text(index + 1);
                         });
                         LoadCart();
-
                         //location.reload();
+
+                        // Cập nhật LOCAL STORAGE của cart
+                        $.ajax({
+                            url: '/shoppingcart/GetCartJson',
+                            type: 'GET',
+                            success: function (cartData) {
+                                console.log(cartData);
+                                //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+                                if (cartData.Items.length !== 0) {
+                                    // Lưu dữ liệu vào Local Storage
+                                    localStorage.setItem('cart', JSON.stringify(cartData));
+                                }
+                            }
+                        });
                     }
                 }
             });
@@ -83,7 +109,7 @@
         e.preventDefault();
         var id = $(this).data("id")
         var quantity = $('#soLuong_product_' + id).val();
-        UpdateQuantityCartItem(id,quantity);
+        UpdateQuantityCartItem(id, quantity);
     });
 
 })
@@ -105,7 +131,7 @@ function DeleteAll() { //Hàm dùng để xoá toàn bộ giỏ hàng
         success: function (rs) {
             if (rs.success) {
                 LoadCart();
-                
+
             }
         }
     })
@@ -115,7 +141,7 @@ function UpdateQuantityCartItem(id, quantity) { //Hàm dùng để update số l
     $.ajax({
         url: '/shoppingcart/UpdateQuantityCartItem',
         type: 'POST',
-        data: {id: id, quantity: quantity},
+        data: { id: id, quantity: quantity },
         success: function (rs) {
             if (rs.success) {
                 LoadCart();
