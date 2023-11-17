@@ -84,6 +84,8 @@
                                 if (cartData.Items.length !== 0) {
                                     // Lưu dữ liệu vào Local Storage
                                     localStorage.setItem('cart', JSON.stringify(cartData));
+                                } else {
+                                    localStorage.setItem('cart', null);
                                 }
                             }
                         });
