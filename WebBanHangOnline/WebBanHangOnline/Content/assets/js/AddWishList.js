@@ -36,13 +36,17 @@
             type: 'POST',
             data: { ProductId: id },
             success: function (res) {
+                toastr.options = {
+                    positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
+                    closeButton: true, // Hiển thị nút X để tắt
+                };
+
                 if (res.success == false) {
-                    //alert(res.message)
-                    toastr.options = {
-                        positionClass: 'toast-bottom-right', // Đặt vị trí ở góc phải dưới
-                        closeButton: true, // Hiển thị nút X để tắt
-                    };
+                  
                     toastr.info(res.message);
+                }
+                else {
+                    toastr.success(res.message);
                 }
             }
         })

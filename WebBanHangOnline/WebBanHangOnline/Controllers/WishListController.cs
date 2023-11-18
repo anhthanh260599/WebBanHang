@@ -42,7 +42,7 @@ namespace WebBanHangOnline.Controllers
             item.CreatedDate = DateTime.Now;
             db.WishLists.Add(item);
             db.SaveChanges();
-            return Json(new {success = true});
+            return Json(new {success = true, message = Models.Common.Message.SuccessAddWishList.ToString() });
         }
 
         [HttpPost]
