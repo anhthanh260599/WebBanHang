@@ -20,7 +20,17 @@
                     var thanhTien = item.Price * item.Quantity;
                     <tr>
                         <td>@i</td>
-                        <td>@item.Product.Title</td>
+                        <td>
+                            @if (item.Product.StoreID != null)
+                            {
+                                <span class="text-danger">@item.Product.Title (Chỉ có tại @item.Product.Store.Name)</span>
+                            }
+                            else
+                            {
+                                <span> @item.Product.Title</span>
+                            }
+
+                        </td>
                         <td>@item.Quantity</td>
                     </tr>
                     i++;

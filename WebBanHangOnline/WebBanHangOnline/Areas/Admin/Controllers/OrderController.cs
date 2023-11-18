@@ -124,9 +124,15 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 item.Status = trangThai;
                 if (item.TotalAmount >= 50000 && item.Status == 3) // Status = 3 là giao hàng thành công
                 {
-                    var user = db.Users.Where(x => x.Id == item.CustomerID).FirstOrDefault();
-                    db.Users.Where(x => x.Id == item.CustomerID).FirstOrDefault().CheckPoint++;
-                    db.SaveChanges();
+                    var user = db.Users.Where(x => x.Email == item.Email).FirstOrDefault();
+                    if (user != null)
+                    {
+                        // Tăng giá trị CheckPoint nếu email đã tồn tại
+                        user.CheckPoint++;
+                        db.SaveChanges();
+                    }
+                    //db.Users.Where(x => x.Id == item.CustomerID).FirstOrDefault().CheckPoint++;
+                    //db.SaveChanges();
                 }
                 db.Entry(item).Property(x => x.Status).IsModified = true;
                 db.SaveChanges();

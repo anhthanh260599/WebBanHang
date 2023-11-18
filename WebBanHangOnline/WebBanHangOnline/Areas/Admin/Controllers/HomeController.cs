@@ -19,7 +19,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         public ActionResult Index()
         {
             DateTime today = DateTime.Today;
-            ViewBag.NewOrderToDay = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today).Count();
+            ViewBag.NewOrderToDay = db.Orders.Where(x => DbFunctions.TruncateTime(x.CreateDate) == today && x.Status == 3).Count();
 
             var newOrderToday = 0;
             decimal totalAmountToday = 0;

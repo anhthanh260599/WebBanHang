@@ -3,6 +3,7 @@
     ViewBag.Title = "Trang chủ Admin";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -43,7 +44,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>@Common.FormatNumber(ViewBag.TicketAccount,0)<sup style="font-size: 20px"> VND</sup></h3>
+                    <h3>@Common.FormatNumber(ViewBag.TicketAccount, 0)<sup style="font-size: 20px"> VND</sup></h3>
 
                     <p>Ticket Account (TA)</p>
                 </div>
