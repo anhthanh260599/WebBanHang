@@ -317,6 +317,9 @@ namespace WebBanHangOnline.Controllers
                             check = user.CheckPoint;
                             if (promotionItem.Point <= check)
                             {
+                                check -= promotionItem.Point;
+                                user.CheckPoint = check;
+                                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                                 promotionItem.Quantity = promotionItem.Quantity - 1;
                             }
                             else
@@ -651,10 +654,6 @@ namespace WebBanHangOnline.Controllers
                 {
                     if (promotion.Point > userCheckPoint)
                     {
-                        userCheckPoint -= promotion.Point;
-                        user.CheckPoint = userCheckPoint;
-                        db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
                         return Json(new { success = false });
 
                     }
