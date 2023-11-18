@@ -651,6 +651,8 @@ namespace WebBanHangOnline.Controllers
                 {
                     if (promotion.Point > userCheckPoint)
                     {
+                        userCheckPoint -= promotion.Point;
+                        user.CheckPoint = userCheckPoint;
                         return Json(new { success = false });
 
                     }
