@@ -85,7 +85,7 @@
                             <th>Trạng thái</th>
                             <th>Số lượng</th>
                             <th>Quy cách</th>
-                            @*<th></th>*@
+                            <th></th>
                         }
                     </tr>
                 </thead>
@@ -95,7 +95,6 @@
                         var i = 1;
                         foreach (var item in Model)
                         {
-
                             //var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
                             if (User.IsInRole("Store"))
                             {
@@ -123,15 +122,15 @@
                                         </td>*@
                                     <td>@item.Quantity</td>
                                     <td>@item.Packing</td>
-                                    @*<td>
+                                    <td>
                                             <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
-                                            <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
-                                        </td>*@
+                                            @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
+                                        </td>
                                 </tr>
                                 i++;
                             }
-                            if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
-                            {
+                            if (User.IsInRole("Admin"))
+                            {     
                                 <tr id="trow_@item.Id">
                                     <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                     <td class="stt-cell">@i</td>

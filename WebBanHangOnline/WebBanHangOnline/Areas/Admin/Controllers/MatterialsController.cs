@@ -152,8 +152,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
                 // Lấy thông tin người dùng hiện tại
                 var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
-
-                // Sử dụng DbContext để tìm ApplicationUser có UserId tương ứng
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
                 var currentUser = userManager.FindById(currentUserId);
 
@@ -161,18 +159,21 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 var quantity = db.Storages.OrderByDescending(x => x.Id).ToList();
                 var store = db.Stores.Where(x => x.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
                 var currentStore = store.FirstOrDefault();
+                var currenrStorage = quantity;
                 if (User.IsInRole("Admin"))
                 {
                     quantity = db.Storages.Where(x => x.StoreId == 0).OrderByDescending(x => x.Id).ToList();
+                    currenrStorage = quantity.Where(x => x.MaterialID == model.Id).ToList();
                 }
                 if (User.IsInRole("Store"))
                 {
                     //items = db.Matterials.Where(s => s.Store.UserID == currentUser.Id).ToList();
                     quantity = db.Storages.Where(x => x.StoreId == currentStore.Id).OrderByDescending(x => x.Id).ToList();
+                    currenrStorage = quantity.Where(x => x.MaterialID == model.Id).ToList();
                 }
-                var storage = quantity.Where(x => x.MaterialID == edit.Id).ToList();
-                var currenrStorage = storage.Where(x => x.StoreId == currentStore.Id).ToList();
                 var update = currenrStorage[0];
+                int num = model.Quantity;
+                update.Quantity = num;
 
                 if (currentUser != null)
                 {
