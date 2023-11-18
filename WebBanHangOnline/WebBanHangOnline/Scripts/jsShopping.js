@@ -49,63 +49,150 @@
         });
     })
 
-    $('body').on('click', '.btnDeleteCartItem', function (e) { // sử dụng hàm xoá cart item
-        e.preventDefault();
-        var id = $(this).data('id');
-        var confirmMessage = confirm("Bạn thật sự muốn xoá sản phẩm này không?");
-        if (confirmMessage == true) {
-            $.ajax({
-                url: '/shoppingcart/DeleteCartItem',
-                type: 'POST',
-                data: { id: id },
-                success: function (rs) {
-                    if (rs.success) {
+        $('body').on('click', '.btnDeleteCartItem', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
 
-                        //Cập nhật lại Cart Count
-                        $('#checkout_items').html(rs.Count)
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Bạn thật sự muốn xoá sản phẩm này không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xóa'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/shoppingcart/DeleteCartItem',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (rs) {
+                            if (rs.success) {
+                                // Cập nhật lại Cart Count
+                                $('#checkout_items').html(rs.Count)
 
-                        // Xoá dòng 
-                        $('#trow_' + id).remove();
+                                // Xoá dòng 
+                                $('#trow_' + id).remove();
 
-                        // Cập nhật lại STT
-                        $('.stt-cell').each(function (index) {
-                            $(this).text(index + 1);
-                        });
-                        LoadCart();
-                        //location.reload();
+                                // Cập nhật lại STT
+                                $('.stt-cell').each(function (index) {
+                                    $(this).text(index + 1);
+                                });
+                                LoadCart();
 
-                        // Cập nhật LOCAL STORAGE của cart
-                        $.ajax({
-                            url: '/shoppingcart/GetCartJson',
-                            type: 'GET',
-                            success: function (cartData) {
-                                console.log(cartData);
-                                //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
-                                if (cartData.Items.length !== 0) {
-                                    // Lưu dữ liệu vào Local Storage
-                                    localStorage.setItem('cart', JSON.stringify(cartData));
-                                } else {
-                                    localStorage.setItem('cart', null);
-                                }
+                                // Cập nhật LOCAL STORAGE của cart
+                                $.ajax({
+                                    url: '/shoppingcart/GetCartJson',
+                                    type: 'GET',
+                                    success: function (cartData) {
+                                        console.log(cartData);
+                                        // Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+                                        if (cartData.Items.length !== 0) {
+                                            // Lưu dữ liệu vào Local Storage
+                                            localStorage.setItem('cart', JSON.stringify(cartData));
+                                        } else {
+                                            localStorage.setItem('cart', null);
+                                        }
+                                    }
+                                });
+
+                                Swal.fire(
+                                    'Xóa thành công!',
+                                    '',
+                                    'success'
+                                );
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             });
-        }
-    });
+        });
 
-    $('body').on('click', '.btnDeleteAllCart', function (e) { // sử dụng hàm xoá toàn bộ cart
+    //$('body').on('click', '.btnDeleteCartItem', function (e) { // sử dụng hàm xoá cart item
+    //    e.preventDefault();
+    //    var id = $(this).data('id');
+    //    var confirmMessage = confirm("Bạn thật sự muốn xoá sản phẩm này không?");
+    //    if (confirmMessage == true) {
+    //        $.ajax({
+    //            url: '/shoppingcart/DeleteCartItem',
+    //            type: 'POST',
+    //            data: { id: id },
+    //            success: function (rs) {
+    //                if (rs.success) {
+
+    //                    //Cập nhật lại Cart Count
+    //                    $('#checkout_items').html(rs.Count)
+
+    //                    // Xoá dòng
+    //                    $('#trow_' + id).remove();
+
+    //                    // Cập nhật lại STT
+    //                    $('.stt-cell').each(function (index) {
+    //                        $(this).text(index + 1);
+    //                    });
+    //                    LoadCart();
+    //                    //location.reload();
+
+    //                    // Cập nhật LOCAL STORAGE của cart
+    //                    $.ajax({
+    //                        url: '/shoppingcart/GetCartJson',
+    //                        type: 'GET',
+    //                        success: function (cartData) {
+    //                            console.log(cartData);
+    //                            //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+    //                            if (cartData.Items.length !== 0) {
+    //                                // Lưu dữ liệu vào Local Storage
+    //                                localStorage.setItem('cart', JSON.stringify(cartData));
+    //                            } else {
+    //                                localStorage.setItem('cart', null);
+    //                            }
+    //                        }
+    //                    });
+    //                }
+    //            }
+    //        });
+    //    }
+    //});
+
+    $('body').on('click', '.btnDeleteAllCart', function (e) {
         e.preventDefault();
-        var confirmMessage = confirm("Bạn thật sự muốn xoá toàn bộ giỏ hàng không?");
-        if (confirmMessage == true) {
-            DeleteAll();
-            ShowCount();
-            LoadCart();
-            location.reload();
-        }
 
+        Swal.fire({
+            title: 'Xác nhận',
+            text: 'Bạn thật sự muốn xoá toàn bộ giỏ hàng không?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                DeleteAll();
+                ShowCount();
+                LoadCart();
+                Swal.fire(
+                    'Xóa thành công!',
+                    '',
+                    'success'
+                ).then(() => {
+                    location.reload();
+                })
+            }
+        });
     });
+
+    //$('body').on('click', '.btnDeleteAllCart', function (e) { // sử dụng hàm xoá toàn bộ cart
+    //    e.preventDefault();
+    //    var confirmMessage = confirm("Bạn thật sự muốn xoá toàn bộ giỏ hàng không?");
+    //    if (confirmMessage == true) {
+    //        DeleteAll();
+    //        ShowCount();
+    //        LoadCart();
+    //        location.reload();
+    //    }
+
+    //});
 
     $('body').on('click', '.btnUpdateCartItem', function (e) { // Sử dụng hàm update cart item
         e.preventDefault();

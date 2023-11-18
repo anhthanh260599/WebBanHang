@@ -73,6 +73,15 @@ namespace WebBanHangOnline.Controllers
             return View(items);
         }
 
+        public ActionResult Partial_SanPhamGoiYTheoDanhMuc(int categoryId, int productID)
+        {
+            var items = db.Products.ToList();
+            if (categoryId > 0)
+            {
+                items = items.Where(x => x.ProductCategory.Id == categoryId && x.IsActive && x.Id != productID).OrderByDescending(x=>x.ViewCount).Take(5).ToList();
+            }
+            return PartialView(items);
+        }
         public ActionResult Partial_ItemsByCateId()
         {
             var item = db.Products.Where(x=>x.IsFeature && x.IsActive && x.IsHome).Take(10).ToList();
