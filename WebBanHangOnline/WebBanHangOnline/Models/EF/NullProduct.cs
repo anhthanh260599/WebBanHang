@@ -19,11 +19,16 @@ namespace WebBanHangOnline.Models.EF
             this.ReviewProducts = new HashSet<ReviewProduct>(); // 1 sản phẩm có nhiều review
             this.WishLists = new HashSet<WishList>(); // 1 sản phẩm có nhiều yêu thích
         }
-
+        public NullProduct(Product p)
+        {
+            this.ProductImage = p.ProductImage; // 1 sản phẩm có nhiều ảnh
+            this.OrderDetails = p.OrderDetails;// 1 sản phẩm có nhiều chi tiết đơn hàng
+            this.ReviewProducts = p.ReviewProducts; // 1 sản phẩm có nhiều review
+            this.WishLists = p.WishLists; // 1 sản phẩm có nhiều yêu thích
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // tự động tăng 
         public int Id { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
         [StringLength(250)]
         public string Title { get; set; }
         [StringLength(250)]
@@ -34,12 +39,8 @@ namespace WebBanHangOnline.Models.EF
         public string Description { get; set; }
         [AllowHtml]
         public string Detail { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
-
         public string Image { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
         public decimal OriginalPrice { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
         public decimal Price { get; set; }
         public decimal? PriceSale { get; set; }
         public bool IsHome { get; set; }
@@ -47,14 +48,12 @@ namespace WebBanHangOnline.Models.EF
         public bool IsFeature { get; set; }
         public bool IsHot { get; set; }
         public bool IsActive { get; set; }
-        [Required(ErrorMessage = "Vui lòng không để trống")]
         public int Quantity { get; set; }
         public int ViewCount { get; set; }
         public string SeoTitle { get; set; }
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public bool IsApprovedByAdmin { get; set; }
-
         public virtual ProductCategory ProductCategory { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; } // 1 sản phẩm có nhiều ảnh
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // 1 sản phẩm có nhiều chi tiết đơn hàng
