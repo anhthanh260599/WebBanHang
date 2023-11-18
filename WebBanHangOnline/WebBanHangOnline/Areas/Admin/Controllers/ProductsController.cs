@@ -119,8 +119,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 }
                 else
                 {
-                    NullProduct newModel = (NullProduct)model;
-                    model = newModel;
+                    NullProduct newModel = new NullProduct();
+                    model.StoreID = newModel.StoreID;
                     model.IsApprovedByAdmin = true; // Nếu là admin thì tự động duyệt
                 }
 
