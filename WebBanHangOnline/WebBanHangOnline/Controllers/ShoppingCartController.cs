@@ -651,6 +651,10 @@ namespace WebBanHangOnline.Controllers
                 {
                     if (promotion.Point > userCheckPoint)
                     {
+                        userCheckPoint -= promotion.Point;
+                        user.CheckPoint = userCheckPoint;
+                        db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
                         return Json(new { success = false });
 
                     }
