@@ -410,6 +410,7 @@
         }
         // Cập nhật cart trong LOCAL STORAGE
         let cartData = JSON.parse(localStorage.getItem('cart')); // chuyển thành chuỗi js
+        let storeIDData = JSON.parse(localStorage.getItem('storeID'));
         if (cartData != null) {
             $.ajax({
                 url: '/shoppingcart/SetCartInSession',
@@ -417,12 +418,20 @@
                 contentType: 'application/json',
                 data: JSON.stringify(cartData),
                 success: function (rs) {
-                    console.log(rs.success);
-
+                    updateStoreSingleton(storeIDData);
                 }
             });
-             let data = @Html.Raw(Json.Encode(Session["Cart"]));
-            console.log(data);
+        }
+        // Ứng dụng Singleton
+        function updateStoreSingleton(selectedValue) {
+            // Sử dụng Ajax để gửi giá trị mới đến server
+            $.ajax({
+                url: '/Product/UpdateStoreId',
+                type: 'POST',
+                data: { newStoreId: selectedValue },
+                success: function (data) {
+                }
+            });
         }
     </script>
 
