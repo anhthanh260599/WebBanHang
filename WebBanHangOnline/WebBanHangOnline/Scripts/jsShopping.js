@@ -133,7 +133,9 @@ function DeleteAll() { //Hàm dùng để xoá toàn bộ giỏ hàng
         success: function (rs) {
             if (rs.success) {
                 LoadCart();
-
+                ShowCount();
+                // Xoá toàn bộ LOCAL STORAGE của cart sau khi xoá giỏ hàng
+                localStorage.removeItem('cart');
             }
         }
     })
@@ -147,6 +149,23 @@ function UpdateQuantityCartItem(id, quantity) { //Hàm dùng để update số l
         success: function (rs) {
             if (rs.success) {
                 LoadCart();
+
+                // Cập nhật LOCAL STORAGE của cart sau khi cập nhật số lượng
+                $.ajax({
+                    url: '/shoppingcart/GetCartJson',
+                    type: 'GET',
+                    success: function (cartData) {
+                        console.log(cartData);
+                        //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+                        if (cartData.Items.length !== 0) {
+                            // Lưu dữ liệu vào Local Storage
+                            localStorage.setItem('cart', JSON.stringify(cartData));
+                        } else {
+                            localStorage.removeItem('cart');
+                        }
+                    }
+                });
+
             }
         }
     })

@@ -28,9 +28,11 @@
             if (res.Success) {
                 if (res.Code == 1) {
                     location.href = 'ShoppingCart/CheckoutSuccess';
+                    localStorage.removeItem('cart');
                 }
                 else {
                     location.href = res.Url;
+                    localStorage.removeItem('cart');
                 }
             }
         }
