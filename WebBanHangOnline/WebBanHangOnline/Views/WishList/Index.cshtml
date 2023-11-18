@@ -6,6 +6,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<!-- SweetAlert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
 <style>
     .news_section_container {
         margin-top: 200px;
@@ -43,7 +46,8 @@
                 <div class="col-md-3">
                     <div class="img-box">
                         <a href="/chi-tiet/@item.Products.Alias-p@(item.ProductId)" title="@item.Products.Title">
-                        <img style="width: 100%;" height="200px;" src="@strImage" alt="@item.Products.Title" /></a>
+                            <img style="width: 100%;" height="200px;" src="@strImage" alt="@item.Products.Title" />
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -62,37 +66,79 @@
             </div>
         }
     }
-    else {
+    else
+    {
         <h5 class="text-danger">Chưa có sản phẩm yêu thích nào</h5>
     }
 </div>
 
 @section scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         $(document).ready(function () {
             $('body').on('click', '.btnDelete', function () {
-                  var id = $(this).data("id");
-                  var confirmMessage = confirm("@Message.ConfirmDeleteItemInWishList");
-                  if (confirmMessage === true)
-                  {
-                      $.ajax({
-                          url: '/WishList/delete',
-                          type: 'POST',
-                          data: { id: id },
-                          success: function (rs)
-                          {
-                              if (rs.success)
-                              {
-                                  location.reload();
+                var id = $(this).data("id");
+                var confirmMessage = "@Message.ConfirmDeleteItemInWishList";
 
-                                  $('#trow_' + id).remove();
-                      
-                              }
-                          }
-                      });
-                  }
-               });
+                Swal.fire({
+                    title: 'Xác nhận',
+                    text: confirmMessage,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xóa'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/WishList/delete',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    Swal.fire(
+                                        'Xóa thành công!',
+                                        '',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                        $('#trow_' + id).remove();
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
+
+    @*<script>
+            $(document).ready(function () {
+                $('body').on('click', '.btnDelete', function () {
+                      var id = $(this).data("id");
+                      var confirmMessage = confirm("@Message.ConfirmDeleteItemInWishList");
+                      if (confirmMessage === true)
+                      {
+                          $.ajax({
+                              url: '/WishList/delete',
+                              type: 'POST',
+                              data: { id: id },
+                              success: function (rs)
+                              {
+                                  if (rs.success)
+                                  {
+                                      location.reload();
+
+                                      $('#trow_' + id).remove();
+
+                                  }
+                              }
+                          });
+                      }
+                   });
+            });
+        </script>*@
 }
 

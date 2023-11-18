@@ -317,6 +317,9 @@ namespace WebBanHangOnline.Controllers
                             check = user.CheckPoint;
                             if (promotionItem.Point <= check)
                             {
+                                check -= promotionItem.Point;
+                                user.CheckPoint = check;
+                                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                                 promotionItem.Quantity = promotionItem.Quantity - 1;
                             }
                             else

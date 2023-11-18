@@ -3698,6 +3698,7 @@
     <Content Include="Views\ShoppingCart\ConfirmMail.cshtml" />
     <Content Include="Views\Home\CustomerRequest.cshtml" />
     <Content Include="Views\Home\CustomerRequest_SuccessSend.cshtml" />
+    <Content Include="Views\Product\Partial_SanPhamGoiYTheoDanhMuc.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
