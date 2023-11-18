@@ -56,19 +56,39 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                                     StoreID = o.StoreID
                                 };
 
-            if (!string.IsNullOrEmpty(fromDate))
+            if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
-                DateTime startDate = DateTime.ParseExact(fromDate,"yyyy-MM-dd",null);
-                queryTotalSell = queryTotalSell.Where(x=>x.CreateDate >= startDate);
-                queryTotalBuy = queryTotalBuy.Where(x => x.CreateDate >= startDate);
+                DateTime startDate = DateTime.ParseExact(fromDate, "yyyy-MM-dd", null);
+                DateTime endDate = DateTime.ParseExact(toDate, "yyyy-MM-dd", null);
+
+                // Kiểm tra nếu startDate lớn hơn endDate
+                if (startDate > endDate)
+                {
+                    return Json(new { success = false ,Message = "Ngày bắt đầu không được lớn hơn ngày kết thúc" }, JsonRequestBehavior.AllowGet);
+                }
+
+                queryTotalSell = queryTotalSell.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDate);
+                queryTotalBuy = queryTotalBuy.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDate);
+            }
+            else
+            {
+                // Xử lý trường hợp ngày bắt đầu hoặc ngày kết thúc không được cung cấp
+                return Json(new { success = false ,Message = "Vui lòng nhập cả ngày bắt đầu và ngày kết thúc" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (!string.IsNullOrEmpty(toDate))
-            {
-                DateTime endDate = DateTime.ParseExact(toDate, "yyyy-MM-dd", null);
-                queryTotalSell = queryTotalSell.Where(x => x.CreateDate <= endDate);
-                queryTotalBuy = queryTotalBuy.Where(x => x.CreateDate <= endDate);
-            }
+            //if (!string.IsNullOrEmpty(fromDate))
+            //{
+            //    DateTime startDate = DateTime.ParseExact(fromDate,"yyyy-MM-dd",null);
+            //    queryTotalSell = queryTotalSell.Where(x=>x.CreateDate >= startDate);
+            //    queryTotalBuy = queryTotalBuy.Where(x => x.CreateDate >= startDate);
+            //}
+
+            //if (!string.IsNullOrEmpty(toDate))
+            //{
+            //    DateTime endDate = DateTime.ParseExact(toDate, "yyyy-MM-dd", null);
+            //    queryTotalSell = queryTotalSell.Where(x => x.CreateDate <= endDate);
+            //    queryTotalBuy = queryTotalBuy.Where(x => x.CreateDate <= endDate);
+            //}
             var result = queryTotalSell.GroupBy(x => DbFunctions.TruncateTime(x.CreateDate))
                               .Select(x => new
                               {
@@ -86,7 +106,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                                   DoanhThu = x.TotalSell,
                                   LoiNhuan = x.TotalSell - x.TotalBuy
                               });
-            return Json(new {Data = result}, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, Data = result}, JsonRequestBehavior.AllowGet);
         }
     }
 }

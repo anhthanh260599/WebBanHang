@@ -169,8 +169,18 @@
                 type: 'GET',
                 data: { fromDate: fromDate, toDate: toDate },
                 success: function (rs) {
-                    myChart.destroy();
-                    GenerateChart(rs);
+                    if (rs.success) {
+                        myChart.destroy();
+                        GenerateChart(rs);
+                    }
+                    else {
+                        Swal.fire({
+                             icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                             title: 'Lỗi',
+                             text: rs.Message,
+                             confirmButtonText: 'OK'
+                        })
+                    }
                 }
             });
 
@@ -196,7 +206,7 @@
                 arrDate.push(strDate)
                 arrDoanhThu.push(item.DoanhThu);
                 arrLoiNhuan.push(item.LoiNhuan);
-                arrSoHoaDon.push(item.SoHoaDon); 
+                arrSoHoaDon.push(item.SoHoaDon);
             });
             let areaChartData = {
                 labels: arrDate,
@@ -225,7 +235,7 @@
                     },
                     {
                         label: 'Tổng số hoá đơn',
-                        backgroundColor: 'rgba(220, 53, 69, 0.8)', 
+                        backgroundColor: 'rgba(220, 53, 69, 0.8)',
                         borderColor: 'rgba(220, 53, 69, 0.8)',
                         pointRadius: false,
                         pointColor: 'rgba(220, 53, 69, 0.8)',
@@ -342,7 +352,7 @@
             });
 
             worksheet.addRow(['STT', 'Ngày', 'Số hoá đơn','Doanh thu', 'Lợi nhuận']);
-       
+
 
             // Thêm dữ liệu từ mảng vào bảng Excel
             data.forEach(function (item, index) {
