@@ -134,19 +134,19 @@
                                 <!-- Product 2 -->
                                 <!-- Sản phẩm mới thì dùng cái này  IsNew-->
                                 @*<div class="product-item women">
-                            <div class="product product_filter">
-                                <div class="product_image">
-                                    <img src="images/product_2.png" alt="">
-                                </div>
-                                <div class="favorite"></div>
-                                <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
-                                <div class="product_info">
-                                    <h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
-                                    <div class="product_price">$610.00</div>
-                                </div>
-                            </div>
-                            <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
-                        </div>*@
+                                        <div class="product product_filter">
+                                            <div class="product_image">
+                                                <img src="images/product_2.png" alt="">
+                                            </div>
+                                            <div class="favorite"></div>
+                                            <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+                                            <div class="product_info">
+                                                <h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
+                                                <div class="product_price">$610.00</div>
+                                            </div>
+                                        </div>
+                                        <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
+                                    </div>*@
 
 
                             </div>
@@ -195,20 +195,30 @@
                 });
             });
 
-
             // Xử lý chọn cửa hàng
-            let elementSelectStore = document.querySelector("#StoreList");
-            elementSelectStore.onchange = (e) => {
-                let selectStoreID = e.target.value;
+            let elementSelectStore = document.querySelector("#StoreList");            
 
-                let btnAddToCart = document.querySelectorAll(".btnAddToCart");
-                btnAddToCart.forEach((btn) => {
-                    btn.onclick = (e) => {
-                        // Ứng dụng Singleton
-                        updateStoreSingleton(parseInt(selectStoreID))
-                    }
-                })
-                
+            elementSelectStore.onchange = (e) => {
+                let dataSessionCart = JSON.parse(localStorage.getItem("cart"));
+                let selectStoreID = e.target.value;
+                localStorage.setItem("storeID", selectStoreID);
+
+                // Xử lý khi local storage != null
+                if (dataSessionCart != null) {
+                    //lap qua cac item
+                    dataSessionCart.Items.forEach((element) => {
+                        if (element.ProductStoreID != 0) {
+                            let storeIDSession = element.ProductStoreID;
+                            updateStoreSingleton(storeIDSession);
+                            localStorage.setItem("storeID", storeIDSession);
+                            return;
+                        } 
+                    })
+                } else {
+                    updateStoreSingleton(selectStoreID);
+                    localStorage.setItem("storeID", selectStoreID);
+                }
+
                 if (selectStoreID != 0) {
 
                     $(".product-grid").css({ 'display': 'block' });
@@ -216,7 +226,7 @@
                     $('.product-grid').isotope({
                         filter: function () {
                             let storeProductID = $(this).find('.in_product_storeID').text();
-                            
+
                             return (parseInt(selectStoreID) == parseInt(storeProductID) || storeProductID == '');
                         },
                         animationOptions: {
@@ -230,21 +240,6 @@
                     $("#nullStoreID").css({ 'display': 'block' });
                 }
             }
-
-            // Ứng dụng Singleton
-            function updateStoreSingleton(selectedValue) {
-                // Sử dụng Ajax để gửi giá trị mới đến server
-                $.ajax({
-                    url: '/Product/UpdateStoreId',
-                    type: 'POST',
-                    data: { newStoreId: selectedValue },
-                    success: function (data) {
-                        console.log(data.dataID);
-                    }
-                });
-            }
-
-
         });
     </script>
 }

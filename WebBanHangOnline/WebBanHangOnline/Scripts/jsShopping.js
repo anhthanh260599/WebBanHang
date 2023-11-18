@@ -29,11 +29,23 @@
                         url: '/shoppingcart/GetCartJson',
                         type: 'GET',
                         success: function (cartData) {
-                            console.log(cartData);
                              //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
                             if (cartData.Items.length !== 0) {
                                 // Lưu dữ liệu vào Local Storage
                                 localStorage.setItem('cart', JSON.stringify(cartData));
+                                let dataSessionCart = JSON.parse(localStorage.getItem("cart"));
+                                if (dataSessionCart != null) {
+                                    //lap qua cac item
+                                    dataSessionCart.Items.forEach((element) => {
+                                        if (element.ProductStoreID != 0) {
+                                            let storeIDSession = element.ProductStoreID;
+                                            updateStoreSingleton(storeIDSession);
+                                            localStorage.setItem("storeID", storeIDSession);
+                                            console.log(storeIDSession)
+                                            return;
+                                        }
+                                    })
+                                }
                             }
                         }
                     });
