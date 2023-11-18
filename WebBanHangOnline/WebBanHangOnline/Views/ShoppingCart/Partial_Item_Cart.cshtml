@@ -124,6 +124,20 @@
 
                         // Cập nhật lại tổng tiền và hiển thị nó trên trang
                         $(".total-price-cart").text(result.tongTienCartFormatted);
+                        //Cập nhật lại LOCAL STORAGE
+                        $.ajax({
+                            url: '/shoppingcart/GetCartJson',
+                            type: 'GET',
+                            success: function (cartData) {
+                                console.log(cartData);
+                                //Kiểm tra xem có dữ liệu trong giỏ hàng hay không
+                                if (cartData.PromotionId !== 0) {
+                                    // Lưu dữ liệu vào Local Storage
+                                    localStorage.setItem('cart', JSON.stringify(cartData));
+                                }
+                            }
+                        });
+                      
                     } else {
                         // Mã khuyến mãi không hợp lệ hoặc đã hết hạn
                         toastr.error("Mã khuyến mãi không hợp lệ hoặc đã hết hạn!");
