@@ -46,18 +46,6 @@
     </div><!-- /.container-fluid -->
 </section>
 
-@if (ViewBag.NotEnought != null)
-{
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        // Sử dụng SweetAlert để hiển thị thông báo pop-up
-        Swal.fire({
-            icon: 'error',
-            title: 'Lỗi',
-            text: "@Html.Raw(ViewBag.NotEnought)"
-        });
-    </script>
-}
 
 <section class="content">
     <!-- Default box -->
@@ -374,21 +362,31 @@
                                 contentType: "application/json; charset=utf-8",
                                 dataType: "json",
                                 success: function (response) {
-                                    @* alert("thành công");*@
-                                    Swal.fire({
-                                        title: 'Thành công',
-                                        text: "Đặt thành công",
-                                        icon: 'success',
-                                        confirmButtonColor: '#3085d6',
-                                        confirmButtonText: 'Đồng ý'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // Chuyển hướng sau khi SweetAlert được hiển thị
-                                            window.location.href = response.newUrl
-                                        }
-                                    })
+                                    if (response.success) {
+                                        Swal.fire({
+                                            title: 'Thành công',
+                                            text: "Đặt thành công",
+                                            icon: 'success',
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Đồng ý'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                // Chuyển hướng sau khi SweetAlert được hiển thị
+                                                window.location.href = response.newUrl
+                                            }
+                                        })
+                                    }
+                                    else {
+                                        Swal.fire({
+                                            title: 'Thất bại',
+                                            text: response.message,
+                                            icon: 'error',
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Đồng ý'
+                                        })
+                                    }
                                 }
-                            })
+                        })
                         } else {
                             Swal.fire({
                                 title: 'Thất bại',

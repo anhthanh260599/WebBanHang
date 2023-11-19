@@ -36,8 +36,9 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 temp = admin.Where(x => x.MaterialID == matID).ToList();
                 if (temp[0].Quantity < list[i].Quantity)
                 {
-                    ViewBag.NotEnought = $"Không có đủ số lượng cho {list[i].Matterial.Title}";
-                    return View(list);
+                    list[i].Matterial = db.Matterials.FirstOrDefault(x => x.Id == matID);
+                    var errorMessage = ($"Hiện tại Kho không đủ nguyên liệu {list[i].Matterial.Title} với số lượng {list[i].Quantity}");
+                    return Json(new { success = false, message = errorMessage }); 
                 }
             }
 
@@ -130,7 +131,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 context.SaveChanges();
             }
 
-            return Json(new { newUrl = Url.Action("OrderIndex", "StoreOrder") }); // Truyền đến quản lý đơn nvl
+            return Json(new { success = true, newUrl = Url.Action("OrderIndex", "StoreOrder") }); // Truyền đến quản lý đơn nvl
         }
 
         public ActionResult OrderIndex()
