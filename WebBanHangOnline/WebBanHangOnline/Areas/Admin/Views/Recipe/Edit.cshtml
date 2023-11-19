@@ -67,10 +67,10 @@
                         </th>
                         <th>
                             <label>Số lượng</label>
-                        </th>
+                        @*</th>
                         <th>
                             <label>Đơn vị</label>
-                        </th>
+                        </th>*@
                         <th>
                             <label>Qui cách</label>
                         </th>
@@ -89,9 +89,9 @@
                                 <input type="text" class="form-control" id="Quantity" placeholder="Nhập số lượng" value="@item.Quantity" />
                                 <span class="text-danger error-message"></span>
                             </td>
-                            <td>
+                            @*<td>
                                 <input type="text" class="form-control" value="@item.Matterial.Unit" />
-                            </td>
+                            </td>*@
                             <td>
                                 <input type="text" class="form-control" value="@item.Matterial.Packing" />
                             </td>
@@ -143,11 +143,11 @@
                                 <span class="text-danger error-message"></span>
                             </div>
                         </div>
-                        <div class="col-sm-2" id="inputValueUnitRecipe">
+                        @*<div class="col-sm-2" id="inputValueUnitRecipe">
                             <div class="form-group">
                                 <input type="text" class="form-control" value="@material.Unit" readonly />
                             </div>
-                        </div>
+                        </div>*@
                         <div class="col-sm-2" id="inputValuePackingRecipe">
                             <div class="form-group">
                                 <input type="text" class="form-control" value="@material.Packing" readonly />
