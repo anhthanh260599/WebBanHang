@@ -27,6 +27,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Index(List<OrderDetailMatts> list, decimal total)
         {
+            var admin = db.Storages.Where(x => x.StoreId == 0).OrderByDescending(x => x.Id).ToList();
+            var temp = admin;
+            int matID;
+            for(int i =0; i<list.Count; i++)
+            {
+                matID = list[i].MatterialID;
+                temp = admin.Where(x => x.MaterialID == matID).ToList();
+                if (temp[0].Quantity < list[i].Quantity)
+                {
+                    ViewBag.NotEnought = $"Không có đủ số lượng cho {list[i].Matterial.Title}";
+                    return View(list);
+                }
+            }
+
             // Them orderMatts vao db
             OrderMatts orderMatts = new OrderMatts();
             var currentUserId = User.Identity.GetUserId(); // Sử dụng UserManager để lấy UserId của người dùng hiện tại
@@ -121,7 +135,21 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult OrderIndex()
         {
-            var items = db.OrderMatts.OrderByDescending(x=>x.Id).ToList();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var currentUser = userManager.FindById(User.Identity.GetUserId());
+            var items = db.OrderMatts.OrderByDescending(x => x.Id).ToList();
+            if (User.IsInRole("Admin"))
+            {
+                // Nếu người dùng có vai trò "Admin" hoặc "Người điều phối đơn", hiển thị toàn bộ danh sách Order
+                items = db.OrderMatts.OrderByDescending(x => x.Id).ToList();
+                return View(items);
+            }
+            else if (User.IsInRole("Store") && currentUser != null)
+            {
+                // Nếu người dùng có vai trò "Store" và đang đăng nhập, lọc danh sách Order có StoreID trùng với UserID của người dùng
+                var storeProduct = db.OrderMatts.Where(x => x.Store.UserID == currentUser.Id).OrderByDescending(x => x.Id).ToList();
+                return View(storeProduct);
+            }
             return View(items);
         }
 
@@ -149,14 +177,23 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 //Lấy storege của cửa hàng
                 var storage = db.Storages.Where(x => x.StoreId == storeId).ToList();
                 var currentStorage = storage.ToList();
+                //Lấy storage admin
+                var admin = db.Storages.Where(x => x.StoreId == 0).ToList();
+                var currentAdmin = admin.ToList();
                 for (int i=0; i<detail.Count; i++)
                 {
                     material = detail[i].MatterialID;
                     quantity = detail[i].Quantity;
+                    //Lấy storage của mat hiện tại
                     currentStorage = storage.Where(x => x.MaterialID == material).ToList();
-                    quantity = quantity + currentStorage[0].Quantity;
-                    currentStorage[0].Quantity = quantity;
+                    //Lấy storage admin của mat hiện tại
+                    currentAdmin = admin.Where(x => x.MaterialID == material).ToList();
+                    //Trừ của admin
+                    currentAdmin[0].Quantity = currentAdmin[0].Quantity - quantity;
+                    //Cộng vào kho của store
+                    currentStorage[0].Quantity = quantity + currentStorage[0].Quantity;
                     db.Entry(currentStorage[0]).Property(x => x.Quantity).IsModified = true;
+                    db.Entry(currentAdmin[0]).Property(x => x.Quantity).IsModified = true;
                 }
             }
 
