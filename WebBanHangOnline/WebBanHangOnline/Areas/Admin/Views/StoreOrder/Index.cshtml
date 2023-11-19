@@ -46,6 +46,19 @@
     </div><!-- /.container-fluid -->
 </section>
 
+@if (ViewBag.NotEnought != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Sử dụng SweetAlert để hiển thị thông báo pop-up
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: "@Html.Raw(ViewBag.NotEnought)"
+        });
+    </script>
+}
+
 <section class="content">
     <!-- Default box -->
     <div class="card">
