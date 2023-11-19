@@ -5,6 +5,10 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css"/>
+
 <style>
     .btn-chuan-bi-mon {
         background-color: #eeb0b0;
@@ -19,6 +23,17 @@
 
     .action-list-order {
         width: 250px;
+    }
+
+    #example_wrapper {
+        position: relative;
+    }
+
+    #example thead {
+        position: sticky;
+        top: 0;
+        background-color: #f5f5f5; /* Màu nền cho phần đầu bảng */
+        z-index: 1;
     }
 </style>
 
@@ -76,7 +91,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-hover" id="dataTable">
+            <table class="table table-hover display nowrap" id="example">
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -87,7 +102,6 @@
                         <th>Phương thức</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
-
                         <th></th>
                     </tr>
                 </thead>
@@ -132,47 +146,47 @@
                                 {
                                     if (item.Status == 1)
                                     {
-                                        <td style="cursor:text; width:100px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
                                     }
                                     if (item.Status == 2)
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-primary">Đã thanh toán</td>
                                     }
                                     if (item.Status == 3)
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-success">Giao hàng thành công</td>
                                     }
                                     if (item.Status == 4)
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Huỷ</td>
                                     }
                                     if (item.Status == 5)
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-info">Đang giao hàng</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-info">Đang giao hàng</td>
                                     }
                                     if (item.Status == 6)
                                     {
-                                        <td style="cursor: text; width: 100px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
                                     }
                                     if (item.Status == 7)
                                     {
-                                        <td style="cursor: text; width: 100px; " class="btn btn-sm btn-danger">Cửa hàng không nhận đơn</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Cửa hàng không nhận đơn</td>
                                     }
                                 }
                                 else
                                 {
                                     if (item.Status == 4)
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-danger">Huỷ</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Huỷ</td>
                                     }
                                     else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-warning">Chưa thanh toán</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-warning">Chưa thanh toán</td>
                                     }
 
                                     else
                                     {
-                                        <td style="cursor: text; width: 100px;" class="btn btn-sm btn-warning">Chưa xác nhận</td>
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-warning">Chưa xác nhận</td>
                                     }
                                 }
 
@@ -184,7 +198,7 @@
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if ((User.IsInRole("Admin") || User.IsInRole("Store")) && item.IsConfirm == true && item.Status == 6 || item.Status == 5 )
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Store")) && item.IsConfirm == true && item.Status == 6 || item.Status == 5)
                                     {
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
@@ -315,6 +329,13 @@
 
 
 @section scripts {
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('body').on('click', '.btnCapNhat', function () {
@@ -445,6 +466,40 @@
                     }
                 })
             })
+
+            var table = $('#example').DataTable({
+                searchPanes: {
+                    viewTotal: true
+                },
+                dom: 'Plfrtip',
+                language: {
+                    searchPanes: {
+                        title: {
+                            _: 'Bảng thông tin - %d cột được chọn',
+                            0: 'Bảng thông tin - Không cột nào được chọn',
+                        },
+                        clearMessage: 'Xóa tất cả các cột đã chọn',
+                        collapse: {
+                            0: 'Bảng thông tin - Các cột đang được hiển thị',
+                            _: 'Bảng thông tin - %d cột đang được hiển thị',
+                        },
+                        showMessage: 'Hiển thị tất cả',
+                        collapseMessage: 'Ẩn tất cả'
+                    },
+                },
+            });
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
         });
     </script>
 
