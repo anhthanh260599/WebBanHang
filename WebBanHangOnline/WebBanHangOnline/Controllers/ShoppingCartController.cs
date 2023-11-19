@@ -35,6 +35,8 @@ namespace WebBanHangOnline.Controllers
         private readonly string _clientId;
         private readonly string _secretKey;
 
+        private OrderViewModel _orderViewModel;
+
         public ShoppingCartController()
         {
             phiShip = db.ShippingFees.Select(x => x.Value).FirstOrDefault();
@@ -252,7 +254,6 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(OrderViewModel request)
         {
-
             if (request.TypePayment == -1)
             {
                 return Json(new { Success = false, message = "Vui lòng chọn phương thức thanh toán", errorcode = 69 });
@@ -270,6 +271,7 @@ namespace WebBanHangOnline.Controllers
                     order.Phone = request.Phone;
                     order.Status = 1; // 1 = Chưa thanh toán, 2 = Đã thanh toán, 3 = Hoàn thành giao, 4 = Đã huỷ, 5 = Đang giao hàng
                     order.Notes = request.Notes;
+                    
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
                     {
                         ProductID = x.ProductId,
@@ -330,8 +332,6 @@ namespace WebBanHangOnline.Controllers
                         }
                     }
 
-
-
                     order.Quantity = cart.Items.Sum(x => x.Quantity);
                     order.Email = request.Email;
                     Session["EmailCustomer"] = order.Email;
@@ -381,6 +381,61 @@ namespace WebBanHangOnline.Controllers
                     string newOrderCode = $"DH{currentDate}{(lastOrderNumber + 1).ToString("D5")}"; // D5 có nghĩa là 5 số 0 cuối, rồi + lên
                                                                                                     ////////// End Tạo mã đơn hàng với Ngày/Tháng/Năm //////////////
 
+                    //Check NVL
+                    int store = StoreSingleton.Instance.Id;
+                    int proID = 0;
+                    int matID = 0;
+                    var storage = db.Storages.Where(x => x.StoreId == store).ToList();
+                    var currentStorage = storage;
+                    var currentMat = db.Matterials.ToList();
+                    var recipe = db.Recipes.ToList();
+                    int reID = 0;
+                    int count = 0;
+                    int logic = 0;
+                    var reDetail = db.RecipeDetails.ToList();
+                    int temp = 0;
+                    for (int i = 0; i < cart.Items.Count; i++)
+                    {
+                        count = cart.Items[i].Quantity;
+                        proID = cart.Items[i].ProductId;
+                        recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
+                        reID = recipe[0].ID;
+                        reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
+                        for (int j = 0; j < reDetail.Count; j++)
+                        {
+                            matID = reDetail[j].MatterialID;
+                            currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
+                            currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
+                            count = count + currentStorage[0].UseCount;
+                            //Lấy logic trừ 
+                            if (currentMat[0].Packing == "Kg")
+                            {
+                                logic = 30;
+                            }
+                            if (currentMat[0].Packing == "Hộp")
+                            {
+                                logic = 5;
+                            }
+                            if (count >= logic)
+                            {
+                                //temp là số lượng NVL cần dùng
+                                temp = (count - (count % logic)) / logic;
+                                if (currentStorage[0].Quantity <= temp)
+                                {
+                                    ViewBag.NotEnought = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                                    return View();
+                                }
+                                //currentStorage[0].UseCount = count % logic;
+                                //currentStorage[0].Quantity -= temp;
+                            }
+                            else
+                            {
+                                //currentStorage[0].UseCount = count;
+                            }
+                            count = cart.Items[i].Quantity;
+                        }
+                    }
+                    //db.Entry(currentStorage).State = System.Data.Entity.EntityState.Modified;
 
                     // Gán mã đơn hàng và lưu vào cơ sở dữ liệu
                     order.Code = newOrderCode;
@@ -552,6 +607,66 @@ namespace WebBanHangOnline.Controllers
                 var trangThaiDon = string.Empty;
                 var hinhThucThanhToan = string.Empty;
 
+                //trừ NVL
+                int oid = item.Id;
+                var cart = db.OrderDetails.Where(x => x.OrderID == oid).ToList();
+
+                int store = StoreSingleton.Instance.Id;
+                int proID = 0;
+                int matID = 0;
+                var storage = db.Storages.Where(x => x.StoreId == store).ToList();
+                var currentStorage = storage;
+                var update = storage;
+                var currentMat = db.Matterials.ToList();
+                var recipe = db.Recipes.ToList();
+                int reID = 0;
+                int count = 0;
+                int logic = 0;
+                var reDetail = db.RecipeDetails.ToList();
+                int temp = 0;
+                for (int i = 0; i < cart.Count; i++)
+                {
+                    count = cart[i].Quantity;
+                    proID = cart[i].ProductID;
+                    recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
+                    reID = recipe[0].ID;
+                    reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
+                    for (int j = 0; j < reDetail.Count; j++)
+                    {
+                        matID = reDetail[j].MatterialID;
+                        currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
+                        currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
+                        count = count + currentStorage[0].UseCount;
+                        //Lấy logic trừ 
+                        if (currentMat[0].Packing == "Kg")
+                        {
+                            logic = 30;
+                        }
+                        if (currentMat[0].Packing == "Hộp")
+                        {
+                            logic = 5;
+                        }
+                        if (count >= logic)
+                        {
+                            //temp là số NVL sử dụng
+                            temp = (count - (count % logic)) / logic;
+                            //if (currentStorage[0].Quantity <= temp)
+                            //{
+                            //    ViewBag.NotEnought = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                            //    return View();
+                            //}
+                            currentStorage[0].UseCount = count % logic;
+                            currentStorage[0].Quantity -= temp;
+                        }
+                        else
+                        {
+                            currentStorage[0].UseCount = count;
+                        }
+                        db.Entry(currentStorage[0]).State = System.Data.Entity.EntityState.Modified;
+                        count = cart[i].Quantity;
+                    }
+                }
+
                 //item.Status = 1;
                 item.IsConfirm = true;
 
@@ -599,6 +714,9 @@ namespace WebBanHangOnline.Controllers
                 int storeID = StoreSingleton.Instance.Id; // Lấy ra id của cửa hàng mà khách hàng chọn
                 item.StoreID = storeID;
                 item.Status = 6;
+
+                
+               
 
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

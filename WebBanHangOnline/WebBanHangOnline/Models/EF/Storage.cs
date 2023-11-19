@@ -19,5 +19,6 @@ namespace WebBanHangOnline.Models.EF
         public virtual Store Stores { get; set; }
         public virtual Store Materials { get; set; }
         public int Quantity { get; set; }
+        public int UseCount { get; set; }
     }
 }
