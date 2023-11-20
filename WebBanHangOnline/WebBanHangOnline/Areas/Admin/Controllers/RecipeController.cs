@@ -20,11 +20,11 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
         public ActionResult Add()
         {
-            //var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
-            //var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
+            var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
+            var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
 
             ViewBag.ListMaterials = db.Matterials.ToList();
-            ViewBag.ListProducts = new SelectList(db.Products.ToList(), "Id", "Title");
+            ViewBag.ListProducts = new SelectList(productsNotInRecipes, "Id", "Title");
 
             return View();
         }
@@ -34,13 +34,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             try
             {
-                //var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
-                //var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
+                var productsInRecipes = db.Recipes.Select(x => x.ProductID).ToList();
+                var productsNotInRecipes = db.Products.ToList().Where(product => !productsInRecipes.Contains(product.Id)).ToList();
 
                 //var missingMaterials = db.Matterials.ToList().Where(material => !items.Any(item => item.MatterialID == material.Id)).ToList();
 
                 ViewBag.ListMaterials = db.Matterials.ToList();
-                ViewBag.ListProducts = new SelectList(db.Products.ToList(), "Id", "Title");
+                ViewBag.ListProducts = new SelectList(productsNotInRecipes, "Id", "Title");
 
                 using (var context = new ApplicationDbContext())
                 {
