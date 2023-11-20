@@ -20,9 +20,21 @@
 {
 
     <script>
-        function OnBeginCO() {
-            $('#btnCheckOut').attr("disabled", "disabled");
-            $('#load_send').html('<h2>Đang đặt hàng....</h2>');
+        function OnBeginCO(res) {
+            if (res.Success == false && res.Code == 111) {
+                Swal.fire({
+                    title: "Đặt hàng thất bại",
+                    text: res.message,
+                    icon: "error",
+                    onClose: () => {
+                        location.href = 'gio-hang';
+                    }
+                })
+            }
+            else {
+                $('#btnCheckOut').attr("disabled", "disabled");
+                $('#load_send').html('<h2>Đang đặt hàng....</h2>');
+            }
         }
         function OnSuccessCO(res) {
             if (res.Success) {
@@ -34,6 +46,16 @@
                     location.href = res.Url;
                     localStorage.removeItem('cart');
                 }
+            }
+            else {
+                Swal.fire({
+                    title: "Đặt hàng thất bại",
+                    text: res.message,
+                    icon: "error",
+                    onClose: () => {
+                        location.href = 'gio-hang';
+                    }
+                })
             }
         }
     </script>

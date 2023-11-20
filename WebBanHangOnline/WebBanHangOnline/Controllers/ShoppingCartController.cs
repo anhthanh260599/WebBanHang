@@ -254,10 +254,6 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(OrderViewModel request)
         {
-            if (request.TypePayment == -1)
-            {
-                return Json(new { Success = false, message = "Vui lòng chọn phương thức thanh toán", errorcode = 69 });
-            }
 
             var code = new { Success = false, Code = -1, Url = "" };
             if (ModelState.IsValid)
@@ -422,8 +418,8 @@ namespace WebBanHangOnline.Controllers
                                 temp = (count - (count % logic)) / logic;
                                 if (currentStorage[0].Quantity <= temp)
                                 {
-                                    ViewBag.NotEnought = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
-                                    return View();
+                                    var errorMessage = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                                    return Json(new { Success = false, Code = 111, message = errorMessage });
                                 }
                                 //currentStorage[0].UseCount = count % logic;
                                 //currentStorage[0].Quantity -= temp;
