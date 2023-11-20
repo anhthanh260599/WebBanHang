@@ -220,12 +220,12 @@
                                     @*<a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
 
                                         }*@
-                                    @if (User.IsInRole("Store") && item.Status == 6)
+                                    @*@if (User.IsInRole("Store") && item.Status == 6)
                                     {
                                         <button type="button" class="btn btn-sm btn-danger btnTuChoiDon" data-id="@item.Id">
                                             Từ chối
                                         </button>
-                                    }
+                                    }*@
                                     @if (User.IsInRole("Admin") && item.Status == 7) // status = 7 nghĩa là đơn bị cửa hàng từ chối
                                     {
                                         var orderId = item.Id;
