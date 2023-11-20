@@ -235,6 +235,7 @@ namespace WebBanHangOnline.Controllers
                                         count = cart[i].Quantity;
                                     }
                                 }
+                                db.SaveChanges();
                             }
                             string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                             contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
@@ -1261,7 +1262,6 @@ namespace WebBanHangOnline.Controllers
                     //trừ NVL
                     int oid = itemOrder.Id;
                     var cart = db.OrderDetails.Where(x => x.OrderID == oid).ToList();
-
                     int store = StoreSingleton.Instance.Id;
                     int proID = 0;
                     int matID = 0;
@@ -1317,6 +1317,7 @@ namespace WebBanHangOnline.Controllers
                             count = cart[i].Quantity;
                         }
                     }
+                    db.SaveChanges();
                 }
                 string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                 contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
