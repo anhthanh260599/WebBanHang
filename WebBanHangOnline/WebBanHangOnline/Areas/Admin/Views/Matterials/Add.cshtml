@@ -105,12 +105,13 @@
 
                         <div class="form-group">
                             <label for="exampleInputPassword1">Số lượng</label>
-                            @Html.TextAreaFor(x => x.Quantity, new { @class = "form-control" })
+                            @Html.TextBoxFor(x => x.Quantity, new { @type = "number",@class = "form-control" })
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputPassword1">Quy cách</label>
-                            @Html.TextAreaFor(x => x.Packing, new { @class = "form-control" })
+                            @*@Html.TextAreaFor(x => x.Packing, new { @class = "form-control" })*@
+                            @Html.DropDownListFor(x => x.Packing, new SelectList(new List<string> { "Hộp", "Kg" }), new { @class = "form-control" })
                         </div>
 
                         <div class="form-group">
