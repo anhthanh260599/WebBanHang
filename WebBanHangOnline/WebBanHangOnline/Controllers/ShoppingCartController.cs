@@ -175,6 +175,66 @@ namespace WebBanHangOnline.Controllers
                             {
                                 trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                                 hinhThucThanhToan = "VNPAY";
+
+                                //trừ NVL
+                                int oid = itemOrder.Id;
+                                var cart = db.OrderDetails.Where(x => x.OrderID == oid).ToList();
+
+                                int store = StoreSingleton.Instance.Id;
+                                int proID = 0;
+                                int matID = 0;
+                                var storage = db.Storages.Where(x => x.StoreId == store).ToList();
+                                var currentStorage = storage;
+                                var update = storage;
+                                var currentMat = db.Matterials.ToList();
+                                var recipe = db.Recipes.ToList();
+                                int reID = 0;
+                                int count = 0;
+                                int logic = 0;
+                                var reDetail = db.RecipeDetails.ToList();
+                                int temp = 0;
+                                for (int i = 0; i < cart.Count; i++)
+                                {
+                                    count = cart[i].Quantity;
+                                    proID = cart[i].ProductID;
+                                    recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
+                                    reID = recipe[0].ID;
+                                    reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
+                                    for (int j = 0; j < reDetail.Count; j++)
+                                    {
+                                        matID = reDetail[j].MatterialID;
+                                        currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
+                                        currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
+                                        count = count + currentStorage[0].UseCount;
+                                        //Lấy logic trừ 
+                                        if (currentMat[0].Packing == "Kg")
+                                        {
+                                            logic = 30;
+                                        }
+                                        if (currentMat[0].Packing == "Hộp")
+                                        {
+                                            logic = 5;
+                                        }
+                                        if (count >= logic)
+                                        {
+                                            //temp là số NVL sử dụng
+                                            temp = (count - (count % logic)) / logic;
+                                            //if (currentStorage[0].Quantity <= temp)
+                                            //{
+                                            //    ViewBag.NotEnought = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                                            //    return View();
+                                            //}
+                                            currentStorage[0].UseCount = count % logic;
+                                            currentStorage[0].Quantity -= temp;
+                                        }
+                                        else
+                                        {
+                                            currentStorage[0].UseCount = count;
+                                        }
+                                        db.Entry(currentStorage[0]).State = System.Data.Entity.EntityState.Modified;
+                                        count = cart[i].Quantity;
+                                    }
+                                }
                             }
                             string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                             contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
@@ -1197,6 +1257,66 @@ namespace WebBanHangOnline.Controllers
                 {
                     trangThaiDon = "<p>Trạng thái đơn hàng: <strong style=\"color:green;\">Đã thanh toán</strong></p>\r\n<p style=\"margin:0 0 16px\">\r\nChúng tôi đang tiến hành hoàn thiện đơn\r\nđặt hàng của bạn\r\n</p>";
                     hinhThucThanhToan = "PayPal";
+
+                    //trừ NVL
+                    int oid = itemOrder.Id;
+                    var cart = db.OrderDetails.Where(x => x.OrderID == oid).ToList();
+
+                    int store = StoreSingleton.Instance.Id;
+                    int proID = 0;
+                    int matID = 0;
+                    var storage = db.Storages.Where(x => x.StoreId == store).ToList();
+                    var currentStorage = storage;
+                    var update = storage;
+                    var currentMat = db.Matterials.ToList();
+                    var recipe = db.Recipes.ToList();
+                    int reID = 0;
+                    int count = 0;
+                    int logic = 0;
+                    var reDetail = db.RecipeDetails.ToList();
+                    int temp = 0;
+                    for (int i = 0; i < cart.Count; i++)
+                    {
+                        count = cart[i].Quantity;
+                        proID = cart[i].ProductID;
+                        recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
+                        reID = recipe[0].ID;
+                        reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
+                        for (int j = 0; j < reDetail.Count; j++)
+                        {
+                            matID = reDetail[j].MatterialID;
+                            currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
+                            currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
+                            count = count + currentStorage[0].UseCount;
+                            //Lấy logic trừ 
+                            if (currentMat[0].Packing == "Kg")
+                            {
+                                logic = 30;
+                            }
+                            if (currentMat[0].Packing == "Hộp")
+                            {
+                                logic = 5;
+                            }
+                            if (count >= logic)
+                            {
+                                //temp là số NVL sử dụng
+                                temp = (count - (count % logic)) / logic;
+                                //if (currentStorage[0].Quantity <= temp)
+                                //{
+                                //    ViewBag.NotEnought = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                                //    return View();
+                                //}
+                                currentStorage[0].UseCount = count % logic;
+                                currentStorage[0].Quantity -= temp;
+                            }
+                            else
+                            {
+                                currentStorage[0].UseCount = count;
+                            }
+                            db.Entry(currentStorage[0]).State = System.Data.Entity.EntityState.Modified;
+                            count = cart[i].Quantity;
+                        }
+                    }
                 }
                 string contentCustomer = System.IO.File.ReadAllText(Server.MapPath("~/Content/template/sendMailKhachHang.html"));
                 contentCustomer = contentCustomer.Replace("{{MaDon}}", itemOrder.Code);
