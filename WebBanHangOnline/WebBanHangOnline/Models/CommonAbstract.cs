@@ -12,5 +12,9 @@ namespace WebBanHangOnline.Models
         public string ModifierBy { get; set; }
         public DateTime ModifierDate { get; set; }
 
+        public abstract void SetCreated();
+
+        public abstract void SetModified();
+
     }
 }

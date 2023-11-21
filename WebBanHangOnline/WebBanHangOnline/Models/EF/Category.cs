@@ -34,5 +34,15 @@ namespace WebBanHangOnline.Models.EF
         public bool IsActive { get; set; }
         public ICollection<News> News { get; set; }
         public ICollection<Posts> Posts { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }

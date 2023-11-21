@@ -35,5 +35,15 @@ namespace WebBanHangOnline.Models.EF
         public virtual ICollection<OrderDetailMatts> OrderDetailMatts { get; set; }
         public string Packing { get; set; }//Quy cách tính
         public virtual ICollection<Storage> Storages { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }
