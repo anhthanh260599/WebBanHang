@@ -28,7 +28,7 @@
             labels: labels,
             datasets: [
                 {
-                    label: 'Doanh thu bán hàng',
+                    label: 'Tổng doanh thu bán hàng',
                     data: viewCounts,
                     backgroundColor: 'rgba(7, 102, 173, 0.2)',
                     borderColor: 'rgba(7, 102, 173, 1)',
@@ -41,9 +41,20 @@
                 y: {
                     beginAtZero: true
                 }
-            }, title: {
-                display: true,
-                text: 'Biểu đồ theo dõi tổng doanh thu của cửa hàng'
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Mức độ chênh lệch doanh thu của từng cửa hàng',
+                    font: {
+                        weight: 'bold',
+                        size: 22
+                    }
+                }
             }
         }
     });
