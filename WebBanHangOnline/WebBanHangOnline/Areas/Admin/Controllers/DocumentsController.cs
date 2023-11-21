@@ -44,6 +44,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.SetCreated();
                 db.Documents.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -63,6 +64,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.SetModified();
                 db.Documents.Attach(model);
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

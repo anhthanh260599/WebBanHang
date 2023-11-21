@@ -42,5 +42,15 @@ namespace WebBanHangOnline.Models.EF
         public virtual Store Store { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } // quan hệ 1 - nhiều
         public virtual Promotion Promotion { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }
