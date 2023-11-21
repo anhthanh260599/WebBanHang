@@ -180,7 +180,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 //Lấy storage admin
                 var admin = db.Storages.Where(x => x.StoreId == 0).ToList();
                 var currentAdmin = admin.ToList();
-                for (int i=0; i<detail.Count; i++)
+                for (int i = 0; i < detail.Count; i++)
                 {
                     material = detail[i].MatterialID;
                     quantity = detail[i].Quantity;
@@ -188,6 +188,20 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     currentStorage = storage.Where(x => x.MaterialID == material).ToList();
                     //Lấy storage admin của mat hiện tại
                     currentAdmin = admin.Where(x => x.MaterialID == material).ToList();
+                    if (currentStorage.Count == 0)
+                    {
+                        var newStorage = currentAdmin;
+                        newStorage[0].Quantity = 0;
+                        newStorage[0].StoreId = storeId;
+                        currentStorage = newStorage.ToList();
+                        //Trừ của admin
+                        currentAdmin[0].Quantity = currentAdmin[0].Quantity - quantity;
+                        //Cộng vào kho của store
+                        currentStorage[0].Quantity = quantity;
+                        db.Entry(currentAdmin[0]).Property(x => x.Quantity).IsModified = true;
+                        db.Storages.Add(currentStorage[0]);
+                        db.SaveChanges();
+                    }
                     //Trừ của admin
                     currentAdmin[0].Quantity = currentAdmin[0].Quantity - quantity;
                     //Cộng vào kho của store
@@ -196,6 +210,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     db.Entry(currentAdmin[0]).Property(x => x.Quantity).IsModified = true;
                 }
             }
+        
 
             var item = db.OrderMatts.Find(id);
             if (item != null)
