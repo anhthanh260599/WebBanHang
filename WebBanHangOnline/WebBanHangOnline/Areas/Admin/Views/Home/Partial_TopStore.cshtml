@@ -1,0 +1,50 @@
+﻿
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div style="width: 90%;">
+    <canvas id="TopStore"></canvas>
+</div>
+
+
+
+<script>
+    // Lấy dữ liệu từ Model để vẽ biểu đồ
+    var labels = [];
+    var viewCounts = [];
+
+    var topStores = @Html.Raw(ViewBag.TopStores);
+
+    for (var i = 0; i < topStores.length; i++) {
+        labels.push(topStores[i].StoreName);
+        viewCounts.push(topStores[i].TotalRevenue);
+    }
+
+    // Vẽ biểu đồ cột sử dụng Chart.js
+    var ctx = document.getElementById('TopStore').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Doanh thu bán hàng',
+                    data: viewCounts,
+                    backgroundColor: 'rgba(7, 102, 173, 0.2)',
+                    borderColor: 'rgba(7, 102, 173, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }, title: {
+                display: true,
+                text: 'Biểu đồ theo dõi tổng doanh thu của cửa hàng'
+            }
+        }
+    });
+</script>

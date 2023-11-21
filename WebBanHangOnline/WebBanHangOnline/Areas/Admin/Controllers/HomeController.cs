@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
@@ -106,5 +107,26 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
               .ToList();
             return PartialView(query);
         }
+
+        public ActionResult Partial_TopStore()
+        {
+            var query = (from s in db.Stores
+                        join od in db.Orders on s.Id equals od.StoreID
+                        join odd in db.OrderDetails on od.Id equals odd.OrderID
+                        group new { s, odd } by s.Name into g
+                        orderby g.Sum(x => x.odd.Price * x.odd.Quantity) descending
+                        select new
+                        {
+                            StoreName = g.Key,
+                            TotalRevenue = g.Sum(x => x.odd.Price * x.odd.Quantity)
+                        }).ToList();
+
+            ViewBag.TopStores = Newtonsoft.Json.JsonConvert.SerializeObject(query); // chuyen sang json
+
+
+            return PartialView();
+
+        }
+
     }
 }
