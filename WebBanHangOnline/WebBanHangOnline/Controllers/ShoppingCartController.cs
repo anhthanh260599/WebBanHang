@@ -479,7 +479,7 @@ namespace WebBanHangOnline.Controllers
                                 temp = (count - (count % logic)) / logic;
                                 if (currentStorage[0].Quantity <= temp)
                                 {
-                                    var errorMessage = $"Cửa hàng này đã hết sản phẩm {cart.Items[i].ProductName}";
+                                    var errorMessage = $"Cửa hàng này không có đủ sản phẩm {cart.Items[i].ProductName}";
                                     return Json(new { Success = false, Code = 111, message = errorMessage });
                                 }
                                 //currentStorage[0].UseCount = count % logic;
