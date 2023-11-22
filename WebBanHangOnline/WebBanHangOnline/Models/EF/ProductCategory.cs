@@ -28,5 +28,15 @@ namespace WebBanHangOnline.Models.EF
         public string SeoKeywords { get; set; }
         public string SeoDescription { get; set; }
         public ICollection<Product> Products { get; set; } // quan hệ 1 - nhiều
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }
