@@ -3602,6 +3602,7 @@
     <Content Include="Areas\Admin\Views\CustomerRequest\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Partial_AdminPage_LoginName.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Partial_TopStore.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_RevenueByStore.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
