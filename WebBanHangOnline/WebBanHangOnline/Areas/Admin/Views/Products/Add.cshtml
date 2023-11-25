@@ -101,7 +101,7 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Số lượng</label>
-                                                    @Html.TextBoxFor(x => x.Quantity, new { @type = "number", @min = "1", @class = "form-control", @Value = "1", @requỉred = true })
+                                                    @Html.TextBoxFor(x => x.Quantity, new { @type = "number", @min = "0", @class = "form-control"})
                                                     @Html.ValidationMessageFor(x => x.Quantity, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -109,7 +109,7 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
                                                     @Html.HiddenFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
-                                                    <input id="textPriceProduct" class="form-control" type="text" placeholder="Giá" required />
+                                                    <input id="textPriceProduct" class="form-control" type="text" placeholder="Giá"  />
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -126,7 +126,7 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
                                                     @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
-                                                    <input id="textPriceOriginalPrice" class="form-control" type="text" placeholder="Giá" required />
+                                                    <input id="textPriceOriginalPrice" class="form-control" type="text" placeholder="Giá"  />
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -359,45 +359,87 @@
             extraAllowedContent: 'span',
                 });
             });
-
         let formSubmit = document.querySelector("#formEdit")
         formSubmit.onsubmit = (e) => {
             let elementImage = document.querySelector("#tCurrentId");
-            let messageError = elementImage.nextElementSibling;
-
             let elementTitle = document.querySelector("#nameProduct");
             let elementPrice = document.querySelector("#Price");
             let elementOriginPrice = document.querySelector("#OriginalPrice");
+            let elementQuantity = document.querySelector("#Quantity");
 
-            console.log(elementPrice)
-            if (elementImage.value == 0 ) {
+            if (elementImage.value == 0) {
                 e.preventDefault();
-                messageError.innerHTML = 'Vui lòng không để trống hình ảnh ';
-                     Swal.fire({
-                         icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
-                         title: 'Thất bại',
-                         text: messageError.textContent,
-                         confirmButtonText: 'OK'
-                     });
+                let messageError = elementImage.nextElementSibling;
+                messageError.innerHTML = 'Vui lòng không để trống hình ảnh';
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: messageError.textContent,
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let messageError = elementImage.nextElementSibling;
+                messageError.innerHTML = 'Vui lòng không để trống hình ảnh';
             }
-
+            if (elementQuantity.value == '') {
+                e.preventDefault();
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Quantity']");
+                errorMessage.innerHTML = 'Vui lòng không được để trống số lượng'
+                console.log(elementQuantity.value)
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Vui lòng không đê trống số lượng',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Quantity']");
+                errorMessage.innerHTML = ''
+            }
             if (elementTitle.value == '') {
                 e.preventDefault();
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Title']");
+                errorMessage.innerHTML = 'Vui lòng không đê trống tên'
                 Swal.fire({
                     icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
                     title: 'Thất bại',
                     text: 'Vui lòng không đê trống tên',
                     confirmButtonText: 'OK'
                 });
+            } else {
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Title']");
+                errorMessage.innerHTML = ''
             }
-            if (elementPrice.value == 0 || elementOriginPrice.value == 0) {
+            if (elementPrice.value == 0) {
                 e.preventDefault();
+                let errorMessage1 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Price']");
+                errorMessage1.innerHTML = 'Vui lòng không để trống giá sản phẩm'
+
                 Swal.fire({
                     icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
                     title: 'Thất bại',
-                    text: 'Giá sản phẩm phải lớn hơn 0',
+                    text: 'Giá bán hoặc giá nhập sản phẩm phải lớn hơn 0',
                     confirmButtonText: 'OK'
                 });
+            } else {
+                let errorMessage1 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Price']");
+                errorMessage1.innerHTML = ''
+            }
+
+            if (elementOriginPrice.value == 0) {
+                e.preventDefault();
+                let errorMessage2 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='OriginalPrice']");
+                errorMessage2.innerHTML = 'Vui lòng không để trống giá nhập sản phẩm'
+
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Giá bán hoặc giá nhập sản phẩm phải lớn hơn 0',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage2 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='OriginalPrice']");
+                errorMessage2.innerHTML = ''
             }
         }
 
