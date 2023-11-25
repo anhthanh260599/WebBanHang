@@ -1,7 +1,7 @@
 Web eCommercial (Chuỗi cửa hàng)
 
-  - link trang chủ: https://anhthanh260599-001-site1.ftempurl.com/
-  - link admin: https://anhthanh260599-001-site1.ftempurl.com/admin/home 
+  - link trang chủ: https://fourccoffee-001-site1.anytempurl.com/
+  - link admin: https://fourccoffee-001-site1.anytempurl.com/admin/home
 
 Liên hệ để nhận dữ liệu mẫu: anhthanh260599@gmail.com
 
