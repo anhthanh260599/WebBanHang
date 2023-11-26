@@ -30,7 +30,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Thêm mới Sản phẩm</h1>
+                <h1>Cập nhật Sản phẩm</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -48,12 +48,12 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Thông tin @ViewBag.Title</h3>
+            <h3 class="card-title">@ViewBag.Title</h3>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    @using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { }))
+                    @using (Html.BeginForm("Edit", "Products", FormMethod.Post, new { id = "formEdit2" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
@@ -104,7 +104,7 @@
                                             <div class="col-3">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Số lượng</label>
-                                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @Value = "1" })
+                                                    @Html.TextBoxFor(x => x.Quantity, new { @type = "number", @min = "0", @class = "form-control" })
                                                     @Html.ValidationMessageFor(x => x.Quantity, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -112,7 +112,7 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá</label>
                                                     @Html.HiddenFor(x => x.Price, new { @class = "form-control", @placeholder = "Giá" })
-                                                    <input id="textPriceProduct" class="form-control" type="text" placeholder="Giá" required />
+                                                    <input id="textPriceProduct" class="form-control" type="text" placeholder="Giá" />
                                                     @Html.ValidationMessageFor(x => x.Price, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -129,7 +129,7 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Giá nhập</label>
                                                     @Html.HiddenFor(x => x.OriginalPrice, new { @class = "form-control", @placeholder = "Giá nhập" })
-                                                    <input id="textPriceOriginalPrice" class="form-control" type="text" placeholder="Giá" required />
+                                                    <input id="textPriceOriginalPrice" class="form-control" type="text" placeholder="Giá" />
                                                     @Html.ValidationMessageFor(x => x.OriginalPrice, null, new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -173,38 +173,38 @@
                                                 </div>
                                             </div>
                                             @*<div class="col-3">
-                                                <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        @Html.CheckBoxFor(x => x.IsSale, new { @class = "custom-control-input", @id = "IsSaleCheckbox" })
-                                                        <label for="IsSaleCheckbox" class="custom-control-label">Khuyến mãi</label>
-                                                    </div>
-                                                </div>
-                                            </div>*@
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch">
+                                            @Html.CheckBoxFor(x => x.IsSale, new { @class = "custom-control-input", @id = "IsSaleCheckbox" })
+                                            <label for="IsSaleCheckbox" class="custom-control-label">Khuyến mãi</label>
+                                        </div>
+                                    </div>
+                                </div>*@
                                         </div>
                                     </div>
                                     <!-- /.tab-pane -->
                                     @*<div class="tab-pane" id="timeline">
-                                            <div class="row">
-                                                <div class="col-md-12 text-right">
-                                                    <input type="button" class="btn btn-primary" id="iTaiAnh" onclick="BrowseServer();" value="Tải ảnh" />
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <table class="table table-hover" id="tbAnhSanPham">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center">#</th>
-                                                                <th class="text-center">Ảnh</th>
-                                                                <th class="text-center">Ảnh đại diện</th>
-                                                                <th class="text-center">Thao tác</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tbHtml">
-                                                        </tbody>
-                                                    </table>
-                                                    <input type="hidden" id="tCurrentId" value="0" />
-                                                </div>
-                                            </div>
-                                        </div>*@
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <input type="button" class="btn btn-primary" id="iTaiAnh" onclick="BrowseServer();" value="Tải ảnh" />
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table table-hover" id="tbAnhSanPham">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="text-center">Ảnh</th>
+                                                <th class="text-center">Ảnh đại diện</th>
+                                                <th class="text-center">Thao tác</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbHtml">
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" id="tCurrentId" value="0" />
+                                </div>
+                            </div>
+                        </div>*@
                                     <!-- /.tab-pane -->
 
                                     <div class="tab-pane" id="settings">
@@ -322,6 +322,16 @@
             }
         }
 
+        // Validate
+        let elementNameProduct = document.querySelector("#nameProduct");
+        elementNameProduct.onblur = (e) => {
+            let error = elementNameProduct.nextElementSibling;
+            if (elementNameProduct.value == '') {
+                error.innerHTML = 'Vui lòng không để trống'
+            } else {
+                error.innerHTML = ''
+            }
+        }
 
         $(document).ready(function () {
             CKEDITOR.replace('txtDetail', {
@@ -329,5 +339,75 @@
                 extraAllowedContent: 'span',
             });
         });
+        let formSubmit = document.querySelector("#formEdit2")
+        formSubmit.onsubmit = (e) => {
+            let elementTitle = document.querySelector("#nameProduct");
+            let elementPrice = document.querySelector("#textPriceProduct");
+            let elementOriginPrice = document.querySelector("#textPriceOriginalPrice");
+            let elementQuantity = document.querySelector("#Quantity");
+
+       
+            if (elementQuantity.value == '') {
+                e.preventDefault();
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Quantity']");
+                errorMessage.innerHTML = 'Vui lòng không được để trống số lượng'
+                console.log(elementQuantity.value)
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Vui lòng không đê trống số lượng',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Quantity']");
+                errorMessage.innerHTML = ''
+            }
+            if (elementTitle.value == '') {
+                e.preventDefault();
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Title']");
+                errorMessage.innerHTML = 'Vui lòng không đê trống tên'
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Vui lòng không đê trống tên',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Title']");
+                errorMessage.innerHTML = ''
+            }
+
+            if (elementPrice.value == '') {
+                e.preventDefault();
+                let errorMessage1 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Price']");
+                errorMessage1.innerHTML = 'Vui lòng không để trống giá sản phẩm'
+
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Giá bán hoặc giá nhập sản phẩm phải lớn hơn 0',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage1 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='Price']");
+                errorMessage1.innerHTML = ''
+
+            }
+            if (elementOriginPrice.value == '') {
+                e.preventDefault();
+                let errorMessage2 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='OriginalPrice']");
+                errorMessage2.innerHTML = 'Vui lòng không để trống giá nhập sản phẩm'
+
+                Swal.fire({
+                    icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    title: 'Thất bại',
+                    text: 'Giá bán hoặc giá nhập sản phẩm phải lớn hơn 0',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                let errorMessage2 = document.querySelector(".field-validation-valid.text-danger[data-valmsg-for='OriginalPrice']");
+                errorMessage2.innerHTML = ''
+            }
+        }
     </script>
 }

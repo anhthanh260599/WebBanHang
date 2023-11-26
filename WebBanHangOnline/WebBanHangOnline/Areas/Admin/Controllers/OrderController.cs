@@ -25,6 +25,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             var currentUser = userManager.FindById(User.Identity.GetUserId());
             var stores = db.Stores.ToList();
 
+
             // Chuyển danh sách cửa hàng vào ViewBag hoặc ViewData
             ViewBag.Stores = new SelectList(stores, "Id", "Name");
 

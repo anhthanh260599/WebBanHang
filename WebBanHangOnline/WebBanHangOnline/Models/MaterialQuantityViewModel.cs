@@ -47,5 +47,15 @@ namespace WebBanHangOnline.Models
             Packing = matterial.Packing;
             Quantity = storage.Quantity;
         }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }

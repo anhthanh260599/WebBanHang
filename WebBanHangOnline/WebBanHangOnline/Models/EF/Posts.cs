@@ -30,5 +30,15 @@ namespace WebBanHangOnline.Models.EF
         public bool IsActive { get; set; }
 
         public virtual Category Category { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }

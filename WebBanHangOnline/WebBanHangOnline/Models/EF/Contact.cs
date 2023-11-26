@@ -23,5 +23,15 @@ namespace WebBanHangOnline.Models.EF
         [StringLength(500)]
         public string Message { get; set; }
         public bool IsRead { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
     }
 }

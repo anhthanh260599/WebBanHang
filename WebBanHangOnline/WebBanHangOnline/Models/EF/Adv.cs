@@ -23,7 +23,16 @@ namespace WebBanHangOnline.Models.EF
         [StringLength(500)]
         public string Link { get; set; }
         public int Type { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
 
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
 
     }
 }
