@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebBanHangOnline.Models.EF.Matterial>
+﻿@model IEnumerable<WebBanHangOnline.Models.MaterialQuantityViewModel>
 @using WebBanHangOnline.Models.Common
 
 @{
@@ -46,10 +46,13 @@
         <div class="card-header">
             <h3 class="card-title">@ViewBag.Title</h3>
 
-            <div class="card-tools">
-                <a href="/admin/Matterials/add" class="btn btn-primary">Thêm mới</a>
-                <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
 
+            <div class="card-tools">
+                @if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
+                {
+                    <a href="/admin/Matterials/add" class="btn btn-primary">Thêm mới</a>
+                    <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
+                }
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
                 </button>
@@ -60,48 +63,102 @@
             <table class="table table-hover" id="dataTable">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="SelectAll" /></th>
-                        <th>STT</th>
-                        <th>Ảnh đại diện</th>
-                        <th>Tên nguyên liệu</th>
-                        <th>Hiển thị</th>
-                        <th></th>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Coordinator"))
+                        {
+                            <th><input type="checkbox" id="SelectAll" /></th>
+                            <th>STT</th>
+                            <th>Ảnh đại diện</th>
+                            <th>Tên nguyên liệu</th>
+                            <th>Giá </th>
+                            // Nếu người dùng có vai trò "Admin" hoặc "Người điều phối đơn", hiển thị toàn bộ danh sách Order
+                            <th>Hiển thị</th>
+                            <th>Số lượng</th>
+                            <th>Quy cách</th>
+                            <th></th>
+                        }
+                        @if (User.IsInRole("Store"))
+                        {
+                            <th>STT</th>
+                            <th>Ảnh đại diện</th>
+                            <th>Tên nguyên liệu</th>
+                            <th>Giá </th>
+                            <th>Trạng thái</th>
+                            <th>Số lượng</th>
+                            <th>Quy cách</th>
+                            <th></th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model != null && Model.Any())
+                    @if (Model != null)
                     {
                         var i = 1;
                         foreach (var item in Model)
                         {
-
                             //var strCheck = item.IsActive ? "<i class = 'fa fa-check text-success'></i>" : "<i class = 'fa fa-times text-danger'></i>";
+                            if (User.IsInRole("Store"))
+                            {
+                                <tr id="trow_@item.Id">
+                                    @*<td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>*@
+                                    <td class="stt-cell">@i</td>
+                                    <td><img src="@item.Image" width="100px" /></td>
+                                    <td>@item.Title</td>
+                                    <td>@String.Format("{0:N0}", item.Price) đ</td>
+                                    <td>
+                                        @{
 
-                            <tr id="trow_@item.Id">
-                                <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
-                                <td class="stt-cell">@i</td>
-                                <td><img src="@item.Image" width="100px" /></td>
-                                <td>@item.Title</td>
+                                            if (item.Quantity == 0)
+                                            {
+                                                <span style="width: 140px;" class="btn btn-warning">Hết nguyên vật liệu</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="width: 140px;" class="btn btn-success">Còn nguyên vật liệu</span>
+                                            }
+                                        }
+                                    </td>
+                                    @*<td class="text-center">
+                                           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                        </td>*@
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Packing</td>
+                                    <td>
+                                            <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                            @*<a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>*@
+                                        </td>
+                                </tr>
+                                i++;
+                            }
+                            if (User.IsInRole("Admin"))
+                            {     
+                                <tr id="trow_@item.Id">
+                                    <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                    <td class="stt-cell">@i</td>
+                                    <td><img src="@item.Image" width="100px" /></td>
+                                    <td>@item.Title</td>
+                                    <td>@String.Format("{0:N0}", item.Price) đ</td>
+                                    <td>
+                                        @{
 
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </td>
-
-                                @*<td class="text-center">
-                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-                                    </td>*@
-
-
-
-                                <td>
-                                    <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
-                                </td>
-                            </tr>
-                            i++;
+                                            // Nếu người dùng có vai trò "Admin" hoặc "Người điều phối đơn", hiển thị toàn bộ danh sách Order
+                                            <label class="switch">
+                                                <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
+                                                <span class="slider round"></span>
+                                            </label>
+                                        }
+                                    </td>
+                                    @*<td class="text-center">
+                                           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                        </td>*@
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Packing</td>
+                                    <td>
+                                        <a href="/admin/Matterials/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
+                                        <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
                         }
                     }
                     @*else

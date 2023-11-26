@@ -77,10 +77,23 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="exampleInputEmail1">Số điện thoại cửa hàng</label>
+                        @Html.TextAreaFor(x => x.StorePhone, new { @class = "form-control", @placeholder = "Nhập số điện thoại của cửa hàng" })
+                        @Html.ValidationMessageFor(x => x.StorePhone, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Quản lý cửa hàng</label>
+                        @Html.DropDownListFor(model => model.StoreManagerName, ViewBag.UserStoreManagerList as SelectList, "Chọn Quản lý", new { @class = "form-control searchable-dropdown-list", @value = Model.StoreManagerName })
+                    </div>
+
+                    @Html.HiddenFor(x => x.Alias)
+
+                    @*<div class="form-group">
                         <label for="exampleInputEmail1">Alias</label>
                         @Html.TextBoxFor(x => x.Alias, new { @class = "form-control", @placeholder = "Không cần điền field này" })
                         @Html.ValidationMessageFor(x => x.Alias, null, new { @class = "text-danger" })
-                    </div>
+                    </div>*@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Mô tả</label>
@@ -88,12 +101,6 @@
                         @Html.ValidationMessageFor(x => x.Description, null, new { @class = "text-danger" })
                     </div>
 
-
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Tên cửa hàng</label>
-                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "Nhập tên cửa hàng" })
-                        @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
-                    </div>
                     <div class="form-group">
                         <label for="exampleInputFile">Ảnh cửa hàng</label>
                         <div class="input-group">
@@ -124,19 +131,26 @@
                         @Html.ValidationMessageFor(x => x.EmbedMap, null, new { @class = "text-danger" })
                     </div>
 
+                    <p class="text-info">Địa chỉ hiện tại: @Model.Address, @Model.Ward, @Model.District, @Model.Province</p>
+
                     <div class="form-group">
                         <label for="exampleInputPassword1">Tỉnh/Thành</label>
-                        @Html.DropDownListFor(model => model.Province, ViewBag.ProvinceList as SelectList, "Chọn Tỉnh/Thành", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.Province, ViewBag.ProvinceList as SelectList, "Chọn Tỉnh/Thành", new { @class = "form-control", @value = Model.Province })
                     </div>
 
                     <div class="form-group">
                         <label for="exampleInputPassword1">Quận/Huyện</label>
-                        @Html.DropDownListFor(model => model.District, ViewBag.DistrictList as SelectList, "Chọn Quận/Huyện", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.District, ViewBag.DistrictList as SelectList, "Chọn Quận/Huyện", new { @class = "form-control", @value = Model.District })
                     </div>
 
                     <div class="form-group">
                         <label for="exampleInputPassword1">Phường/Xã</label>
-                        @Html.DropDownListFor(model => model.Ward, ViewBag.WardList as SelectList, "Chọn Phường/Xã", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.Ward, ViewBag.WardList as SelectList, "Chọn Phường/Xã", new { @class = "form-control", @value = Model.Ward })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Tài khoản đăng nhập</label>
+                        @Html.DropDownListFor(model => model.UserID, ViewBag.UserList as SelectList, "Chọn Tài khoản", new { @class = "form-control searchable-dropdown-list", @value = Model.UserID })
                     </div>
 
                     <div class="form-group">

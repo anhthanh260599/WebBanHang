@@ -5,6 +5,38 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css"/>
+
+<style>
+    .btn-chuan-bi-mon {
+        background-color: #eeb0b0;
+    }
+
+    .table-detail {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .action-list-order {
+        width: 250px;
+    }
+
+    #example_wrapper {
+        position: relative;
+    }
+
+    #example thead {
+        position: sticky;
+        top: 0;
+        background-color: #f5f5f5; /* Màu nền cho phần đầu bảng */
+        z-index: 1;
+    }
+</style>
+
 @section naviheader {
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -43,8 +75,13 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">@ViewBag.Title</h3>
+            <h3 class="card-title">@ViewBag.Title</h3> <br />
+            <strong class="text-info">Lưu ý: Mã đơn có màu đỏ thì đơn đó có sản phẩm riêng của cửa hàng đó</strong><br />
+            @if (User.IsInRole("Admin"))
+            {
+                <strong class="text-info">Lưu ý: Đơn hàng có món độc quyền thì không thể điều phối sang cửa hàng khác</strong>
 
+            }
             <div class="card-tools">
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -54,7 +91,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-hover" id="dataTable">
+            <table class="table table-hover display nowrap" id="example">
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -65,7 +102,6 @@
                         <th>Phương thức</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
-
                         <th></th>
                     </tr>
                 </thead>
@@ -77,49 +113,93 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@item.Code</td>
-                                <td>@item.CustomerName</td>
+                                <td>
+                                    @if (item.OrderDetails.Any(x => x.Product.StoreID != null))
+                                    {
+                                        <span class="text-danger">@item.Code</span>
+                                    }
+                                    else
+                                    {
+                                        @item.Code
+                                    }
+
+                                </td>
+                                <td class="table-detail">@item.CustomerName</td>
                                 <td>@item.Phone</td>
                                 <td>@Common.FormatNumber(item.TotalAmount, 0)</td>
                                 <td>
                                     @if (item.TypePayment == 1)
                                     {
-                                        <span>COD</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/cod-logo.png" /></span>
                                     }
-                                    else
+                                    @if (item.TypePayment == 2)
                                     {
-                                        <span>VNPAY</span>
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/VNPAY_Logo.png" /></span>
+                                    }
+                                    @if (item.TypePayment == 3)
+                                    {
+                                        <span><img style="width: 50px; height: 50px;" src="~/Content/template/paypal-logo-small.png" /></span>
                                     }
                                 </td>
 
+                                @if (item.IsConfirm == true)
+                                {
+                                    if (item.Status == 1)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-secondary">Đã xác nhận</td>
+                                    }
+                                    if (item.Status == 2)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-primary">Đã thanh toán</td>
+                                    }
+                                    if (item.Status == 3)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-success">Giao hàng thành công</td>
+                                    }
+                                    if (item.Status == 4)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Huỷ</td>
+                                    }
+                                    if (item.Status == 5)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-info">Đang giao hàng</td>
+                                    }
+                                    if (item.Status == 6)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-chuan-bi-mon">Chuẩn bị món</td>
+                                    }
+                                    if (item.Status == 7)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Cửa hàng không nhận đơn</td>
+                                    }
+                                }
+                                else
+                                {
+                                    if (item.Status == 4)
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-danger">Huỷ</td>
+                                    }
+                                    else if ((item.TypePayment == 2 && item.Status == 1) || (item.TypePayment == 3 && item.Status == 1))
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-warning">Chưa thanh toán</td>
+                                    }
 
-                                @if (item.Status == 1)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-secondary">Chưa thanh toán</td>
+                                    else
+                                    {
+                                        <td style="cursor: text; width: 140px; " class="btn btn-sm btn-warning">Chưa xác nhận</td>
+                                    }
                                 }
-                                @if (item.Status == 2)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-primary">Đã thanh toán</td>
-                                }
-                                @if (item.Status == 3)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-success">Giao hàng thành công</td>
-                                }
-                                @if (item.Status == 4)
-                                {
-                                    <td style="cursor:text;" class="btn btn-sm btn-danger">Huỷ</td>
-                                }
+
 
                                 @*<td>@(item.TypePayment == 1?"Chờ thanh toán":"Đã thanh toán")</td>*@
                                 <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
-                                <td>
+                                <td class="action-list-order">
                                     <a href="/admin/order/detail/@item.Id" class="btn btn-sm btn-info">Xem</a>
                                     @*<a href="#" class="btn btn-sm btn-primary btnCapNhat" data-id="@item.Id">Cập nhật</a>*@
 
-                                    @if (item.Status != 3)
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("Store")) && item.IsConfirm == true && item.Status == 6 || item.Status == 5)
                                     {
-
                                         <button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
                                             Cập nhật
                                         </button>
@@ -128,12 +208,37 @@
                                     {
                                         <button type="button" class="btn btn-sm disabled btn-primary"> Cập nhật </button>
                                     }
+                                    @*@if ((User.IsInRole("Admin") || User.IsInRole("Coordinator")) && item.IsConfirm == true && item.Status != 3 && item.Status != 4 && item.Status != 5 && item.Status != 6)
+                                        {
+                                            var orderId = item.Id;
+                                            var storeId = item.StoreID;*@
 
-                                    @*<button type="button" class="btn btn-sm btn-primary btnCapNhat" data-toggle="modal" data-target="#modal-default" data-id="@item.Id">
-                Cập nhật
-            </button>*@
+                                    @*<button type="button" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">
+                                            Điều phối đơn
+                                        </button>*@
+                                    @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
+                                    @*<a href="@Url.Action("CoordinationDetail","Order", new {id = @orderId})" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>
 
+                                        }*@
+                                    @*@if (User.IsInRole("Store") && item.Status == 6)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger btnTuChoiDon" data-id="@item.Id">
+                                            Từ chối
+                                        </button>
+                                    }*@
+                                    @if (User.IsInRole("Admin") && item.Status == 7) // status = 7 nghĩa là đơn bị cửa hàng từ chối
+                                    {
+                                        var orderId = item.Id;
+                                        var storeId = item.StoreID;
+                                        @*<a href="/admin/order/detail/@item.Id" class="btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi">Điều phối đơn</a>*@
+                                        <button type="button" class="btn btn-sm btn-danger btnHuyDon" data-id="@orderId">Hủy đơn</button>
+                                        if (item.OrderDetails.All(x => x.Product.StoreID == null)) // đơn hàng không có sản phẩm độc quyền thì có thể điều phối
+                                        {
+                                            <button type="button" class="mt-2 btn btn-sm @(storeId.HasValue ? "btn-secondary" : "btn-success") btnDieuPhoi" data-toggle="modal" data-target="#modal-default-store" data-id="@orderId">Điều phối đơn</button>
 
+                                        }
+
+                                    }
                                 </td>
                             </tr>
                             i++;
@@ -156,7 +261,7 @@
 
 </section>
 <!-- /.content -->
-
+<!-- /.modal-danh sách trạng thái -->
 <div class="modal fade" id="modal-default">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -171,7 +276,8 @@
                 <div class="form-group">
                     <label>Trạng thái</label>
                     <select class="form-control" id="ddTrangThai">
-                        <option value="2">Đã thanh toán</option>
+                        @*<option value="2">Đã thanh toán</option>*@
+                        <option value="5">Đang giao hàng</option>
                         <option value="3">Giao hàng thành công</option>
                         <option value="4">Huỷ</option>
 
@@ -188,40 +294,213 @@
     <!-- /.modal-dialog -->
 </div>
 
-@section scripts {
-<script>
-    $(document).ready(function () {
-        $('body').on('click', '.btnCapNhat', function () {
-            var id = $(this).data('id')
-            $('#txtOrderID').val(id);
-            $('#modal-default').modal('show')
-        })
 
-        $('body').on('click', '#btnLuu', function () {
-            var id = $('#txtOrderID').val();
-            var trangThai = $('#ddTrangThai').val();
-            $.ajax({
-                url: '/admin/order/UpdateTrangThai',
-                type: 'POST',
-                data: { id: id, trangThai: trangThai },
-                success: function (rs) {
-                    if (rs.success) {
-                        //alert(rs.message)
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thành công',
-                            text: rs.message,
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload(); // Reload trang sau khi người dùng nhấn OK
+<!-- /.modal-danh sách cửa hàng -->
+<div class="modal fade" id="modal-default-store">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Điều phối đơn cho cửa hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtOrderIDStore" value="0" />
+                <div class="form-group">
+                    <label>Cửa hàng</label>
+                    <select class="form-control" id="ddCuaHang">
+                        @foreach (var store in ViewBag.Stores)
+                        {
+                            <option value="@store.Value">@store.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnLuu">Lưu thay đổi</button>
+            </div>
+        </div>
+        @*/.modal-content*@
+    </div>
+    @*/.modal-dialog*@
+</div>
+
+
+@section scripts {
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnCapNhat', function () {
+                var id = $(this).data('id')
+                $('#txtOrderID').val(id);
+                $('#modal-default').modal('show')
+            })
+
+            $('body').on('click', '#btnLuu', function () {
+                var id = $('#txtOrderID').val();
+                var trangThai = $('#ddTrangThai').val();
+                $.ajax({
+                    url: '/admin/order/UpdateTrangThai',
+                    type: 'POST',
+                    data: { id: id, trangThai: trangThai },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+
+            $('body').on('click', '.btnTuChoiDon', function () {
+                var id = $(this).data("id");
+
+                Swal.fire({
+                    title: 'Bạn có muốn từ chối đơn hàng này không?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Order/TuChoiDon',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                Swal.fire({
+                                    icon: rs.success ? 'success' : 'error',
+                                    title: rs.success ? 'Thành công' : 'Lỗi',
+                                    text: rs.success ? 'Từ chối đơn thành công' : 'Có lỗi xảy ra khi từ chối đơn hàng.',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+
                             }
                         });
                     }
-                }
+                });
+            });
+
+            // hủy đơn
+
+            $('body').on('click', '.btnHuyDon', function () {
+                var id = $(this).data("id");
+                Swal.fire({
+                    title: 'Bạn muốn hủy đơn này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Order/HuyDon',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                Swal.fire({
+                                    icon: rs.success ? 'success' : 'error',
+                                    title: rs.success ? 'Thành công' : 'Lỗi',
+                                    text: rs.success ? 'Hủy đơn thành công' : 'Có lỗi xảy ra khi hủy đơn hàng.',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload();
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('body').on('click', '.btnDieuPhoi', function () {
+                var id = $(this).data('id')
+                $('#txtOrderIDStore').val(id);
+                $('#modal-default-store').modal('show')
             })
-        })
-    });
-    </script>    
-    
+
+            $('body').on('click', '#btnLuu', function () {
+                var orderID = $('#txtOrderIDStore').val();
+                var storeId = $('#ddCuaHang').val();
+                $.ajax({
+                    url: '/admin/order/DieuPhoiDon',
+                    type: 'POST',
+                    data: { orderID: orderID, storeId: storeId },
+                    success: function (rs) {
+                        if (rs.success) {
+                            //alert(rs.message)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công',
+                                text: rs.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload(); // Reload trang sau khi người dùng nhấn OK
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+
+            var table = $('#example').DataTable({
+                searchPanes: {
+                    viewTotal: true
+                },
+                dom: 'Plfrtip',
+                language: {
+                    searchPanes: {
+                        title: {
+                            _: 'Bảng thông tin - %d cột được chọn',
+                            0: 'Bảng thông tin - Không cột nào được chọn',
+                        },
+                        clearMessage: 'Xóa tất cả các cột đã chọn',
+                        collapse: {
+                            0: 'Bảng thông tin - Các cột đang được hiển thị',
+                            _: 'Bảng thông tin - %d cột đang được hiển thị',
+                        },
+                        showMessage: 'Hiển thị tất cả',
+                        collapseMessage: 'Ẩn tất cả'
+                    },
+                },
+            });
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+
 }

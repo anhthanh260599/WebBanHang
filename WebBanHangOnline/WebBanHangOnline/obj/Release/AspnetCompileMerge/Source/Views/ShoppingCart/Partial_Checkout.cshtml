@@ -1,9 +1,11 @@
 ﻿@model WebBanHangOnline.Models.OrderViewModel
+
 @{
     if (ViewBag.User != null)
     {
         var user = (WebBanHangOnline.Models.ApplicationUser)ViewBag.User;
     }
+
 }
 
 @using (Ajax.BeginForm("Checkout", "ShoppingCart", new AjaxOptions
@@ -18,21 +20,48 @@
 {
 
     <script>
-        function OnBeginCO() {
-            $('#btnCheckOut').attr("disabled", "disabled");
-            $('#load_send').html('<h2>Đang đặt hàng....</h2>');
+        function OnBeginCO(res) {
+            if (res.Success == false && res.Code == 111) {
+                Swal.fire({
+                    title: "Đặt hàng thất bại",
+                    text: res.message,
+                    icon: "error",
+                    onClose: () => {
+                        location.href = 'gio-hang';
+                    }
+                })
+            }
+            else {
+                $('#btnCheckOut').attr("disabled", "disabled");
+                $('#load_send').html('<h2>Đang đặt hàng....</h2>');
+            }
         }
         function OnSuccessCO(res) {
             if (res.Success) {
                 if (res.Code == 1) {
                     location.href = 'ShoppingCart/CheckoutSuccess';
+                    localStorage.removeItem('cart');
                 }
                 else {
                     location.href = res.Url;
+                    localStorage.removeItem('cart');
                 }
+            }
+            else {
+                Swal.fire({
+                    title: "Đặt hàng thất bại",
+                    text: res.message,
+                    icon: "error",
+                    onClose: () => {
+                        location.href = 'gio-hang';
+                    }
+                })
             }
         }
     </script>
+
+    <h6 class="text-danger">Lưu ý: Khi thanh toán bằng Paypal, giao dịch sẽ sử dụng đơn vị tiền tệ là USD.</h6>
+    <p class="text-info">Tỉ giá: 1 USD = 25.000 VND</p>
 
     @Html.AntiForgeryToken()
     <h4>Thông tin khách hàng</h4>
@@ -46,7 +75,7 @@
 
         <div class="form-group">
             <label>Số điện thoại</label>
-            <input type="text" name="Phone" required class="form-control" autocomplete="off" />
+            <input type="tel" name="Phone" required class="form-control" autocomplete="off" />
         </div>
 
         <div class="form-group">
@@ -70,7 +99,7 @@
 
         <div class="form-group">
             <label>Số điện thoại</label>
-            <input type="text" name="Phone" value="@user.Phone" required class="form-control" autocomplete="off" />
+            <input type="tel" name="Phone" value="@user.Phone" required class="form-control" autocomplete="off" />
         </div>
 
         <div class="form-group">
@@ -84,7 +113,15 @@
         </div>
     }
 
+    <div class="form-group">
+        <span>Cửa hàng phục vụ</span>
+        <input type="text" value="@ViewBag.StoreByID" class="form-control" disabled />
+    </div>
 
+    <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea type="text" name="Notes" class="form-control" autocomplete="off"></textarea>
+    </div>
 
 
     <div class="form-group">
@@ -92,9 +129,11 @@
         <select class="form-control" name="TypePayment" id="drTypePayment">
             <option value="1" selected>Ship COD</option>
             <option value="2">Thanh toán VNPAY</option>
-
+            <option value="3">Thanh toán PAYPAL</option>
         </select>
     </div>
+
+
 
     <div class="form-group" id="load_form_payment" style="display:none;">
         <h4> <label>Chọn phương thực thanh toán: </label></h4>
@@ -151,11 +190,17 @@
         // Close the modal when the countdown is finished
         $('#countdownModal').modal('hide');
     }
+    let nameInput = document.querySelector("input[name=CustomerName]");
+    let phoneInput = document.querySelector("input[name=Phone]");
+    let addressInput = document.querySelector("input[name=Address]");
+    let emailInput = document.querySelector("input[name=Email]");
 
     // Add a click event handler to the "Đặt hàng" button
     $('#btnCheckOut').click(function () {
-        $('#countdownModal').modal('show'); // Show the countdown modal
-        startCountdown(); // Start the countdown
+        if (nameInput.value != '' && phoneInput.value && '' && addressInput.value != '' && emailInput.value != '') {
+            $('#countdownModal').modal('show'); // Show the countdown modal
+            startCountdown(); // Start the countdown
+        }
     });
 </script>
 

@@ -4,6 +4,13 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Đối với SheetJS -->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>-->
+<!-- Đối với ExcelJS -->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+
+
 @section naviheader {
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -42,11 +49,9 @@
             <div class="form-group">
                 <label>Từ ngày:</label>
                 <div class="input-group date" id="fromDate" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDate" id="fromDateInput" />
-                    <div class="input-group-append" data-target="#fromDate" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
+                    <input type="date" class="form-control " data-target="#fromDate" id="fromDateInput" />
                 </div>
+
             </div>
         </div>
 
@@ -54,17 +59,14 @@
             <div class="form-group">
                 <label>Đến ngày:</label>
                 <div class="input-group date" id="toDate" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#toDate" id="toDateInput" />
-                    <div class="input-group-append" data-target="#toDate" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
+                    <input type="date" class="form-control" data-target="#toDate" id="toDateInput" />
                 </div>
             </div>
         </div>
     </div>
     <div class="row mb-3">
         <div class="col-md-4">
-        <button type="submit" id="DateFromTo" class="btn btn-success">Lọc</button>
+            <button type="submit" id="DateFromTo" class="btn btn-success">Lọc</button>
         </div>
     </div>
     <!-- Default box -->
@@ -94,24 +96,38 @@
 
 
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                         <div class="chart">
                             <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Ngày</th>
-                                    <th>Doanh thu</th>
-                                    <th>Lợi nhuận</th>
-                                </tr>
-                            </thead>
-                            <tbody id="load_data">
-                            </tbody>
-                        </table>
+                   
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-success btn-Xuat-Excel" onclick="XuatExcel()"> <i style="margin-right:8px;" class="fa-solid fa-file-excel"></i>  Xuất Excel</button>
+                        <div class="col-12 mt-3" id="data">
+                            @{
+                                var profileHtml = Html.Action("Partial_AdminPage_LoginName", "Account", new { area = "Admin" });
+                            }
+
+                            <h5>Doanh thu cửa hàng<strong>@Html.Raw(profileHtml)</strong></h5>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Ngày</th>
+                                        <th>Tổng số hoá đơn</th>
+                                        <th>Doanh thu</th>
+                                        <th>Lợi nhuận</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="load_data">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -132,87 +148,159 @@
 @section scripts {
     <script src="~/Content/clients/plugins/chart.js/Chart.min.js"></script>
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.10.2/docxtemplater.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.js"></script>
+
     <script>
 
-        var fromDate = '';
-        var toDate = '';
+        let btnDateFromTo = document.querySelector("#DateFromTo");
+        let fromDate = '';
+        let toDate = '';
+        let barChartCanvas = document.querySelector("#barChart").getContext('2d');
+        let myChart;
 
-        $(function () {
-            var arrDoanhThu = [];
-            var arrLoiNhuan = [];
-            var arrDate = [];
+        btnDateFromTo.onclick = (e) => {
+            fromDate = document.querySelector("#fromDateInput").value;
+            toDate = document.querySelector("#toDateInput").value;
+            // Thực hiện yêu cầu AJAX mới khi người dùng chọn ngày
             $.ajax({
                 url: '/RevenueStatistics/GetStatistical',
                 type: 'GET',
                 data: { fromDate: fromDate, toDate: toDate },
                 success: function (rs) {
-                    $.each(rs.Data, function (i, item) {
-                        var strDate = moment(item.Date).format('DD/MM/yyyy') // Convert và Định dạng date cho đúng
-                        arrDate.push(strDate)
-                        arrDoanhThu.push(item.DoanhThu);
-                        arrLoiNhuan.push(item.LoiNhuan);
-                    });
-                    var areaChartData = {
-                        labels: arrDate,
-                        datasets: [
-                            {
-                                label: 'Lợi nhuận',
-                                backgroundColor: 'rgba(60,141,188,0.9)',
-                                borderColor: 'rgba(60,141,188,0.8)',
-                                pointRadius: false,
-                                pointColor: '#3b8bba',
-                                pointStrokeColor: 'rgba(60,141,188,1)',
-                                pointHighlightFill: '#fff',
-                                pointHighlightStroke: 'rgba(60,141,188,1)',
-                                data: arrLoiNhuan
-                            },
-                            {
-                                label: 'Doanh thu',
-                                backgroundColor: 'rgba(210, 214, 222, 1)',
-                                borderColor: 'rgba(210, 214, 222, 1)',
-                                pointRadius: false,
-                                pointColor: 'rgba(210, 214, 222, 1)',
-                                pointStrokeColor: '#c1c7d1',
-                                pointHighlightFill: '#fff',
-                                pointHighlightStroke: 'rgba(220,220,220,1)',
-                                data: arrDoanhThu
-                            },
-                        ]
+                    if (rs.success) {
+                        myChart.destroy();
+                        GenerateChart(rs);
                     }
-                    //-------------
-                    //- BAR CHART -
-                    //-------------
-                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-                    var barChartData = $.extend(true, {}, areaChartData)
-                    var temp0 = areaChartData.datasets[0]
-                    var temp1 = areaChartData.datasets[1]
-                    barChartData.datasets[0] = temp1
-                    barChartData.datasets[1] = temp0
-
-                    var barChartOptions = {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        datasetFill: false,
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    callback: function (value, index, values) {
-                                        // Định dạng giá trị số có dấu ngăn cách phần nghìn
-                                        return value.toLocaleString('en-US');
-                                    }
-                                }
-                            }]
-                        }
+                    else {
+                        Swal.fire({
+                             icon: 'error', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                             title: 'Lỗi',
+                             text: rs.Message,
+                             confirmButtonText: 'OK'
+                        })
                     }
-                    new Chart(barChartCanvas, {
-                        type: 'bar',
-                        data: barChartData,
-                        options: barChartOptions
-                    });
-                    LoadData(rs.Data);
                 }
             });
-        })
+
+        }
+
+        $.ajax({
+            url: '/RevenueStatistics/GetStatistical',
+            type: 'GET',
+            data: { fromDate: fromDate, toDate: toDate },
+            success: function (rs) {
+                GenerateChart(rs);
+            }
+        });
+
+        // Hàm cập nhật biểu đồ với dữ liệu mới
+        function GenerateChart(rs) {
+            let arrDoanhThu = [];
+            let arrLoiNhuan = [];
+            let arrDate = [];
+            let arrSoHoaDon = [];
+            $.each(rs.Data, function (i, item) {
+                let strDate = moment(item.Date).format('DD/MM/yyyy') // Convert và Định dạng date cho đúng
+                arrDate.push(strDate)
+                arrDoanhThu.push(item.DoanhThu);
+                arrLoiNhuan.push(item.LoiNhuan);
+                arrSoHoaDon.push(item.SoHoaDon);
+            });
+            let areaChartData = {
+                labels: arrDate,
+                datasets: [
+                    {
+                        label: 'Lợi nhuận',
+                        backgroundColor: 'rgba(60,141,188,0.9)',
+                        borderColor: 'rgba(60,141,188,0.8)',
+                        pointRadius: false,
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: arrLoiNhuan
+                    },
+                    {
+                        label: 'Doanh thu',
+                        backgroundColor: 'rgba(210, 214, 222, 1)',
+                        borderColor: 'rgba(210, 214, 222, 1)',
+                        pointRadius: false,
+                        pointColor: 'rgba(210, 214, 222, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        data: arrDoanhThu
+                    },
+                    {
+                        label: 'Tổng số hoá đơn',
+                        backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                        borderColor: 'rgba(220, 53, 69, 0.8)',
+                        pointRadius: false,
+                        pointColor: 'rgba(220, 53, 69, 0.8)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,53,69,1)',
+                        type: 'line',  // Set the chart type to 'line' for this dataset
+                        yAxisID: 'right-y-axis', // Assigning the right y-axis for 'Tổng số hoá đơn'
+                        data: arrSoHoaDon
+                    },
+                ]
+            }
+            //-------------
+            //- BAR CHART -
+            //-------------
+            let barChartCanvas = document.querySelector("#barChart").getContext('2d');
+            let barChartData = $.extend(true, {}, areaChartData)
+            let temp0 = areaChartData.datasets[0]
+            let temp1 = areaChartData.datasets[1]
+            barChartData.datasets[0] = temp1
+            barChartData.datasets[1] = temp0
+
+            let barChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                datasetFill: false,
+                scales: {
+                    yAxes: [
+                        {
+                            id: 'left-y-axis', // Assigning the left y-axis for 'Doanh thu' and 'Lợi nhuận'
+                            position: 'left',
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return value.toLocaleString('en-US');
+                                }
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Tiền'
+                            }
+                        },
+                        {
+                            id: 'right-y-axis', // Assigning the right y-axis for 'Tổng số hoá đơn'
+                            position: 'right',
+                            ticks: {
+                                callback: function (value, index, values) {
+                                    return value.toLocaleString('en-US');
+                                }
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Tổng số hoá đơn'
+                            }
+                        }
+                    ]
+                }
+            }
+            myChart = new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
+            });
+            // Cập nhật biểu đồ và dữ liệu
+            LoadData(rs.Data);
+        }
 
         function LoadData(data) {
             var strHtml = ``;
@@ -220,9 +308,11 @@
                 var strDate = moment(item.Date).format('DD/MM/yyyy') // Convert và Định dạng date cho đúng
                 var doanhThuFormatted = item.DoanhThu.toLocaleString('en-US'); // Định dạng số thành chuỗi có dấu ngăn cách phần nghìn
                 var loiNhuanFormatted = item.LoiNhuan.toLocaleString('en-US'); // Định dạng số thành chuỗi có dấu ngăn cách phần nghìn
+                var SoHoaDon = item.SoHoaDon;
                 strHtml += `<tr>`
                 strHtml += `<td>` + (i + 1) + '</td>'
                 strHtml += `<td>` + strDate + '</td>'
+                strHtml += `<td>` + SoHoaDon + '</td>'
                 strHtml += `<td>` + doanhThuFormatted + '</td>'
                 strHtml += `<td>` + loiNhuanFormatted + '</td>'
                 strHtml += `</tr>`
@@ -230,13 +320,65 @@
             $('#load_data').html(strHtml);
         }
 
-        //Date picker
-        $('#fromDate').datetimepicker({
-            format: 'L'
-        });
+        function XuatExcel() {
+            // Gửi yêu cầu AJAX để lấy dữ liệu từ hàm GetStatistical
+            $.ajax({
+                url: '/RevenueStatistics/GetStatistical',
+                type: 'GET',
+                data: { fromDate: fromDate, toDate: toDate },
+                success: function (data) {
+                    // Gọi hàm để tạo và tải xuống tệp Excel
+                    TaoVaTaiXuongExcel(data.Data);
+                }
+            });
+        }
 
-        $('#toDate').datetimepicker({
-            format: 'L'
-        });
+        function TaoVaTaiXuongExcel(data) {
+            // Tạo đối tượng Excel
+            var workbook = new ExcelJS.Workbook();
+            var worksheet = workbook.addWorksheet('Sheet 1');
+
+            // Thêm dòng "Doanh thu cửa hàng" và merge các ô
+            var profileValue = $("h5:contains('Doanh thu cửa hàng')").text();
+            var doanhThuRow = worksheet.addRow([profileValue]);
+            worksheet.mergeCells(`A${doanhThuRow.number}:E${doanhThuRow.number}`);
+
+            // Đặt kiểu cho dòng "Doanh thu cửa hàng"
+            doanhThuRow.eachCell((cell) => {
+                cell.font = { bold: true }; // Đặt đậm
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF00' } }; // Màu nền vàng
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }; // Căn giữa dọc và ngang
+
+            });
+
+            worksheet.addRow(['STT', 'Ngày', 'Số hoá đơn','Doanh thu', 'Lợi nhuận']);
+
+
+            // Thêm dữ liệu từ mảng vào bảng Excel
+            data.forEach(function (item, index) {
+                var rowValues = [index + 1, moment(item.Date).format('DD/MM/yyyy'), item.SoHoaDon, item.DoanhThu, item.LoiNhuan];
+                worksheet.addRow(rowValues);
+            });
+
+            // Tạo một Blob từ tệp Excel
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                var blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+                // Tạo một đường dẫn URL từ Blob và tạo một thẻ 'a' để tải xuống
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'DuLieuDoanhThu.xlsx';
+
+                // Thêm thẻ 'a' vào trang và kích hoạt sự kiện click để tải xuống
+                document.body.appendChild(a);
+                a.click();
+
+                // Xóa đối tượng 'a' sau khi đã tải xuống
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
+        }
+
     </script>
 }

@@ -1,6 +1,12 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+<!-- Thư viện Chart.js từ CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@if (Model != null && Model.Any())
+<div style="width: 90%;">
+    <canvas id="TopViewCount"></canvas>
+</div>
+
+@*@if (Model != null && Model.Any())
 {
 
     <table class="table">
@@ -22,5 +28,39 @@
             }
         </tbody>
     </table>
+}*@
 
-}
+<script>
+    // Lấy dữ liệu từ Model để vẽ biểu đồ
+    var labels = [];
+    var viewCounts = [];
+
+    @foreach (var item in Model)
+    {
+        <text>labels.push('@Html.Raw(item.Title)');</text>
+        <text>viewCounts.push('@item.ViewCount');</text>
+    }
+
+    // Vẽ biểu đồ cột sử dụng Chart.js
+    var ctx = document.getElementById('TopViewCount').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Lượt xem',
+                data: viewCounts,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+        }
+    });
+</script>

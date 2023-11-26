@@ -3,6 +3,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -41,6 +43,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             // Khởi tạo UserManager và RoleManager
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+
+            // Lấy store id
+            var userId = User.Identity.GetUserId();
+            var user = userManager.FindById(userId);
+            var currentUser = userManager.FindById(User.Identity.GetUserId());
+            var storeID = db.Stores.Where(x => x.UserID == currentUser.Id).Select(x => x.Id).FirstOrDefault();
+            ViewBag.storeID = storeID;
 
             // Tìm role "Customer" bằng tên
             var customerRole = roleManager.FindByName("Customer");
@@ -126,6 +135,27 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
             return PartialView();
 
+        }
+
+        public ActionResult Partial_RevenueByStore(int idStore)
+        {
+            var query = from od in db.Orders
+                        join odt in db.OrderDetails on od.Id equals odt.OrderID
+                        where od.StoreID == idStore
+                        group new { od, odt } by EntityFunctions.TruncateTime(od.CreateDate) into g
+                        orderby g.Key
+                        select new
+                        {
+                            OrderDate = SqlFunctions.DatePart("day", g.Key) + "-" +
+                                         SqlFunctions.DatePart("month", g.Key) + "-" +
+                                         SqlFunctions.DatePart("year", g.Key),
+                            TotalRevenue = g.Sum(x => x.odt.Price * x.odt.Quantity)
+                        };
+
+            var result = query.Take(5).ToList();
+            ViewBag.TopStores = Newtonsoft.Json.JsonConvert.SerializeObject(result); // chuyen sang json
+
+            return PartialView();
         }
 
     }

@@ -71,7 +71,7 @@ namespace WebBanHangOnline
                 WebBanHangOnline.Models.Common.ExecuteStoredProcedure.UpdateStatusIfNoChange();
                 WebBanHangOnline.Models.Common.ExecuteStoredProcedure.sp_UpdateIsActivePromotionCode();
 
-                HttpContext.Current.Application["LastStoredProcedureExecution"] = DateTime.Now; /// AddHours(14) nếu deploy 
+                HttpContext.Current.Application["LastStoredProcedureExecution"] = DateTime.Now.AddHours(15); /// AddHours(14) nếu deploy 
             }
             catch (Exception ex)
             {

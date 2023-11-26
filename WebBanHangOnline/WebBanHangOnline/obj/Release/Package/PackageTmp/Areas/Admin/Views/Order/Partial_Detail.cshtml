@@ -4,31 +4,40 @@
 @if (Model != null && Model.Any())
 {
     int i = 1;
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>Tên sản phẩm</th>
-                <th>Giá</th>
-                <th>Số lượng</th>
-                <th>Thành tiền</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model)
-            {
-                var thanhTien = item.Price * item.Quantity;
+    <fieldset class="border p-2">
+        <legend style="font-weight:600;" class="w-auto">Danh sách sản phẩm</legend>
+        <table class="table table-hover">
+            <thead>
                 <tr>
-                    <td>@i</td>
-                    <td>@item.Product.Title</td>
-                    <td>@Common.FormatNumber(item.Price,0)</td>
-                    <td>@item.Quantity</td>
-                    <td>@Common.FormatNumber(thanhTien, 0)</td>
-
+                    <th>STT</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
                 </tr>
-                i++;
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var thanhTien = item.Price * item.Quantity;
+                    <tr>
+                        <td>@i</td>
+                        <td>
+                            @if (item.Product.StoreID != null)
+                            {
+                                <span class="text-danger">@item.Product.Title (Chỉ có tại @item.Product.Store.Name)</span>
+                            }
+                            else
+                            {
+                                <span> @item.Product.Title</span>
+                            }
+
+                        </td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </fieldset>
+
+    
 }

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+@using WebBanHangOnline.Models.Common
+
+@if (Model != null && Model.Any())
+{
+
+    <div class="row">
+
+        <div class="card-group">
+
+
+            @foreach (var item in Model)
+            {
+
+                var strImage = "";
+                var img = item.ProductImage.FirstOrDefault(x => x.IsDefault);
+                if (img != null)
+                {
+                    strImage = img.Image;
+                }
+
+                var wishList = item.WishLists.FirstOrDefault(x => x.CustomerName == User.Identity.Name);
+                var IsWishList = false;
+                if (wishList != null)
+                {
+                    IsWishList = true;
+                }
+
+                <div class="card">
+                    <a href="/chi-tiet/@item.Alias-p@(item.Id)">
+                        <img src="@strImage" class="card-img-top" height="200px;" alt="@item.Title">
+                    </a>
+                    <a href="/chi-tiet/@item.Alias-p@(item.Id)">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-bold text-center">@item.Title</h5>
+                            @if (item.PriceSale > 0)
+                            {
+                                <div class="card-text font-weight-bold text-danger">
+                                    @WebBanHangOnline.Models.Common.Common.FormatNumber(item.PriceSale, 0)
+                                    <p class="text-dark float-right" style="text-decoration:line-through">@WebBanHangOnline.Models.Common.Common.FormatNumber(item.Price, 0)</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card-text font-weight-bold text-danger">@WebBanHangOnline.Models.Common.Common.FormatNumber(item.Price, 0) </div>
+
+                            }
+                            <div class="card-text mt-4">
+                                @if (item.StoreID != null)
+                                {
+                                    <p style="font-size:12px;" class="float-left text-danger">Sản phẩm giới hạn</p>
+                                }
+                                <p style="font-size:12px; padding-top: 16px;" class="float-right"> @item.ViewCount <i class="fa-solid fa-eye"></i></p>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}

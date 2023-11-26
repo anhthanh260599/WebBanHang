@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Danh sách Khuyến mãi";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";    
 }
 
 @section naviheader {
@@ -66,6 +66,11 @@
                         <th>Giá trị giảm</th>
                         <th>Mã khuyến mãi</th>
                         <th>Hoạt động</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Số lượng còn lại</th>
+                        <th>Điểm cần để sử dụng</th>
+
                         <th></th>
                     </tr>
                 </thead>
@@ -92,19 +97,25 @@
                                 }
                                 <td>@item.PromotionCode</td>
                                 <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-id="@item.Id" class="btnActive" @(item.IsActive ? "checked" : "") />
-                                        <span class="slider round"></span>
-                                    </label>
+                                    @if (item.IsActive == true)
+                                    {
+                                        <span class="btn btn-sm btn-success">Đang hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="btn btn-sm btn-danger">Không hoạt động</span>
+                                    }
                                 </td>
 
                                 @*<td class="text-center">
            <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
         </td>*@
 
-
-
-                                <td>
+                                <td>@item.DateFrom.ToString("dd/MM/yyyy")</td>
+                                <td>@item.DateTo.AddDays(-1).ToString("dd/MM/yyyy")</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Point</td>
+                                <td class="action-list">
                                     <a href="/admin/Promotion/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
                                 </td>
@@ -229,7 +240,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/admin/Promotion/deleteSelected',
+                                url: '/admin/Promotion/DeleteSelected',
                                 type: 'POST',
                                 data: { ids: str },
                                 success: function (rs) {
@@ -375,27 +386,27 @@
             //        });
             //});
 
-            $('body').on('change', '.btnActive', function () {
-                //e.preventDefault();
-                var checkbox = $(this);
-                var id = checkbox.data("id");
+            //$('body').on('change', '.btnActive', function () {
+            //    //e.preventDefault();
+            //    var checkbox = $(this);
+            //    var id = checkbox.data("id");
 
-                $.ajax({
-                    url: '/admin/Promotion/IsActive',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (rs) {
-                        if (rs.success) {
-                            if (rs.IsActive) {
-                                checkbox.prop('checked', true);
-                            } else {
+            //    $.ajax({
+            //        url: '/admin/Promotion/IsActive',
+            //        type: 'POST',
+            //        data: { id: id },
+            //        success: function (rs) {
+            //            if (rs.success) {
+            //                if (rs.IsActive) {
+            //                    checkbox.prop('checked', true);
+            //                } else {
 
-                                checkbox.prop('checked', false);
-                            }
-                        }
-                    }
-                });
-            });
+            //                    checkbox.prop('checked', false);
+            //                }
+            //            }
+            //        }
+            //    });
+            //});
 
 
 

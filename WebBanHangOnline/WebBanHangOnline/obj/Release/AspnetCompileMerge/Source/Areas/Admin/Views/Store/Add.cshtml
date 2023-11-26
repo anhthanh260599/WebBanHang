@@ -76,10 +76,23 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="exampleInputEmail1">Số điện thoại cửa hàng</label>
+                        @Html.TextAreaFor(x => x.StorePhone, new { @class = "form-control", @placeholder = "Nhập số điện thoại của cửa hàng" })
+                        @Html.ValidationMessageFor(x => x.StorePhone, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Quản lý cửa hàng</label>
+                        @Html.DropDownListFor(model => model.StoreManagerName, ViewBag.UserStoreManagerList as SelectList, "Chọn Quản lý", new { @class = "form-control searchable-dropdown-list", @value = Model.StoreManagerName })
+                    </div>
+
+                    @Html.HiddenFor(x=>x.Alias)
+
+                    @*<div class="form-group">
                         <label for="exampleInputEmail1">Alias</label>
                         @Html.TextBoxFor(x => x.Alias, new { @class = "form-control", @placeholder = "Không cần điền field này" })
                         @Html.ValidationMessageFor(x => x.Alias, null, new { @class = "text-danger" })
-                    </div>
+                    </div>*@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Mô tả</label>
@@ -131,7 +144,10 @@
                         <label for="exampleInputPassword1">Phường/Xã</label>
                         @Html.DropDownListFor(model => model.Ward, ViewBag.WardList as SelectList, "Chọn Phường/Xã", new { @class = "form-control" })
                     </div>
-
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Tài khoản đăng nhập</label>
+                        @Html.DropDownListFor(model => model.UserID, ViewBag.UserList as SelectList, "Chọn Tài khoản", new { @class = "form-control searchable-dropdown-list", @value = Model.UserID })
+                    </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Hiển thị</label>
                         @Html.CheckBoxFor(x => x.IsActive, new { @checked = "checked" })

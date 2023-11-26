@@ -108,8 +108,14 @@
     </div>
     <div class="row mt-5">
         <div class="col-12">
-            @Html.Action("Partial_TopStore", "Home")
-
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.Action("Partial_TopStore", "Home")
+            }
+            @if (User.IsInRole("Store"))
+            {
+                @Html.Action("Partial_RevenueByStore", "Home", new { idStore = ViewBag.storeID })
+            }
         </div>
     </div>
 

@@ -1,6 +1,12 @@
 ﻿@model List<WebBanHangOnline.Models.ProductQuantityViewModel>
 
-<table class="table">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div style="width: 90%;">
+    <canvas id="TopOrder"></canvas>
+</div>
+
+@*<table class="table">
     <tr>
         <th>Mã sản phẩm</th>
         <th>Tên sản phẩm</th>
@@ -14,4 +20,40 @@
             <td>@product.TotalQuantitySold</td>
         </tr>
     }
-</table>
+</table>*@
+
+
+<script>
+    // Lấy dữ liệu từ Model để vẽ biểu đồ
+    var labels = [];
+    var viewCounts = [];
+
+    @foreach (var item in Model)
+    {
+        <text>labels.push('@Html.Raw(item.ProductName)');</text>
+        <text>viewCounts.push('@item.TotalQuantitySold');</text>
+    }
+
+    // Vẽ biểu đồ cột sử dụng Chart.js
+    var ctx = document.getElementById('TopOrder').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Tổng số bán',
+                data: viewCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+        }
+    });
+</script>
