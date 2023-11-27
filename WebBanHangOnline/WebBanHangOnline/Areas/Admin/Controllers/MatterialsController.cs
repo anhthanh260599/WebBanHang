@@ -85,8 +85,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
                     insert.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
-                insert.CreateDate = DateTime.Now;
-                insert.ModifierDate = DateTime.Now;
+                insert.SetCreated();
                 insert.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(insert.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Matterials.Add(insert);
                 db.SaveChanges();
@@ -186,7 +185,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                     // Chẳng hạn, bạn có thể gán một giá trị mặc định hoặc xử lý khác
                     edit.CreateBy = "Người dùng không tồn tại"; // Ví dụ
                 }
-                edit.ModifierDate = DateTime.Now;
+                edit.SetModified();
                 edit.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(edit.Title); // chuyển có dấu thành không dấu, mục đích để làm url sau này
                 db.Entry(edit).State = System.Data.Entity.EntityState.Modified;
                 db.Entry(update).State = System.Data.Entity.EntityState.Modified;
