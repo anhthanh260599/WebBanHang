@@ -120,6 +120,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 else
                 {
                     NullProduct newModel = new NullProduct();
+                    newModel.SetCreated();
                     model.StoreID = newModel.StoreID;
                     model.IsApprovedByAdmin = true; // Nếu là admin thì tự động duyệt
                 }

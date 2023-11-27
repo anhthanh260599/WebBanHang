@@ -61,5 +61,18 @@ namespace WebBanHangOnline.Models.EF
         public virtual ICollection<WishList> WishLists { get; set; } // 1 sản phẩm có nhiều yêu thích
         public int? StoreID => null;
         public virtual Store Store { get; set; }
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+            this.CreateBy = "Admin";
+            this.ModifierBy = "Admin";
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+            this.ModifierBy = "Admin";
+        }
     }
 }
