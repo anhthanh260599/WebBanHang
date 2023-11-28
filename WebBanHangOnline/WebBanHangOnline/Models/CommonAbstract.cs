@@ -16,5 +16,8 @@ namespace WebBanHangOnline.Models
 
         public abstract void SetModified();
 
+        public abstract void SetCreatedBy();
+
+        public abstract void SetModifiedBy();
     }
 }

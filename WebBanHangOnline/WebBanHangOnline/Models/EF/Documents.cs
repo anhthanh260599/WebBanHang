@@ -28,5 +28,15 @@ namespace WebBanHangOnline.Models.EF
             this.ModifierDate = DateTime.Now;
             this.ModifierBy = "Admin";
         }
+
+        public override void SetCreatedBy()
+        {
+
+        }
+
+        public override void SetModifiedBy()
+        {
+
+        }
     }
 }
