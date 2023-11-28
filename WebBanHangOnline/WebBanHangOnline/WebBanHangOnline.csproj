@@ -55,6 +55,7 @@
       <HintPath>..\packages\Dapper.2.0.123\lib\net461\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -232,10 +233,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202311220433331_update1.cs" />
-    <Compile Include="Migrations\202311220433331_update1.designer.cs">
-      <DependentUpon>202311220433331_update1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -245,6 +242,7 @@
     <Compile Include="Models\Common\Message.cs" />
     <Compile Include="Models\Common\SettingHelper.cs" />
     <Compile Include="Models\Common\ThongKeTruyCap.cs" />
+    <Compile Include="Models\ContextStrategy.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\EF\Adv.cs" />
     <Compile Include="Models\EF\Category.cs" />
@@ -290,6 +288,8 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\StrategyForAdmin.cs" />
+    <Compile Include="Models\StrategyForEmployee.cs" />
     <Compile Include="Models\ThongKeViewModel.cs" />
     <Compile Include="Models\WishListCountViewModel.cs" />
     <Compile Include="PayPal\Api\PayPalConfiguration.cs" />
@@ -3739,11 +3739,6 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202311220433331_update1.resx">
-      <DependentUpon>202311220433331_update1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
