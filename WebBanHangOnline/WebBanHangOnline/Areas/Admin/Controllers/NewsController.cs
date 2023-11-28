@@ -8,16 +8,26 @@ using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
+using WebBanHangOnline.Models.Repository;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
     public class NewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+
+        private readonly IRepository<News> repository;
+
+        public NewsController() // Thêm constructor không tham số
+        {
+            repository = new GenericRepository<News>();
+        }
+
         // GET: Admin/News
         public ActionResult Index()
         {
-            var items = db.News.OrderByDescending(x=>x.Id).ToList();
+            //var items = db.News.OrderByDescending(x=>x.Id).ToList();
+            var items = repository.GetAll();
             return View(items);
         }
 
