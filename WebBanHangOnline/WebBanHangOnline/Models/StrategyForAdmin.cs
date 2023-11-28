@@ -8,6 +8,8 @@ namespace WebBanHangOnline.Models
 {
     public class StrategyForAdmin : CommonAbstract
     {
+        public string ModifierBy { get; set; }
+        public string CreateBy { get; set; }
         public override void SetCreated()
         {
 
