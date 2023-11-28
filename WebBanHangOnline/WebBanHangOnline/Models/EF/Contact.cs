@@ -33,5 +33,15 @@ namespace WebBanHangOnline.Models.EF
         {
             this.ModifierDate = DateTime.Now;
         }
+
+        public override void SetCreatedBy()
+        {
+
+        }
+
+        public override void SetModifiedBy()
+        {
+
+        }
     }
 }

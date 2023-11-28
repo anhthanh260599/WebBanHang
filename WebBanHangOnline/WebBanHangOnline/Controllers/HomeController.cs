@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PayPal.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -84,17 +85,22 @@ namespace WebBanHangOnline.Controllers
                 ViewBag.RequestType = new SelectList(db.RequestTypes.ToList(), "Id", "RequestTypeName");
                 if (model.RequestType != null) 
                 {
-                    db.CustomerRequests.Add(new CustomerRequest
+                    if (User.IsInRole("Admin"))
                     {
-                        CustomerName = model.CustomerName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        CreatedDate = DateTime.Now,
-                        RequestTitle = model.RequestTitle,
-                        RequestContent = model.RequestContent,
-                        RequestTypeId = model.RequestType.Id,
-                        IsResolve = false
-                    });
+                        CommonAbstract strategy = new StrategyForAdmin();
+                        ContextStrategy contextStrategy = new ContextStrategy(strategy);
+                        contextStrategy.ExecuteCreate();
+                        model.CreateBy = contextStrategy.CreateBy;
+                    }
+                    else
+                    {
+                        CommonAbstract strategy = new StrategyForEmployee();
+                        ContextStrategy contextStrategy = new ContextStrategy(strategy);
+                        contextStrategy.ExecuteCreate();
+                        model.CreateBy = contextStrategy.CreateBy;
+                    }
+                    model.SetCreated();
+                    db.CustomerRequests.Add(model);
                     db.SaveChanges();
                 }
                 return RedirectToAction("CustomerRequest_SuccessSend", "Home");
@@ -109,7 +115,7 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult TraCuuDonHang(string request)
         {
-            List<Order> danhSachDonHang = new List<Order>();
+            List<Models.EF.Order> danhSachDonHang = new List<Models.EF.Order>();
 
             if (!string.IsNullOrEmpty(request))
             {

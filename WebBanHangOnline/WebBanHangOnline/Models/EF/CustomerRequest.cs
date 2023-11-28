@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace WebBanHangOnline.Models.EF
 {
     [Table("tb_CustomerRequest")]
-    public class CustomerRequest
+    public class CustomerRequest : CommonAbstract
     {
         public int Id { get; set; }
         public string CustomerName { get; set; }
@@ -18,8 +18,28 @@ namespace WebBanHangOnline.Models.EF
         [AllowHtml]
         public string RequestContent { get; set; }
         public int RequestTypeId { get; set; }
-        public DateTime CreatedDate { get; set; }
         public bool IsResolve { get; set; }
         public virtual RequestType RequestType { get; set; }
+
+        public override void SetCreated()
+        {
+            this.CreateDate = DateTime.Now;
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetModified()
+        {
+            this.ModifierDate = DateTime.Now;
+        }
+
+        public override void SetCreatedBy()
+        {
+
+        }
+
+        public override void SetModifiedBy()
+        {
+
+        }
     }
 }
