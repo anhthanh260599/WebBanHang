@@ -196,7 +196,7 @@
             });
 
             // Xử lý chọn cửa hàng
-            let elementSelectStore = document.querySelector("#StoreList");            
+            let elementSelectStore = document.querySelector("#StoreList");
 
             elementSelectStore.onchange = (e) => {
                 let dataSessionCart = JSON.parse(localStorage.getItem("cart"));
@@ -212,7 +212,7 @@
                             updateStoreSingleton(storeIDSession);
                             localStorage.setItem("storeID", storeIDSession);
                             return;
-                        } 
+                        }
                     })
                 } else {
                     updateStoreSingleton(selectStoreID);
