@@ -15,6 +15,11 @@ Web có thể hoạt động như 1 trang web bán hàng thực thụ
 
 Chức năng chính: 
 
+Cửa hàng:
+  - Tạo sản phẩm riêng cho cửa hàng
+  - Quản lý đơn theo cửa hàng
+  - Thống kê doanh thu/ In báo cáo theo cửa hàng
+
 Khách hàng:
 
   - Xem sản phẩm
