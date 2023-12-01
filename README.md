@@ -19,6 +19,10 @@ Cửa hàng:
   - Tạo sản phẩm riêng cho cửa hàng
   - Quản lý đơn theo cửa hàng
   - Thống kê doanh thu/ In báo cáo theo cửa hàng
+  - Đặt nguyên vật liệu
+  - Tồn kho
+  - Xem tình trạng đơn hàng NVL và đơn hàng khách đặt
+  - Chăm sóc, phản hồi ý kiến của khách hàng
 
 Khách hàng:
 
@@ -41,8 +45,8 @@ Khách hàng:
   - Xem lịch sử đơn hàng
   - Tra cứu đơn hàng
   - Xem trạng thái đơn hàng
-  - Đặt nguyên vật liệu (Áp dụng cho user cửa hàng)
   - Đăng ký nhận thông báo (Subscribe): Gửi mail khi Subscribe thành công
+  - Xem sản phẩm gợi ý
     
 Admin:
 
@@ -65,6 +69,11 @@ Admin:
   - Quản lý mã khuyến mãi
   - Điều phối đơn hàng
   - Quản lý công thức sản phẩm
+  - Thống kê số lượt xem, thống kê số lượt truy cập
+  - Chăm sóc, phản hồi ý kiến của khách hàng
+
+
+Và còn nhiều hơn thế nữa
 
 Account thanh toán VNPAY Demo:
    - Ngân hàng:	NCB
