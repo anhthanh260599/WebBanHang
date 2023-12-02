@@ -247,6 +247,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CommandPattern\DeleteCommand.cs" />
+    <Compile Include="Models\CommandPattern\DeleteMultipleCommand.cs" />
+    <Compile Include="Models\CommandPattern\ICommand.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
     <Compile Include="Models\Common\Common.cs" />
     <Compile Include="Models\Common\ExecuteStoredProcedure.cs" />
