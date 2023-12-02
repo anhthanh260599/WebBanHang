@@ -4,13 +4,20 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.CommandPattern;
 using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
     public class HomeSliderController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext();
+        //ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db;
+
+        public HomeSliderController()
+        {
+            db = new ApplicationDbContext();
+        }
         // GET: Admin/HomeSlider
         public ActionResult Index()
         {
@@ -55,38 +62,78 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(model);
         }
 
+        //[HttpPost]
+        //public ActionResult Delete(int id)
+        //{
+
+        //    var item = db.Sliders.Find(id);
+        //    if (item != null)
+        //    {
+        //        db.Sliders.Remove(item);
+        //        db.SaveChanges();
+        //        return Json(new { success = true });
+        //    }
+        //    return Json(new { success = false });
+        //}
+
+        //[HttpPost]
+        //public ActionResult DeleteSelected(string ids)
+        //{
+        //    if (!string.IsNullOrEmpty(ids))
+        //    {
+        //        var items = ids.Split(',');
+        //        if (items != null && items.Any())
+        //        {
+        //            foreach (var item in items)
+        //            {
+        //                var obj = db.Sliders.Find(Convert.ToInt32(item));
+        //                db.Sliders.Remove(obj);
+        //                db.SaveChanges();
+        //            }
+        //        }
+        //        return Json(new { success = true });
+        //    }
+        //    return Json(new { success = false });
+        //}
+
         [HttpPost]
         public ActionResult Delete(int id)
         {
-
             var item = db.Sliders.Find(id);
-            if (item != null)
+            if(item != null)
             {
-                db.Sliders.Remove(item);
-                db.SaveChanges();
+                var command = new DeleteCommand<Slider>(db,item.Id);
+                command.Execute();
                 return Json(new { success = true });
             }
             return Json(new { success = false });
         }
+
 
         [HttpPost]
-        public ActionResult DeleteSelected(string ids)
+        public ActionResult DeleteSelected(string ids) 
         {
-            if (!string.IsNullOrEmpty(ids))
+            if(!string.IsNullOrEmpty(ids))
             {
                 var items = ids.Split(',');
-                if (items != null && items.Any())
+                if(items != null && items.Any())
                 {
-                    foreach (var item in items)
-                    {
-                        var obj = db.Sliders.Find(Convert.ToInt32(item));
-                        db.Sliders.Remove(obj);
-                        db.SaveChanges();
-                    }
+                    var command = new DeleteMultipleCommand<Slider>(db, items);
+                    command.Execute();
+                    return Json(new { success = true });
                 }
-                return Json(new { success = true });
             }
             return Json(new { success = false });
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
     }
 }
