@@ -8,6 +8,9 @@ using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
 using WebBanHangOnline.Models.Repository;
+using WebBanHangOnline.Models.UnitOfWork;
+using WebBanHangOnline.Models.UnityConfig;
+using Unity;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
@@ -15,17 +18,26 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
 
+        private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<Posts> repository;
+
         public PostsController()
         {
-            repository = new GenericRepository<Posts>();
+            this.unitOfWork = UnityConfig.Container.Resolve<IUnitOfWork>();
+            this.repository = new GenericRepository<Posts>(unitOfWork);
+        }
+        public PostsController(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+            this.repository = new GenericRepository<Posts>(unitOfWork);
         }
 
         // GET: Admin/Posts
         public ActionResult Index()
         {
             //var items = db.Posts.OrderByDescending(x=>x.Id).ToList();
-            var items = repository.GetAll();
+            //var items = repository.GetAll();
+            var items = unitOfWork.PostsRepository.GetAll();
             return View(items);
         }
 
