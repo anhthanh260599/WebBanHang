@@ -44,7 +44,10 @@ namespace WebBanHangOnline.Models.UnitOfWork
             }
         }
 
-        public void SaveChanges()
+        public ApplicationDbContext DbContext => db; // Thêm property này để triển khai IUnitOfWork.DbContext
+
+
+        public void UnitOfWorkSaveChanges()
         {
             db.SaveChanges();
         }
