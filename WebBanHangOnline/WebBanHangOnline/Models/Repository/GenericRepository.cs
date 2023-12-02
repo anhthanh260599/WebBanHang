@@ -30,5 +30,11 @@ namespace WebBanHangOnline.Models.Repository
 
             return db.Set<T>().OrderByDescending(lambda).ToList();
         }
+
+        public void Add(T entity)
+        {
+            //db.Set<T>().Add(entity);
+            _unitOfWork.DbContext.Set<T>().Add(entity);
+        }
     }
 }

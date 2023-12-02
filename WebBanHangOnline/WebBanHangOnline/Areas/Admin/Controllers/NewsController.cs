@@ -77,8 +77,11 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 model.CategoryID = 18; // CategoryID của Tin tức (check trong DB)
                 model.ModifierDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Common.Filter.FilterChar(model.Title);  // chuyển có dấu thành không dấu, mục đích để làm url sau này
-                db.News.Add(model);
-                db.SaveChanges();
+                //db.News.Add(model);
+                //db.SaveChanges();
+                unitOfWork.NewsRepository.Add(model); // Sử dụng phương thức Add từ IRepository
+                unitOfWork.UnitOfWorkSaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(model);

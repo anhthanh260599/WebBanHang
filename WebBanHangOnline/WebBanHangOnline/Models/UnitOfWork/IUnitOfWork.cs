@@ -13,6 +13,8 @@ namespace WebBanHangOnline.Models.UnitOfWork
         IRepository<News> NewsRepository { get; }
         IRepository<Posts> PostsRepository { get; }
         // Thêm các IRepository khác nếu cần
-        void SaveChanges();
+        void UnitOfWorkSaveChanges();
+        ApplicationDbContext DbContext { get; } 
+
     }
 }
