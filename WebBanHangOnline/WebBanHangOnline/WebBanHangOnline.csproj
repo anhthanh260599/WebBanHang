@@ -303,6 +303,8 @@
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\Repository\GenericRepository.cs" />
     <Compile Include="Models\Repository\IRepository.cs" />
+    <Compile Include="Models\ServicePattern\ISocialMediaService.cs" />
+    <Compile Include="Models\ServicePattern\SocialMediaService.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Models\StrategyForAdmin.cs" />
