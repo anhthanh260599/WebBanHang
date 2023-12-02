@@ -116,3 +116,11 @@ D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnli
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\obj\Release\WebBanHangOnline.pdb
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.dll
 D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\PayPal.xml
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\System.Threading.Tasks.Extensions.dll
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\Unity.Abstractions.dll
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\Unity.Container.dll
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\System.Threading.Tasks.Extensions.xml
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\Unity.Abstractions.pdb
+D:\Workspace\Project\WebBanHangOnline\WebBanHang\WebBanHangOnline\WebBanHangOnline\bin\Unity.Container.pdb

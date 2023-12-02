@@ -6,28 +6,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Unity;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
 using WebBanHangOnline.Models.Repository;
+using WebBanHangOnline.Models.UnitOfWork;
+using WebBanHangOnline.Models.UnityConfig;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
     public class NewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-
+        private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<News> repository;
 
-        public NewsController() // Thêm constructor không tham số
+        public NewsController()
         {
-            repository = new GenericRepository<News>();
+            this.unitOfWork = UnityConfig.Container.Resolve<IUnitOfWork>();
+            this.repository = new GenericRepository<News>(unitOfWork);
+        }
+
+        public NewsController(IUnitOfWork unitOfWork) 
+        {
+            this.unitOfWork = unitOfWork;
+            this.repository = new GenericRepository<News>(unitOfWork);
         }
 
         // GET: Admin/News
         public ActionResult Index()
         {
             //var items = db.News.OrderByDescending(x=>x.Id).ToList();
-            var items = repository.GetAll();
+            //var items = repository.GetAll();
+
+            var items = unitOfWork.NewsRepository.GetAll();
             return View(items);
         }
 

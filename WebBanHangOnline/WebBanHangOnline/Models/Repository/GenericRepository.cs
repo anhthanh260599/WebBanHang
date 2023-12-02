@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using WebBanHangOnline.Models.UnitOfWork;
 
 namespace WebBanHangOnline.Models.Repository
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {
+
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationDbContext db;
 
-        public GenericRepository()
+        public GenericRepository( IUnitOfWork unitOfWork)
         {
+            this._unitOfWork = unitOfWork;
             this.db = new ApplicationDbContext();
         }
 
