@@ -7,6 +7,9 @@ using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
+using Microsoft.VisualBasic.Logging;
+using System.Xml.Linq;
+using PayPal.Api;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
@@ -66,6 +69,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             {
                 model.SetModified();
                 db.Documents.Attach(model);
+                model.CreateDate = DateTime.Now;
+                model.ModifierDate = DateTime.Now;
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -102,6 +107,22 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                         db.SaveChanges();
                     }
                 }
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public ActionResult Duplicate(int id)
+        {
+
+            var item = db.Documents.Find(id);
+            if (item != null)
+            {
+                // Sử dụng Prototype
+                var cloneDocument = item.Clone();
+                db.Documents.Add((Documents)cloneDocument);
+                db.SaveChanges();
                 return Json(new { success = true });
             }
             return Json(new { success = false });

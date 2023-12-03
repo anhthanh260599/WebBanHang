@@ -105,15 +105,14 @@
                                 </td>
 
                                 @*<td class="text-center">
-           <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
-        </td>*@
-
-
-
+                                       <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck) </a>
+                                    </td>*@
                                 <td>
                                     <a href="/admin/Documents/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnDelete">Xoá</a>
+                                    <a href="#" data-id="@item.Id" class="btn btn-sm btn-warning btnDuplicate">Nhân bản</a>
                                     <a href="@Url.Action("Download", "Documents", new { id = item.Id })" class="btn btn-sm btn-success">Tải xuống</a>
+
                                 </td>
                             </tr>
                             i++;
@@ -354,6 +353,44 @@
                                         title: 'Thành công',
                                         text: '@Message.SuccessDeleted',
                                         confirmButtonText: 'OK'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('body').on('click', '.btnDuplicate', function () {
+                var id = $(this).data("id");
+
+                // Sử dụng SweetAlert 2 để hiển thị cửa sổ xác nhận thay vì confirm
+                Swal.fire({
+                    title: 'Bạn có muốn nhân bản tài liệu này không ?',
+                    text: '',
+                    icon: 'warning', // Loại biểu tượng (có thể là 'success', 'error', 'warning', 'info', v.v.)
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Nhân bản',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/Documents/Duplicate',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function (rs) {
+                                if (rs.success) {
+                                    // Thông báo thành công sử dụng SweetAlert 2
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Thành công',
+                                        text: 'Nhân bản thành công',
+                                        confirmButtonText: 'OK'
+                                    }).then((result) => {
+                                        // Load lại trang web
+                                        location.reload();
                                     });
                                 }
                             }
