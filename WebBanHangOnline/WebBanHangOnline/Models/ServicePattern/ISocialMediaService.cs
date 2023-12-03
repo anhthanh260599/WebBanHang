@@ -14,5 +14,8 @@ namespace WebBanHangOnline.Models.ServicePattern
         SocialMediaProfiles GetProfileById(int id);
         void UpdateProfile(SocialMediaProfiles profile);
         void DeleteProfile(int id);
+
+        //Hàm logic không truy cập CSDL
+        bool IsProfileNameValid(string socialMediaName);
     }
 }

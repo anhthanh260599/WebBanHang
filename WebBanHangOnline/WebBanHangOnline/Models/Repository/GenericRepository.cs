@@ -28,7 +28,8 @@ namespace WebBanHangOnline.Models.Repository
 
             var lambda = Expression.Lambda<Func<T, int>>(property, parameter);
 
-            return db.Set<T>().OrderByDescending(lambda).ToList();
+            return _unitOfWork.DbContext.Set<T>().OrderByDescending(lambda).ToList();
+            //return db.Set<T>().OrderByDescending(lambda).ToList();
         }
 
         public void Add(T entity)

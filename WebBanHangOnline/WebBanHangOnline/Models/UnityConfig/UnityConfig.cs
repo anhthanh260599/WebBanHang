@@ -9,12 +9,12 @@ namespace WebBanHangOnline.Models.UnityConfig
 {
     public class UnityConfig
     {
-        public static IUnityContainer Container { get; private set; }
+        //public static IUnityContainer Container { get; private set; }
 
-        public static void RegisterComponents()
-        {
-            Container = new UnityContainer();
-            Container.RegisterType<IUnitOfWork, UnitOfWork.UnitOfWork>();
-        }
+        //public static void RegisterComponents()
+        //{
+        //    Container = new UnityContainer();
+        //    Container.RegisterType<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        //}
     }
 }

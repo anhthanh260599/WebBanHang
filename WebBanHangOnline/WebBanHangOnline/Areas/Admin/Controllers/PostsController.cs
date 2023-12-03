@@ -19,17 +19,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
 
         private readonly IUnitOfWork unitOfWork;
-        private readonly IRepository<Posts> repository;
 
         public PostsController()
         {
-            this.unitOfWork = UnityConfig.Container.Resolve<IUnitOfWork>();
-            this.repository = new GenericRepository<Posts>(unitOfWork);
+            this.unitOfWork = new UnitOfWork();
         }
         public PostsController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            this.repository = new GenericRepository<Posts>(unitOfWork);
         }
 
         // GET: Admin/Posts

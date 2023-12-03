@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
 using WebBanHangOnline.Models.ServicePattern;
+using WebBanHangOnline.Models.CommandPattern;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
@@ -88,6 +89,26 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return Json(new { success = true });
         }
 
+        //[HttpPost]
+        //public ActionResult DeleteSelected(string ids)
+        //{
+        //    if (!string.IsNullOrEmpty(ids))
+        //    {
+        //        var items = ids.Split(',');
+        //        if (items != null && items.Any())
+        //        {
+        //            foreach (var item in items)
+        //            {
+        //                var obj = db.SocialMediaProfiles.Find(Convert.ToInt32(item));
+        //                db.SocialMediaProfiles.Remove(obj);
+        //                db.SaveChanges();
+        //            }
+        //        }
+        //        return Json(new { success = true });
+        //    }
+        //    return Json(new { success = false });
+        //}
+
         [HttpPost]
         public ActionResult DeleteSelected(string ids)
         {
@@ -96,16 +117,19 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 var items = ids.Split(',');
                 if (items != null && items.Any())
                 {
-                    foreach (var item in items)
-                    {
-                        var obj = db.SocialMediaProfiles.Find(Convert.ToInt32(item));
-                        db.SocialMediaProfiles.Remove(obj);
-                        db.SaveChanges();
-                    }
+                    var command = new DeleteMultipleCommand<SocialMediaProfiles>(db, items);
+                    command.Execute();
+                    return Json(new { success = true });
                 }
-                return Json(new { success = true });
             }
             return Json(new { success = false });
+        }
+
+        [HttpPost]
+        public ActionResult ValidateProfileName(string socialMediaName)
+        {
+            bool isValid = _socialMediaService.IsProfileNameValid(socialMediaName);
+            return Json(new { isValid });
         }
     }
 }
