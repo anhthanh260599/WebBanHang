@@ -24,7 +24,7 @@ namespace WebBanHangOnline
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            UnityConfig.RegisterComponents();
+            //UnityConfig.RegisterComponents();
 
             Application["HomNay"] = 0;
             Application["HomQua"] = 0;

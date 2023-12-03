@@ -46,5 +46,11 @@ namespace WebBanHangOnline.Models.ServicePattern
                 db.SaveChanges();
             }
         }
+
+        public bool IsProfileNameValid(string socialMediaName)
+        {
+            // Thực hiện logic kiểm tra hợp lệ mà không cần truy cập cơ sở dữ liệu
+            return !string.IsNullOrEmpty(socialMediaName) && socialMediaName.Length <= 10;
+        }
     }
 }

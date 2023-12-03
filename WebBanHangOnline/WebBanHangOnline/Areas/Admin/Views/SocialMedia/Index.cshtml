@@ -56,8 +56,19 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-6 pl-4 mt-5">
+                <div class="form-group">
+                    <label>Kiểm tra độ dài <= 10</label>
+                    <input type="text" id="socialMediaNameInput" class="form-control" />
+                    <span id="validationMessage"></span>
+                </div>
+            </div>
+        </div>
+       
+
         <div class="card-body">
-            <table class="table table-hover" id="dataTable">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="SelectAll" /></th>
@@ -91,11 +102,11 @@
                         }
                     }
                     @*else
-                        {
-                            <tr>
-                                <td colspan="4">@Message.NoRecord</td>
-                            </tr>
-                        }*@
+                    {
+                        <tr>
+                            <td colspan="4">@Message.NoRecord</td>
+                        </tr>
+                    }*@
                 </tbody>
 
             </table>
@@ -116,6 +127,33 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+
+            // Gán sự kiện khi người dùng rời khỏi trường nhập liệu
+            $("#socialMediaNameInput").blur(function () {
+                // Lấy giá trị từ trường nhập liệu
+                var socialMediaName = $(this).val();
+
+                // Gọi phương thức kiểm tra tính hợp lệ từ Server
+                $.ajax({
+                    url: "/admin/SocialMedia/ValidateProfileName", // Địa chỉ URL của phương thức trong controller
+                    type: "POST",
+                    data: { socialMediaName: socialMediaName },
+                    success: function (data) {
+                        // Xử lý kết quả từ server
+                        if (data.isValid) {
+                            $("#validationMessage").text("Tên mạng xã hội hợp lệ.");
+                            $("#validationMessage").addClass("text-success text-bold");
+
+                        } else {
+                            $("#validationMessage").text("Tên mạng xã hội không hợp lệ.");
+                            $("#validationMessage").addClass("text-danger text-bold");
+                        }
+                    },
+                    error: function () {
+                        console.log("Lỗi khi gọi phương thức kiểm tra tính hợp lệ.");
+                    }
+                });
+            });
 
             @*$('body').on('click', '#btnDeleteSelected', function (e) { // Hàm dùng để Xoá các mục đã chọn
                 e.preventDefault();
@@ -327,6 +365,22 @@
                                 }
                             }
                         });
+                    }
+                });
+            });
+
+            $("#SocialMediaName").change(function () {
+                var socialMediaName = $(this).val();
+                var id = $("#Id").val() || 0;
+                $.ajax({
+                    url: "admin/SocialMedia/IsSocialMediaNameUnique",
+                    type: "GET",
+                    data: { socialMediaName: socialMediaName, id: id },
+                    success: function (isUnique) {
+                        if (!isUnique) {
+                            alert("Tên mạng xã hội phải là duy nhất.");
+                            $("#SocialMediaName").val(''); // Clear the input
+                        }
                     }
                 });
             });
