@@ -94,6 +94,11 @@ namespace WebBanHangOnline.Controllers
             return PartialView(item);
         }
 
+        public ActionResult Partial_ProductHot()
+        {
+            var item = db.Products.Where(x => x.IsHot && x.IsActive).ToList();
+            return PartialView(item);
+        }
 
         // Hàm ứng dụng singleton
         [HttpPost]
