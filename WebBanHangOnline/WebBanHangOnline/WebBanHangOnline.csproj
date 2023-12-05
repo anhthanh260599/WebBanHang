@@ -3940,6 +3940,7 @@
     <Content Include="Uploads\files\kienthuc.docx" />
     <Content Include="Uploads\files\phan-cong.xlsx" />
     <Content Include="Uploads\files\Phân công.xlsx" />
+    <Content Include="Views\Product\Partial_ProductHot.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
