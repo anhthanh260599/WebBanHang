@@ -13,11 +13,19 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
     {
         //ApplicationDbContext db = new ApplicationDbContext();
         private readonly ApplicationDbContext db;
+        private static Stack<IUndoCommand> _undoCommand = new Stack<IUndoCommand>();
 
         public HomeSliderController()
         {
             db = new ApplicationDbContext();
         }
+
+        public HomeSliderController(ApplicationDbContext db, Stack<IUndoCommand> undoCommand)
+        {
+            this.db = db;
+            _undoCommand = undoCommand;
+        }
+
         // GET: Admin/HomeSlider
         public ActionResult Index()
         {
@@ -103,12 +111,24 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if(item != null)
             {
                 var command = new DeleteCommand<Slider>(db,item.Id);
+                _undoCommand.Push(command);
                 command.Execute();
                 return Json(new { success = true });
             }
             return Json(new { success = false });
         }
 
+        [HttpPost]
+        public ActionResult Undo()
+        {
+            if(_undoCommand.Count > 0)
+            {
+                var undoCommand = _undoCommand.Pop();
+                undoCommand.Undo();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
 
         [HttpPost]
         public ActionResult DeleteSelected(string ids) 
@@ -119,6 +139,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 if(items != null && items.Any())
                 {
                     var command = new DeleteMultipleCommand<Slider>(db, items);
+                    _undoCommand.Push(command); 
                     command.Execute();
                     return Json(new { success = true });
                 }

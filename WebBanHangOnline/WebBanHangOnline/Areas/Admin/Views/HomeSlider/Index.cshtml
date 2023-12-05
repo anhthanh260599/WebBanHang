@@ -51,6 +51,7 @@
             <div class="card-tools">
                 <a href="/admin/homeslider/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" id="btnDeleteSelected" class="btn btn-danger">Xoá các mục đã chọn</a>
+                <a href="#" id="btnUndo" class="btn btn-warning">Hoàn tác</a>
 
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
@@ -389,8 +390,32 @@
                 });
             });
 
-
-
+            $('body').on('click', '#btnUndo', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/admin/homeslider/undo', // Địa chỉ URL của action Undo trong Controller
+                    type: 'POST',
+                    success: function (rs) {
+                        if (rs.success) {
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Thao tác đã được hoàn tác, nhấn OK để tiếp tục',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                // Sau khi bấm OK, làm mới trang
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể hoàn tác thao tác.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });                        }
+                    }
+                });
+            });
         });
     </script>
 
