@@ -68,7 +68,7 @@
                         <th>Hình ảnh</th>
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
-                        <th>Số lượng</th>
+                        @*<th>Số lượng</th>*@
                         <th>Giá (VND)</th>
                         <th>Ngày tạo</th>
                         <th>Hiển thị</th>
@@ -77,7 +77,7 @@
                         <th>Nổi bật</th>
                         <th>Khuyến mãi</th>
                         <th>Cửa hàng</th>
-
+                        <th>Tỉ lệ mua hàng</th>
 
                         <th style="width:150px;"></th>
                     </tr>
@@ -86,18 +86,25 @@
                     @if (Model != null && Model.Any())
                     {
                         var i = 1;
+                        double buyFrequency = 1;
                         foreach (var item in Model)
                         {
 
+
                             if (item.IsApprovedByAdmin == false)
                             {
+                                if (item.ViewCount > 0)
+                                {
+                                    buyFrequency = ((double)item.BuyCount / (double)item.ViewCount) * 100;
+                                    buyFrequency = Math.Round(buyFrequency, 0);
+                                }
                                 <tr id="trow_@item.Id">
                                     <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                     <td class="stt-cell">@i</td>
                                     <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
                                     <td>@item.Title</td>
                                     <td>@item.ProductCategory.Title</td>
-                                    <td>@item.Quantity</td>
+                                    @*<td>@item.Quantity</td>*@
                                     <td>@Common.FormatNumber(item.Price, 0)</td>
                                     <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
                                     <td></td>
@@ -106,23 +113,30 @@
                                     <td class="btn btn-sm btn-warning">Đang chờ duyệt</td>
                                     <td></td>
                                     <td>@item.Store.Name</td>
+                                    <td></td>
                                     <td>
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <a href="#" data-id="@item.Id" class="btn btn-sm btn-danger btnApprovedProductStore">Duyệt</a>
                                         }
                                     </td>
+
                                 </tr>
                             }
                             else
                             {
+                                if (item.ViewCount > 0)
+                                {
+                                    buyFrequency = ((double)item.BuyCount / (double)item.ViewCount) * 100;
+                                    buyFrequency = Math.Round(buyFrequency, 0);
+                                }
                                 <tr id="trow_@item.Id">
                                     <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                     <td class="stt-cell">@i</td>
                                     <td><img width="100px" class="imgproduct" data-id="@item.Id" src="@item.ProductImage.FirstOrDefault(x=>x.IsDefault).Image" /></td>
                                     <td>@item.Title</td>
                                     <td>@item.ProductCategory.Title</td>
-                                    <td>@item.Quantity</td>
+                                    @*<td>@item.Quantity</td>*@
                                     <td class="auto">@Common.FormatNumber(item.Price, 0)</td>
                                     <td>@item.CreateDate.ToString("dd/MM/yyyy")</td>
 
@@ -172,7 +186,9 @@
                                         }
                                     </td>
 
-
+                                    <td>
+                                        @buyFrequency%
+                                    </td>
 
 
                                     @*<td class="text-center">
