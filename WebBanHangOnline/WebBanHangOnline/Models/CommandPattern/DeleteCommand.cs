@@ -9,6 +9,7 @@ namespace WebBanHangOnline.Models.CommandPattern
     {
         private readonly ApplicationDbContext _db;
         private readonly int _itemId;
+        private T _item;
 
         public DeleteCommand(ApplicationDbContext db, int itemId) 
         {
@@ -17,11 +18,23 @@ namespace WebBanHangOnline.Models.CommandPattern
         }
         public void Execute()
         {
-            var item = _db.Set<T>().Find(_itemId);
-            if (item != null)
+            _item = _db.Set<T>().Find(_itemId);
+            if (_item != null)
             {
-                _db.Set<T>().Remove(item);
+                _db.Set<T>().Remove(_item);
                 _db.SaveChanges();
+            }
+        }
+
+        public void Undo()
+        {
+            if(_item != null)
+            {
+                using (var undoContext = new ApplicationDbContext())
+                {
+                    undoContext.Set<T>().Add(_item);
+                    undoContext.SaveChanges();
+                }
             }
         }
     }

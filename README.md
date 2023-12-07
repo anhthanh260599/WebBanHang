@@ -7,9 +7,11 @@ Liên hệ để nhận dữ liệu mẫu: anhthanh260599@gmail.com
 
 Account đăng nhập trang admin:
 
-    - admin / admin1
+    - admin / admin1 (Admin)
     
-    - anhthanh2605 / 123456
+    - anhthanh2605 / 123456 (Admin)
+    - fourcsuvanhanh / 123456 (Account cửa hàng)
+    - fourcthatson / 123456 (Account cửa hàng)
 
 Web có thể hoạt động như 1 trang web bán hàng thực thụ
 

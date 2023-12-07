@@ -183,6 +183,7 @@ namespace WebBanHangOnline.Controllers
                                 int store = StoreSingleton.Instance.Id;
                                 int proID = 0;
                                 int matID = 0;
+                                
                                 var storage = db.Storages.Where(x => x.StoreId == store).ToList();
                                 var currentStorage = storage;
                                 var update = storage;
@@ -197,6 +198,10 @@ namespace WebBanHangOnline.Controllers
                                 {
                                     count = cart[i].Quantity;
                                     proID = cart[i].ProductID;
+                                    //BuyCount
+                                    var pp = db.Products.Where(x => x.Id == proID).ToList();
+                                    pp[0].BuyCount+=count;
+                                    db.Entry(pp[0]).State = System.Data.Entity.EntityState.Modified;
                                     recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
                                     reID = recipe[0].ID;
                                     reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
@@ -685,6 +690,10 @@ namespace WebBanHangOnline.Controllers
                 {
                     count = cart[i].Quantity;
                     proID = cart[i].ProductID;
+                    //BuyCount
+                    var pp = db.Products.Where(x => x.Id == proID).ToList();
+                    pp[0].BuyCount+=count;
+                    db.Entry(pp[0]).State = System.Data.Entity.EntityState.Modified;
                     recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
                     reID = recipe[0].ID;
                     reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
@@ -1260,7 +1269,7 @@ namespace WebBanHangOnline.Controllers
                     var cart = db.OrderDetails.Where(x => x.OrderID == oid).ToList();
                     int store = StoreSingleton.Instance.Id;
                     int proID = 0;
-                    int matID = 0;
+                    int matID = 0;                   
                     var storage = db.Storages.Where(x => x.StoreId == store).ToList();
                     var currentStorage = storage;
                     var update = storage;
@@ -1275,6 +1284,10 @@ namespace WebBanHangOnline.Controllers
                     {
                         count = cart[i].Quantity;
                         proID = cart[i].ProductID;
+                        //BuyCount
+                        var pp = db.Products.Where(x => x.Id == proID).ToList();
+                        pp[0].BuyCount+=count;
+                        db.Entry(pp[0]).State = System.Data.Entity.EntityState.Modified;
                         recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
                         reID = recipe[0].ID;
                         reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();

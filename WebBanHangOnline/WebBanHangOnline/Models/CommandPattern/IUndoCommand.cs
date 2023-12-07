@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebBanHangOnline.Models.CommandPattern
 {
-    public interface ICommand<T> : IUndoCommand
+    public interface IUndoCommand
     {
-        void Execute();
+        void Undo();
     }
 }
