@@ -83,5 +83,7 @@ namespace WebBanHangOnline.Models.EF
         {
 
         }
+
+        public int BuyCount { get; set; }
     }
 }

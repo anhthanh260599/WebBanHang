@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.BuilderPattern;
 using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
@@ -30,7 +31,13 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.SocialMediaPlugins.Add(model);
+                //db.SocialMediaPlugins.Add(model);
+                var socialMediaPluginBuilder = new SocialMediaPluginBuilder()
+                    .WithName(model.Name)
+                    .WithImage(model.Image)
+                    .WithPlugin(model.Plugin);
+                var newSocialMediaPlugin = socialMediaPluginBuilder.Build();
+                db.SocialMediaPlugins.Add(newSocialMediaPlugin);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
