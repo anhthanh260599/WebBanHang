@@ -1,4 +1,6 @@
-﻿using PagedList;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using PagedList;
 using PayPal.Api;
 using System;
 using System.Collections.Generic;
@@ -15,16 +17,38 @@ namespace WebBanHangOnline.Controllers
 {
     public class ProductController : Controller
     {
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Product
         public ActionResult Index()
         {
+            var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            if (user != null)
+            {
+                ViewBag.User = user;
+            }
+
             var storeList = db.Stores.ToList().Select(s => new
             {
                 Id = s.Id,
-                DisplayName = $"{s.Name} -- {s.Address}, {s.District}, {s.Ward}, {s.Province}"
+                DisplayName = $"{s.Name} -- {s.Address}, {s.District}, {s.Ward}, {s.Province}",
+                Address = $"{s.Address}, {s.District}, {s.Ward}, {s.Province}"
             });
 
+            ViewBag.StoreAddress = storeList;
 
             ViewBag.StoreList = new SelectList(storeList, "Id", "DisplayName");
 
