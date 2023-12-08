@@ -245,6 +245,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202312072017323_update25.cs" />
+    <Compile Include="Migrations\202312072017323_update25.designer.cs">
+      <DependentUpon>202312072017323_update25.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BuilderPattern\SocialMediaPluginBuilder.cs" />
@@ -3939,6 +3943,7 @@
     <Content Include="Uploads\files\phan-cong.xlsx" />
     <Content Include="Uploads\files\Phân công.xlsx" />
     <Content Include="Views\Product\Partial_ProductHot.cshtml" />
+    <Content Include="Views\Menu\_StoresInProvince.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3971,6 +3976,11 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202312072017323_update25.resx">
+      <DependentUpon>202312072017323_update25.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
