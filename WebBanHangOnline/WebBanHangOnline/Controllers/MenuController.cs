@@ -30,6 +30,10 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult MenuLeft(int? id)
         {
+            // Lấy ra danh sách cửa hàng
+            var store = db.Stores.ToList();
+            ViewBag.StoreList = store;
+
             if(id != null)
             {
                 ViewBag.CateId = id;
@@ -37,7 +41,11 @@ namespace WebBanHangOnline.Controllers
             var items = db.ProductCategories.ToList();
             return PartialView("_MenuLeft", items);
         }
-
+        public ActionResult GetStoresByProvince(string province)
+        {
+            var storesInProvince = db.Stores.Where(s => s.Province == province).ToList();
+            return PartialView("_StoresInProvince", storesInProvince);
+        }
         public ActionResult MenuArrivals()
         {
             var items = db.ProductCategories.ToList();
