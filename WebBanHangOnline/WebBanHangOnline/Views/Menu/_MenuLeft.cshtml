@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.EF.ProductCategory>
+@{
+    List<string> provinces = new List<string>();
+}
 
 
 
@@ -38,23 +41,47 @@
             <h5>Tìm kiếm sản phẩm</h5>
         </div>
         <div>
-           <input type="text" name="searchString" id="search" class="form-control" placeholder="Nhập tên sản phẩm">
+            <input type="text" name="searchString" id="search" class="form-control" placeholder="Nhập tên sản phẩm">
         </div>
     </div>
+    <div class="sidebar_section">
+        <div class="sidebar_title">
+            <h5>Khu vực</h5>
+        </div>
+        <div>
+            @foreach (var store in ViewBag.StoreList)
+            {
+                if (!provinces.Contains(store.Province))
+                {
+                    provinces.Add(store.Province);
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center;">
+                            <input type="radio" name="storeWard" value="@store.Province" class="province-radio mr-2">
+                            <span>@store.Province</span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="stores-in-province-container">
+            @Html.Action("GetStoresByProvince", "Menu")
 
+        </div>
+
+    </div>
     <!-- Price Range Filtering -->
     <div class="sidebar_section">
-            <div class="sidebar_title">
-                <h5>Khoảng giá</h5>
-            </div>
-            <p>
-                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                <input type="hidden" id="FromAmount" />
-                <input type="hidden" id="ToAmount" />
+        <div class="sidebar_title">
+            <h5>Khoảng giá</h5>
+        </div>
+        <p>
+            <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            <input type="hidden" id="FromAmount" />
+            <input type="hidden" id="ToAmount" />
 
-            </p>
-            <div id="slider-range"></div>
-@*            <div class="filter_button"><span>Lọc</span></div>*@
+        </p>
+        <div id="slider-range"></div>
+        @*            <div class="filter_button"><span>Lọc</span></div>*@
 
     </div>
 
@@ -67,6 +94,25 @@
         </div>
     </div>
 
+    <script>
+    $(document).ready(function () {
+        $('.province-radio').change(function () {
+            var selectedProvince = $(this).val();
+            
+            $.ajax({
+                url: '@Url.Action("GetStoresByProvince", "Menu")',
+                type: 'GET',
+                data: { province: selectedProvince },
+                success: function (result) {
+                    $('.stores-in-province-container').html(result);
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi khi lấy danh sách cửa hàng.');
+                }
+            });
+        });
+    });
+    </script>
     <!-- Sizes -->
     @*<div class="sidebar_section">
             <div class="sidebar_title">
