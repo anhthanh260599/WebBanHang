@@ -17,8 +17,6 @@
         height: 80vh;
         z-index: 0;
         margin-top: 150px;
-       
-        
         width: 100%;
     }
 
@@ -92,18 +90,20 @@
         <div class="col-12">
             <div class="owl-carousel owl-theme" id="slider">
                 @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                <div class="item">
-                    <img src="@item.Image" alt="">
-                    <div class="slider__content">
-                        <h3 class="slider__content-header">@item.Title</h3>
-                        <a href="@item.Link" class="btn btn-danger"><span>Xem chi tiết</span> </a>
-                    </div>
-                </div>
+                {
+                    foreach (var item in Model)
+                    {
+                        <a href="@item.Link">
+                            <div class="item">
+                                <img src="@item.Image" alt="">
+                                <div class="slider__content">
+                                    <h3 class="slider__content-header">@item.Title</h3>
+                                    <p class="btn btn-danger mt-3"><span>Xem chi tiết</span> <p/>
+                                </div>
+                            </div>
+                        </a>
+                    }
                 }
-        }
             </div>
         </div>
     </div>
