@@ -302,6 +302,7 @@
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\Payment\PaypalConfiguration.cs" />
     <Compile Include="Models\Payment\VnPayLibrary.cs" />
+    <Compile Include="Models\ProductBoughtTogetherViewModel.cs" />
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\Repository\GenericRepository.cs" />
     <Compile Include="Models\Repository\IRepository.cs" />
@@ -3632,6 +3633,7 @@
     <Content Include="Areas\Admin\Views\Account\Partial_AdminPage_LoginName.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Partial_TopStore.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Partial_RevenueByStore.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopProductTogether.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
