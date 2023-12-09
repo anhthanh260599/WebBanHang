@@ -8,6 +8,7 @@ using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
@@ -115,6 +116,32 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
               .Take(5)
               .ToList();
             return PartialView(query);
+        }
+
+        public ActionResult Partial_TopProductTogether()
+        {
+            var result = db.Database.SqlQuery<ProductBoughtTogetherViewModel>(
+                 @"SELECT
+                    p1.Id AS ProductID1,
+                    p1.Title AS ProductName1,
+                    p2.Id AS ProductID2,
+                    p2.Title AS ProductName2,
+                    COUNT(od1.OrderID) AS BuyCount
+                FROM
+                    tb_OrderDetail od1
+                    JOIN tb_OrderDetail od2 ON od1.OrderID = od2.OrderID AND od1.ProductID < od2.ProductID
+                    JOIN tb_Product p1 ON od1.ProductID = p1.Id
+                    JOIN tb_Product p2 ON od2.ProductID = p2.Id
+                GROUP BY
+                    p1.Id, p1.Title, p2.Id, p2.Title
+                HAVING
+                    COUNT(od1.OrderID) > 1
+                ORDER BY
+                    BuyCount DESC")
+                .Take(5)
+                .ToList();
+
+            return PartialView(result);
         }
 
         public ActionResult Partial_TopStore()
