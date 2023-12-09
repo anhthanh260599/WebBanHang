@@ -283,6 +283,7 @@
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\Payment\PaypalConfiguration.cs" />
     <Compile Include="Models\Payment\VnPayLibrary.cs" />
+    <Compile Include="Models\ProductBoughtTogetherViewModel.cs" />
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\SettingSystemViewModel.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
@@ -3606,6 +3607,7 @@
     <Content Include="Areas\Admin\Views\Home\Partial_RevenueByStore.cshtml" />
     <None Include="Properties\PublishProfiles\fourccoffee-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\fourccoffee-001-site1 - Web Deploy.pubxml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopProductTogether.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

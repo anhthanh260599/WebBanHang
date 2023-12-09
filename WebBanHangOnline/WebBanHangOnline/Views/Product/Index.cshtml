@@ -383,6 +383,11 @@
                                     let btnConfirmStoreNearest = document.querySelector("#btn_Confirmed_StoreNearest");
                                     btnConfirmStoreNearest.onclick = (e) => {
                                         if (nearestStore != null) {
+
+                                            // Cập nhật Singleton
+                                            updateStoreSingleton(nearestStore.Id);
+                                            localStorage.setItem("storeID", nearestStore.Id);
+
                                             elementSelectStore.value = nearestStore.Id;
                                             if (elementSelectStore.value != 0) {
                                                 $(".product-grid").css({ 'display': 'block' });
