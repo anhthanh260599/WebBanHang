@@ -39,9 +39,16 @@
 
             <div class="main_content">
                 <h5 class="sidebar_title mb-3">Cửa hàng:</h5>
-                @Html.DropDownList("StoreList", ViewBag.StoreList as SelectList, "-- Chọn cửa hàng --", new { @class = "form-control searchable-dropdown-list" })
-                <h6 class="text-info mt-3">* Lưu ý: Sản phẩm độc quyền là sản phẩm chỉ có bán tại cửa hàng đó</h6>
 
+                @Html.DropDownList("StoreList", ViewBag.StoreList as SelectList, "-- Chọn cửa hàng --", new { @class = "form-control searchable-dropdown-list" })
+                <div class="row mt-2">
+                    <div class="col-8">
+                        <h6 class="text-info mt-2">* Lưu ý: Sản phẩm độc quyền là sản phẩm chỉ có bán tại cửa hàng đó</h6>
+                    </div>
+                    <div class="col-4">
+                        <button style="font-size:14px; padding: 5px 10px; float:right;" id="nearlyStore" class="btn btn-link mb-3">Tìm cửa hàng gần nhất ?</button>
+                    </div>
+                </div>
                 <!-- Products -->
 
                 <div class="products_iso">
@@ -58,7 +65,6 @@
                                 {
                                     foreach (var item in Model)
                                     {
-
                                         var strImage = "";
                                         var img = item.ProductImage.FirstOrDefault(x => x.IsDefault);
                                         if (img != null)
@@ -156,22 +162,363 @@
             </div>
         </div>
     </div>
+    <!-- Popup Form -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Cửa hàng gần nhất</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!--Hiển thị bản đồ -->
+                    <div class="row">
+                        <div class="col-7">
+                            <div id="myMap" style="width: 100%; height: 400px;"></div>
+                        </div>
+                        <div class="col-5">
+                            <div id='searchBoxContainer' class="form-group">
+                                <label>Địa chỉ khách hàng</label>
+
+                                @if (Request.IsAuthenticated)
+                                {
+                                    var user = (WebBanHangOnline.Models.ApplicationUser)ViewBag.User;
+                                    <input type="text" id="sourceInput" class="form-control w-75" value="@user.Address">
+                                }
+                                else
+                                {
+                                    <input type="text" id="sourceInput" class="form-control w-75">
+                                }
+                                <span id="errorDirection" class="text-danger"></span>
+
+                            </div>
+                            <button class="btn btn-dark mt-2" id="btnDirection">Xem Đường Đi</button>
+                            <button class="btn btn-success mt-2" id="MyPosition">Vị trí hiện tại</button>
+                            <div class="mt-4" id='printoutPanel'></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                        <button type="button" id="btn_Confirmed_StoreNearest" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-@section scripts {
-    <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
-    <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
-    <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
-    <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
-    <script src="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
-    <script src="~/Content/assets/plugins/easing/easing.js"></script>
-    <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-    <script src="~/Content/assets/js/categories_custom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.1/fuse.min.js"></script>
-    @*Search library*@
-    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.2.0/dist/umd/index.min.js"></script>
+    @section scripts {
+        <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
+        <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
+        <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
+        <script src="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+        <script src="~/Content/assets/plugins/easing/easing.js"></script>
+        <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+        <script src="~/Content/assets/js/categories_custom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.1/fuse.min.js"></script>
+        @*Search library*@
+        <script src="https://cdn.jsdelivr.net/npm/minisearch@6.2.0/dist/umd/index.min.js"></script>
 
-    <script>
+        <script>
+
+        // Load map
+        let map;
+        let stores = @Html.Raw(Json.Encode(ViewBag.StoreAddress));
+        // Xử lý chọn cửa hàng
+        let elementSelectStore = document.querySelector("#StoreList");
+
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                customMapStyle: {
+                    elements: {
+                        area: { fillColor: '#b6e591' },
+                        water: { fillColor: '#75cff0' },
+                        tollRoad: { fillColor: '#a964f4', strokeColor: '#a964f4' },
+                        arterialRoad: { fillColor: '#ffffff', strokeColor: '#d7dae7' },
+                        road: { fillColor: '#ffa35a', strokeColor: '#ff9c4f' },
+                        street: { fillColor: '#ffffff', strokeColor: '#ffffff' },
+                        transit: { fillColor: '#000000' }
+                    },
+                    settings: {
+                        landColor: '#efe9e1'
+                    }
+                }
+            });
+            // Thêm tính năng gợi ý vị trí khi nhập vào ô input
+            Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+                var options = {
+                    maxResults: 6,
+                    map: map
+                }
+                // Đặt tọa độ bounding box để giới hạn kết quả trong thành phố Hồ Chí Minh
+                var boundingBox = Microsoft.Maps.LocationRect.fromEdges(10.7769, 106.4270, 10.7296, 106.7009);
+                options.bounds = boundingBox;
+
+                var manager = new Microsoft.Maps.AutosuggestManager(options);
+                manager.attachAutosuggest('#sourceInput', '#searchBoxContainer', selectedSuggestion);
+            });
+
+            function selectedSuggestion(suggestionResult) {
+                map.entities.clear();
+                map.setView({ bounds: suggestionResult.bestView });
+                var pushpin = new Microsoft.Maps.Pushpin(suggestionResult.location);
+                map.entities.push(pushpin);
+
+            }
+        }
+
+        function getDirections() {
+            var sourceAddress = document.getElementById('sourceInput').value;
+
+            // Tạo bản đồ
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                zoom: 12,
+                customMapStyle: {
+                    elements: {
+                        area: { fillColor: '#b6e591' },
+                        water: { fillColor: '#75cff0' },
+                        tollRoad: { fillColor: '#a964f4', strokeColor: '#a964f4' },
+                        arterialRoad: { fillColor: '#ffffff', strokeColor: '#d7dae7' },
+                        road: { fillColor: '#ffa35a', strokeColor: '#ff9c4f' },
+                        street: { fillColor: '#ffffff', strokeColor: '#ffffff' },
+                        transit: { fillColor: '#000000' }
+                    },
+                    settings: {
+                        landColor: '#efe9e1'
+                    }
+                }
+            });
+
+            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                // Tìm tọa độ của nguồn
+                geocodeAddress(searchManager, sourceAddress, function (sourceLocation) {
+                    // Duyệt qua danh sách cửa hàng và tính khoảng cách
+                    let nearestStoreDistance;
+                    let nearestStoreDuration;
+                    let nearestStore;
+                    let locationNearestStore;
+                    let nearestStoreLayer;
+                    let minDistance = Infinity;
+                    let listLayer = [];
+                    let countLoop = 0;
+                    // Tìm tọa độ của đích
+                    for (var i = 0; i < stores.length; i++) {
+                        let store = stores[i];
+                        geocodeAddress(searchManager, store.Address, function (destinationLocation) {
+                            var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                            // // Lấy dường đi ngắn nhất
+                            Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (directionsEvent) {
+                                var route = directionsManager.getRouteResult()[0];
+                                var distance = route.routeLegs[0].summary.distance;
+                                var duration = route.routeLegs[0].summary.time;
+                                //console.log(`Khoảng cách: ${distance} km\nThời gian di chuyển: ${duration} giây`)
+                                listLayer.push(directionsManager._layer)
+                                countLoop++;
+                                // So sánh và cập nhật cửa hàng gần nhất
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    nearestStore = store;
+                                    locationNearestStore = [destinationLocation];
+                                    //console.log("Store update: ", nearestStore);
+                                    //console.log("locationNearestStore update: ", locationNearestStore);
+                                    // Lưu đường đi hiện tại
+                                    nearestStoreLayer = directionsManager._layer;
+                                    nearestStoreDistance = distance;
+                                    nearestStoreDuration = duration;
+                                }
+                                // Khi đi qua hết vòng lập
+                                if (countLoop == stores.length) {
+                                    console.log(nearestStoreLayer)
+
+                                    listLayer.forEach((layer) => {
+                                        if (layer._internalId != nearestStoreLayer._internalId && layer._id != nearestStoreLayer._id) {
+                                            map.layers.remove(layer);
+                                        }
+                                    })
+                                    //document.getElementById('printoutPanel').innerHTML = `Địa chỉ khách hàng` `Khoảng cách: ${distance} km \n`+ `Thời gian di chuyển: ${duration} giây`;
+                                    let timeObject = secondsToHoursMinutes(nearestStoreDuration)
+                                    document.getElementById('printoutPanel').innerHTML =
+                                        '<b>Khách hàng</b> <br>' + [sourceLocation][0].name + '<br>' +
+                                        `<b>Cửa hàng:</b> <br>` + nearestStore.Address + `<br>` +
+                                        `<b>SĐT Cửa hàng:</b> <br>` + nearestStore.StorePhone + `<br>` +
+                                        `<b>Khoảng cách: </b><br>` + nearestStoreDistance + ` km <br>` +
+                                        `<b>Thời gian: </b><br>` + timeObject.hours + ` giờ, ` + timeObject.minutes + ' Phút';
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/Product/SaveNearestStoreId',
+                                        data: { nearestStoreId: nearestStore.Id },
+                                        success: function (data) { // Data ở đây là Partial View
+                                            //// Kiểm tra nếu nearestStoreId == null
+                                            //if (nearestStore.Id != 0) {
+                                            //    document.getElementById('product-near-store').innerHTML =  data ;
+                                            //}
+                                            //else {
+                                            //    document.getElementById('product-near-store').innerHTML = '<div class="text-danger">Chưa chọn cửa hàng gần nhất</div>';
+                                            //}
+                                        },
+                                        error: function () {
+                                            console.error('Lỗi khi lưu trữ giá trị trên máy chủ.');
+                                        }
+                                    });
+
+                                    // Lấy tất cả các điểm của nearestStoreLayer
+                                    var locations = nearestStoreLayer.getPrimitives().filter(function (primitive) {
+                                        return primitive instanceof Microsoft.Maps.Pushpin;
+                                    }).map(function (pushpin) {
+                                        return pushpin.getLocation();
+                                    });
+
+                                    // Tìm giới hạn xem chứa tất cả các điểm của nearestStoreLayer
+                                    var bounds = Microsoft.Maps.LocationRect.fromLocations(locations);
+
+                                    // Zoom vào giới hạn xem mới
+                                    map.setView({ bounds: bounds });
+
+                                    // Khi bấm vào nút xác nhận cửa hàng gần nhất
+                                    let btnConfirmStoreNearest = document.querySelector("#btn_Confirmed_StoreNearest");
+                                    btnConfirmStoreNearest.onclick = (e) => {
+                                        if (nearestStore != null) {
+
+                                            // Cập nhật Singleton
+                                            updateStoreSingleton(nearestStore.Id);
+                                            localStorage.setItem("storeID", nearestStore.Id);
+
+                                            elementSelectStore.value = nearestStore.Id;
+                                            if (elementSelectStore.value != 0) {
+                                                $(".product-grid").css({ 'display': 'block' });
+                                                $("#nullStoreID").css({ 'display': 'none' });
+                                                $('.product-grid').isotope({
+                                                    filter: function () {
+                                                        let storeProductID = $(this).find('.in_product_storeID').text();
+                                                        return (parseInt(elementSelectStore.value) == parseInt(storeProductID) || storeProductID == '');
+                                                    },
+                                                    animationOptions: {
+                                                        duration: 750,
+                                                        easing: 'linear',
+                                                        queue: false
+                                                    }
+                                                });
+                                            } else {
+                                                $(".product-grid").css({ 'display': 'none' });
+                                                $("#nullStoreID").css({ 'display': 'block' });
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            // Set Route Mode to driving
+                            directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+                            var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: sourceAddress, location: new Microsoft.Maps.Location(sourceLocation.latitude, sourceLocation.longitude) });
+                            var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: store.Address, location: new Microsoft.Maps.Location(destinationLocation.latitude, destinationLocation.longitude) });
+                            directionsManager.addWaypoint(waypoint1);
+                            directionsManager.addWaypoint(waypoint2);
+                            // Tìm đường đi
+                            directionsManager.calculateDirections();
+                        });
+                    }
+                });
+            });
+            // Tìm tọa độ theo tên đường
+            function geocodeAddress(searchManager, address, callback) {
+                var searchRequest = {
+                    where: address,
+                    callback: function (result, userData) {
+                        var location = result.results[0].location;
+                        callback(location);
+                    }
+                };
+                searchManager.geocode(searchRequest);
+            }
+
+            function secondsToHoursMinutes(seconds) {
+                var hours = Math.floor(seconds / 3600);
+                var minutes = Math.floor((seconds % 3600) / 60);
+                // var remainingSeconds = Math.floor(seconds % 60); // Nếu bạn muốn lấy giây còn lại
+
+                return {
+                    hours: hours,
+                    minutes: minutes
+                };
+            }
+        }
+
+
+        $(document).ready(function () {
+            let nearlyStore = document.querySelector("#nearlyStore");
+
+            // Lấy vị trí hiện tại
+            let locateMeButton = document.querySelector("#MyPosition");
+
+            if (locateMeButton != null) {
+                locateMeButton.onclick = (e) => {
+                    // Kiểm tra xem trình duyệt có hỗ trợ định vị không
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            // Hàm gọi lại khi thành công
+                            function (position) {
+                                // Lấy tọa độ hiện tại
+                                let currentLatitude = position.coords.latitude;
+                                let currentLongitude = position.coords.longitude;
+
+                                // Reverse geocode để lấy địa chỉ
+                                Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                                    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+
+                                    var reverseGeocodeRequest = {
+                                        location: new Microsoft.Maps.Location(currentLatitude, currentLongitude),
+                                        callback: function (result) {
+                                            // Đặt giá trị của ô input với địa chỉ hiện tại
+                                            document.getElementById('sourceInput').value = result.address.formattedAddress;
+                                        }
+                                    };
+
+                                    searchManager.reverseGeocode(reverseGeocodeRequest);
+                                });
+                            },
+                            // Hàm gọi lại khi có lỗi
+                            function (error) {
+                                console.error('Lỗi khi lấy địa chỉ hiện tại:', error.message);
+                                swal('Lỗi khi lấy địa chỉ hiện tại:', error.message, 'error');
+
+                            }
+                        );
+                    } else {
+                        console.error('Trình duyệt không hỗ trợ định vị.');
+                        swal('Trình duyệt không hỗ trợ định vị.', '', 'error');
+
+                    }
+                };
+            }
+
+            if (nearlyStore != null) {
+                nearlyStore.onclick = (e) => {
+                    // Mở popup form
+                    $("#myModal").modal("show");
+
+                    let getDirection = document.querySelector("#btnDirection");
+                    getDirection.onclick = (e) => {
+                        let inputeElement = document.querySelector("#sourceInput");
+                        let errorMess = document.querySelector("#errorDirection");
+                        console.log([inputeElement])
+
+                        if (inputeElement.value != '') {
+                            errorMess.textContent = ''
+                            getDirections();
+                        }
+                        else {
+                            errorMess.textContent = 'Vui lòng không để trống'
+                        }
+                    }
+                }
+            }
+        });
+
         // Đợi cho trang web được tải hoàn toàn
         $(document).ready(function () {
             $('#search').on('input', function () {
@@ -195,8 +542,7 @@
                 });
             });
 
-            // Xử lý chọn cửa hàng
-            let elementSelectStore = document.querySelector("#StoreList");
+
 
             elementSelectStore.onchange = (e) => {
                 let dataSessionCart = JSON.parse(localStorage.getItem("cart"));
@@ -241,5 +587,8 @@
                 }
             }
         });
-    </script>
-}
+        </script>
+        <script type='text/javascript'
+                src='https://www.bing.com/api/maps/mapcontrol?key=AsXqZAIwiXPz-BiqR_5COks2dHmzXxArTOTUbxvx4QOpOhqnOfClGu0Guk2Tt8yB&callback=loadMapScenario'
+                async defer></script>
+    }

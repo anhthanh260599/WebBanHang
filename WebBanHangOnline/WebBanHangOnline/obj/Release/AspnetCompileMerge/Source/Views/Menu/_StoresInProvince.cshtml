@@ -1,0 +1,51 @@
+﻿@model List<WebBanHangOnline.Models.EF.Store>
+
+@if (Model.Count != 0)
+{
+    <div class="stores-in-district">
+        <div class="sidebar_title">
+            <h5>Các cửa hàng</h5>
+        </div>
+
+        @foreach (var store in Model)
+        {
+            <div class="form-group">
+                <div style="display: flex; align-items: center;">
+                    <input class="mr-2 store-radio" type="radio" name="storeName" value="@store.Id" />
+                    <span>@store.Name, @store.District</span>
+                </div>
+            </div>
+        }
+    </div>
+    <script>
+    $(document).ready(function () {
+        $('.store-radio').change(function () {
+            var selectedStoreId = $(this).val();
+            //let  document.querySelector("#StoreList")
+            console.log(elementSelectStore);
+            elementSelectStore.value = selectedStoreId;
+
+            if (elementSelectStore.value != 0) {
+                $(".product-grid").css({ 'display': 'block' });
+                $("#nullStoreID").css({ 'display': 'none' });
+                $('.product-grid').isotope({
+                    filter: function () {
+                        let storeProductID = $(this).find('.in_product_storeID').text();
+                        return (parseInt(elementSelectStore.value) == parseInt(storeProductID) || storeProductID == '');
+                    },
+                    animationOptions: {
+                        duration: 750,
+                        easing: 'linear',
+                        queue: false
+                    }
+                });
+            } else {
+                $(".product-grid").css({ 'display': 'none' });
+                $("#nullStoreID").css({ 'display': 'block' });
+            }
+
+           
+        });
+    });
+    </script>
+}
