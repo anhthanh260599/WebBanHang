@@ -90,19 +90,24 @@
     <hr />
 
     <div class="row">
-        <div class="col-4">
-            <h5>Top 5 sản phẩm xem nhiều </h5>
+        <div class="col-6">
+            <h5 class="mt-5 text-center font-weight-bold">Top 5 sản phẩm xem nhiều </h5>
             @Html.Action("Partial_TopViewCount", "Home")
         </div>
 
-
-        <div class="col-4">
-            <h5>Top 5 sản phẩm bán ra</h5>
+        <div class="col-6">
+            <h5 class="mt-5 text-center font-weight-bold">Top 5 sản phẩm bán ra</h5>
             @Html.Action("Partial_TopOrder", "Home")
         </div>
-
-        <div class="col-4">
-            <h5>Top 5 sản phẩm yêu thích</h5>
+       
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h5 class="mt-5 text-center font-weight-bold">Top 5 sản phẩm mua cùng nhau </h5>
+            @Html.Action("Partial_TopProductTogether", "Home")
+        </div>
+        <div class="col-6">
+            <h5 class="mt-5 text-center font-weight-bold">Top 5 sản phẩm yêu thích</h5>
             @Html.Action("Partial_TopWishList", "Home")
         </div>
     </div>

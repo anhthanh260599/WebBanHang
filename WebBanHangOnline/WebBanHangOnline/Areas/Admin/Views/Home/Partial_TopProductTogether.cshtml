@@ -1,0 +1,94 @@
+﻿@model List<WebBanHangOnline.Models.ProductBoughtTogetherViewModel>
+
+
+@if (Model != null && Model.Any())
+{
+    <div style="width: 90%;">
+        <canvas id="boughtTogetherChart"></canvas>
+    </div>
+}
+
+@*<table>
+        <thead>
+            <tr>
+                <th>ID Sản Phẩm Đầu Tiên</th>
+                <th>Sản Phẩm Đầu Tiên</th>
+                <th>ID Sản Phẩm Thứ Hai</th>
+                <th>Sản Phẩm Thứ Hai</th>
+                <th>Số Lần Mua Cùng Nhau</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductID1</td>
+                    <td>@item.ProductName1</td>
+                    <td>@item.ProductID2</td>
+                    <td>@item.ProductName2</td>
+                    <td>@item.BuyCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ctx = document.getElementById('boughtTogetherChart').getContext('2d');
+
+        var data = {
+            labels: [
+                @foreach (var item in Model)
+                {
+                    @*<text>"@item.ProductName1 - @item.ProductName2",</text>*@
+                    <text>@Html.Raw("\"" + item.ProductName1 + " - " + item.ProductName2 + "\""),</text>
+
+                }
+            ],
+            datasets: [{
+                label: 'Số Lần Mua Cùng Nhau',
+                data: [
+                    @foreach (var item in Model)
+                    {
+                        <text>@item.BuyCount,</text>
+                    }
+                ],
+                backgroundColor: 'rgba(255, 165, 0, 0.2)', 
+                borderColor: 'rgba(255, 165, 0, 1)', 
+                borderWidth: 1
+            }]
+        };
+
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    display: true,
+                    color: 'black', // Color of the data labels
+                }
+            }
+        };
+
+        var boughtTogetherChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    });
+</script>
+
+
+

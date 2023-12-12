@@ -45,7 +45,8 @@ namespace WebBanHangOnline.Controllers
             {
                 Id = s.Id,
                 DisplayName = $"{s.Name} -- {s.Address}, {s.District}, {s.Ward}, {s.Province}",
-                Address = $"{s.Address}, {s.District}, {s.Ward}, {s.Province}"
+                Address = $"{s.Address}, {s.District}, {s.Ward}, {s.Province}",
+                StorePhone = s.StorePhone
             });
 
             ViewBag.StoreAddress = storeList;
@@ -68,6 +69,16 @@ namespace WebBanHangOnline.Controllers
         public ActionResult Detail(string alias, int id)
         {
             var item = db.Products.Find(id);
+
+            var storeList = db.Stores.ToList().Select(s => new
+            {
+                Id = s.Id,
+                DisplayName = $"{s.Name} -- {s.Address}, {s.District}, {s.Ward}, {s.Province}",
+                Address = $"{s.Address}, {s.District}, {s.Ward}, {s.Province}",
+                StorePhone = s.StorePhone
+            });
+
+            ViewBag.StoreAddress = storeList;
             if (item != null)
             {
                 db.Products.Attach(item);
@@ -132,6 +143,21 @@ namespace WebBanHangOnline.Controllers
             StoreSingleton.Instance.Id = newStoreId;
 
             return Json(new { success = true, dataID = StoreSingleton.Instance.Id });
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveNearestStoreId(int nearestStoreId)
+        {
+            Session["NearestStoreId"] = nearestStoreId;
+            return RedirectToAction("Partial_ProductListNearestStoreId");
+        }
+
+        public ActionResult Partial_ProductListNearestStoreId()
+        {
+            int nearestStoreId = (int)Session["NearestStoreId"];
+            var items = db.Products.Where(x=>x.StoreID == nearestStoreId || x.StoreID == null && x.IsActive == true).OrderByDescending(x=>x.StoreID).Take(5).ToList();
+            return PartialView(items);
         }
 
     }

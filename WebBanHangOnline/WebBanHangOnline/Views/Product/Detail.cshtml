@@ -226,10 +226,179 @@
                 @Html.Action("Partial_SanPhamGoiYTheoDanhMuc", "Product", new { categoryId = Model.ProductCategory.Id, productID = Model.Id })
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row mt-5">
+                    <h4 class="mb-3">Sản phẩm nổi bật theo cửa hàng gần nhất</h4>
+                </div>
+                    @*@Html.Action("Partial_ProductListNearestStoreId","Product")*@
+                <div id="list-product-nearest">
+
+                </div>
+            </div>
+        </div>
     </div>
 }
 
-@section scripts {
+<div id="map" class="mt-5" style="width: 100%; height: 400px;"></div>
 
+
+
+@section scripts {
     <script src="~/Content/assets/js/single_custom.js"></script>
+    <script>
+
+        function initMap() {
+            // Tạo một đối tượng bản đồ mới
+            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+            });
+            let stores = @Html.Raw(Json.Encode(ViewBag.StoreAddress));
+            let nearestStore; // Biến để lưu cửa hàng gần nhất
+
+            // Lấy vị trí hiện tại
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var loc = new Microsoft.Maps.Location(
+                    position.coords.latitude,
+                    position.coords.longitude
+                );
+
+                console.log(position.coords.latitude);
+                console.log(position.coords.longitude);
+
+                // Đặt trung tâm bản đồ vào vị trí hiện tại
+                map.setView({
+                    center: loc,
+                    zoom: 20
+                });
+
+                //// Thêm đánh dấu vị trí hiện tại
+                //var pin = new Microsoft.Maps.Pushpin(loc);
+                //map.entities.push(pin);
+                var sourceLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                }
+
+                Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                    // Tìm tọa độ của nguồn
+                    // Duyệt qua danh sách cửa hàng và tính khoảng cách
+                    let nearestStoreDistance;
+                    let nearestStoreDuration;
+                    let nearestStore;
+                    let locationNearestStore;
+                    let nearestStoreLayer;
+                    let minDistance = Infinity;
+                    let listLayer = [];
+                    let countLoop = 0;
+                    // Tìm tọa độ của đích
+                    for (var i = 0; i < stores.length; i++) {
+                        let store = stores[i];
+                        geocodeAddress(searchManager, store.Address, function (destinationLocation) {
+                            var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                            // // Lấy dường đi ngắn nhất
+                            Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (directionsEvent) {
+                                var route = directionsManager.getRouteResult()[0];
+                                var distance = route.routeLegs[0].summary.distance;
+                                var duration = route.routeLegs[0].summary.time;
+                                //console.log(`Khoảng cách: ${distance} km\nThời gian di chuyển: ${duration} giây`)
+                                listLayer.push(directionsManager._layer)
+                                countLoop++;
+                                // So sánh và cập nhật cửa hàng gần nhất
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    nearestStore = store;
+                                    locationNearestStore = [destinationLocation];
+                                    //console.log("Store update: ", nearestStore);
+                                    //console.log("locationNearestStore update: ", locationNearestStore);
+                                    // Lưu đường đi hiện tại
+                                    nearestStoreLayer = directionsManager._layer;
+                                    nearestStoreDistance = distance;
+                                    nearestStoreDuration = duration;
+                                }
+                                // Khi đi qua hết vòng lập
+                                if (countLoop == stores.length) {
+                                    console.log(nearestStoreLayer)
+
+                                    listLayer.forEach((layer) => {
+                                        if (layer._internalId != nearestStoreLayer._internalId && layer._id != nearestStoreLayer._id) {
+                                            map.layers.remove(layer);
+                                        }
+                                    })
+                                    //document.getElementById('printoutPanel').innerHTML = `Địa chỉ khách hàng` `Khoảng cách: ${distance} km \n`+ `Thời gian di chuyển: ${duration} giây`;
+                                    //let timeObject = secondsToHoursMinutes(nearestStoreDuration)
+                                    //document.getElementById('printoutPanel').innerHTML =
+                                    //    '<b>Khách hàng</b> <br>' + [sourceLocation][0].name + '<br>' +
+                                    //    `<b>Cửa hàng:</b> <br>` + nearestStore.Address + `<br>` +
+                                    //    `<b>SĐT Cửa hàng:</b> <br>` + nearestStore.StorePhone + `<br>` +
+                                    //    `<b>Khoảng cách: </b><br>` + nearestStoreDistance + ` km <br>` +
+                                    //    `<b>Thời gian: </b><br>` + timeObject.hours + ` giờ, ` + timeObject.minutes + ' Phút';
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/Product/SaveNearestStoreId',
+                                        data: { nearestStoreId: nearestStore.Id },
+                                        success: function (data) { // Data ở đây là Partial View
+                                            //Kiểm tra nếu nearestStoreId == null
+                                            if (nearestStore.Id != 0) {
+                                                document.getElementById('list-product-nearest').innerHTML = data;
+                                            }
+                                            else {
+                                                document.getElementById('list-product-nearest').innerHTML = '<div class="text-danger">Chưa chọn cửa hàng gần nhất</div>';
+                                            }
+                                        },
+                                        error: function () {
+                                            console.error('Lỗi khi lưu trữ giá trị trên máy chủ.');
+                                        }
+                                    });
+
+                                    // Lấy tất cả các điểm của nearestStoreLayer
+                                    var locations = nearestStoreLayer.getPrimitives().filter(function (primitive) {
+                                        return primitive instanceof Microsoft.Maps.Pushpin;
+                                    }).map(function (pushpin) {
+                                        return pushpin.getLocation();
+                                    });
+
+                                    // Tìm giới hạn xem chứa tất cả các điểm của nearestStoreLayer
+                                    var bounds = Microsoft.Maps.LocationRect.fromLocations(locations);
+
+                                    // Zoom vào giới hạn xem mới
+                                    map.setView({ bounds: bounds });
+
+                                    // Khi bấm vào nút xác nhận cửa hàng gần nhất
+
+                                }
+                            });
+
+                            // Set Route Mode to driving
+                            directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+                            var waypoint1 = new Microsoft.Maps.Directions.Waypoint({ address: "Vị trí hiện tại", location: new Microsoft.Maps.Location(sourceLocation.latitude, sourceLocation.longitude) });
+                            var waypoint2 = new Microsoft.Maps.Directions.Waypoint({ address: store.Address, location: new Microsoft.Maps.Location(destinationLocation.latitude, destinationLocation.longitude) });
+                            directionsManager.addWaypoint(waypoint1);
+                            directionsManager.addWaypoint(waypoint2);
+                            // Tìm đường đi
+                            directionsManager.calculateDirections();
+
+                        });
+                    }
+                });
+                // Tìm tọa độ theo tên đường
+                function geocodeAddress(searchManager, address, callback) {
+                    var searchRequest = {
+                        where: address,
+                        callback: function (result, userData) {
+                            var location = result.results[0].location;
+                            callback(location);
+                        }
+                    };
+                    searchManager.geocode(searchRequest);
+                }
+            });
+        }
+
+    </script>
+    <script type='text/javascript'
+            src='https://www.bing.com/api/maps/mapcontrol?key=AsXqZAIwiXPz-BiqR_5COks2dHmzXxArTOTUbxvx4QOpOhqnOfClGu0Guk2Tt8yB&callback=initMap'
+            async defer></script>
+
 }

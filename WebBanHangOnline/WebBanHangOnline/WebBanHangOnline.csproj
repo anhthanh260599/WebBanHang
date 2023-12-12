@@ -249,10 +249,6 @@
     <Compile Include="Migrations\202312072017323_update25.designer.cs">
       <DependentUpon>202312072017323_update25.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202312120646413_Thongg.cs" />
-    <Compile Include="Migrations\202312120646413_Thongg.designer.cs">
-      <DependentUpon>202312120646413_Thongg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BuilderPattern\SocialMediaPluginBuilder.cs" />
@@ -310,6 +306,7 @@
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\Payment\PaypalConfiguration.cs" />
     <Compile Include="Models\Payment\VnPayLibrary.cs" />
+    <Compile Include="Models\ProductBoughtTogetherViewModel.cs" />
     <Compile Include="Models\ProductQuantityViewModel.cs" />
     <Compile Include="Models\Repository\GenericRepository.cs" />
     <Compile Include="Models\Repository\IRepository.cs" />
@@ -3640,6 +3637,7 @@
     <Content Include="Areas\Admin\Views\Account\Partial_AdminPage_LoginName.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Partial_TopStore.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Partial_RevenueByStore.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Partial_TopProductTogether.cshtml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\anhthanh260599-001-site1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -3948,6 +3946,7 @@
     <Content Include="Uploads\files\Phân công.xlsx" />
     <Content Include="Views\Product\Partial_ProductHot.cshtml" />
     <Content Include="Views\Menu\_StoresInProvince.cshtml" />
+    <Content Include="Views\Product\Partial_ProductListNearestStoreId.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3984,9 +3983,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202312072017323_update25.resx">
       <DependentUpon>202312072017323_update25.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202312120646413_Thongg.resx">
-      <DependentUpon>202312120646413_Thongg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

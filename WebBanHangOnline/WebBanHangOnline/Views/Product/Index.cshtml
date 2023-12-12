@@ -195,34 +195,34 @@
 
                             </div>
                             <button class="btn btn-dark mt-2" id="btnDirection">Xem Đường Đi</button>
-
+                            <button class="btn btn-success mt-2" id="MyPosition">Vị trí hiện tại</button>
                             <div class="mt-4" id='printoutPanel'></div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
-                    <button type="button" id="btn_Confirmed_StoreNearest" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                        <button type="button" id="btn_Confirmed_StoreNearest" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@section scripts {
-    <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
-    <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
-    <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
-    <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
-    <script src="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
-    <script src="~/Content/assets/plugins/easing/easing.js"></script>
-    <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-    <script src="~/Content/assets/js/categories_custom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.1/fuse.min.js"></script>
-    @*Search library*@
-    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.2.0/dist/umd/index.min.js"></script>
+    @section scripts {
+        <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
+        <script src="~/Content/assets/styles/bootstrap4/popper.js"></script>
+        <script src="~/Content/assets/styles/bootstrap4/bootstrap.min.js"></script>
+        <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
+        <script src="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+        <script src="~/Content/assets/plugins/easing/easing.js"></script>
+        <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+        <script src="~/Content/assets/js/categories_custom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.1/fuse.min.js"></script>
+        @*Search library*@
+        <script src="https://cdn.jsdelivr.net/npm/minisearch@6.2.0/dist/umd/index.min.js"></script>
 
-    <script>
+        <script>
 
         // Load map
         let map;
@@ -344,8 +344,27 @@
                                     document.getElementById('printoutPanel').innerHTML =
                                         '<b>Khách hàng</b> <br>' + [sourceLocation][0].name + '<br>' +
                                         `<b>Cửa hàng:</b> <br>` + nearestStore.Address + `<br>` +
+                                        `<b>SĐT Cửa hàng:</b> <br>` + nearestStore.StorePhone + `<br>` +
                                         `<b>Khoảng cách: </b><br>` + nearestStoreDistance + ` km <br>` +
                                         `<b>Thời gian: </b><br>` + timeObject.hours + ` giờ, ` + timeObject.minutes + ' Phút';
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/Product/SaveNearestStoreId',
+                                        data: { nearestStoreId: nearestStore.Id },
+                                        success: function (data) { // Data ở đây là Partial View
+                                            //// Kiểm tra nếu nearestStoreId == null
+                                            //if (nearestStore.Id != 0) {
+                                            //    document.getElementById('product-near-store').innerHTML =  data ;
+                                            //}
+                                            //else {
+                                            //    document.getElementById('product-near-store').innerHTML = '<div class="text-danger">Chưa chọn cửa hàng gần nhất</div>';
+                                            //}
+                                        },
+                                        error: function () {
+                                            console.error('Lỗi khi lưu trữ giá trị trên máy chủ.');
+                                        }
+                                    });
 
                                     // Lấy tất cả các điểm của nearestStoreLayer
                                     var locations = nearestStoreLayer.getPrimitives().filter(function (primitive) {
@@ -364,6 +383,11 @@
                                     let btnConfirmStoreNearest = document.querySelector("#btn_Confirmed_StoreNearest");
                                     btnConfirmStoreNearest.onclick = (e) => {
                                         if (nearestStore != null) {
+
+                                            // Cập nhật Singleton
+                                            updateStoreSingleton(nearestStore.Id);
+                                            localStorage.setItem("storeID", nearestStore.Id);
+
                                             elementSelectStore.value = nearestStore.Id;
                                             if (elementSelectStore.value != 0) {
                                                 $(".product-grid").css({ 'display': 'block' });
@@ -428,27 +452,71 @@
         $(document).ready(function () {
             let nearlyStore = document.querySelector("#nearlyStore");
 
-        if (nearlyStore != null) {
-            nearlyStore.onclick = (e) => {
-                // Mở popup form
-                $("#myModal").modal("show");
+            // Lấy vị trí hiện tại
+            let locateMeButton = document.querySelector("#MyPosition");
 
-                let getDirection = document.querySelector("#btnDirection");
-                getDirection.onclick = (e) => {
-                    let inputeElement = document.querySelector("#sourceInput");
-                    let errorMess = document.querySelector("#errorDirection");
-                    console.log([inputeElement])
+            if (locateMeButton != null) {
+                locateMeButton.onclick = (e) => {
+                    // Kiểm tra xem trình duyệt có hỗ trợ định vị không
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            // Hàm gọi lại khi thành công
+                            function (position) {
+                                // Lấy tọa độ hiện tại
+                                let currentLatitude = position.coords.latitude;
+                                let currentLongitude = position.coords.longitude;
 
-                    if (inputeElement.value != '') {
-                        errorMess.textContent = ''
-                        getDirections();
+                                // Reverse geocode để lấy địa chỉ
+                                Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                                    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+
+                                    var reverseGeocodeRequest = {
+                                        location: new Microsoft.Maps.Location(currentLatitude, currentLongitude),
+                                        callback: function (result) {
+                                            // Đặt giá trị của ô input với địa chỉ hiện tại
+                                            document.getElementById('sourceInput').value = result.address.formattedAddress;
+                                        }
+                                    };
+
+                                    searchManager.reverseGeocode(reverseGeocodeRequest);
+                                });
+                            },
+                            // Hàm gọi lại khi có lỗi
+                            function (error) {
+                                console.error('Lỗi khi lấy địa chỉ hiện tại:', error.message);
+                                swal('Lỗi khi lấy địa chỉ hiện tại:', error.message, 'error');
+
+                            }
+                        );
+                    } else {
+                        console.error('Trình duyệt không hỗ trợ định vị.');
+                        swal('Trình duyệt không hỗ trợ định vị.', '', 'error');
+
                     }
-                    else {
-                        errorMess.textContent = 'Vui lòng không để trống'
+                };
+            }
+
+            if (nearlyStore != null) {
+                nearlyStore.onclick = (e) => {
+                    // Mở popup form
+                    $("#myModal").modal("show");
+
+                    let getDirection = document.querySelector("#btnDirection");
+                    getDirection.onclick = (e) => {
+                        let inputeElement = document.querySelector("#sourceInput");
+                        let errorMess = document.querySelector("#errorDirection");
+                        console.log([inputeElement])
+
+                        if (inputeElement.value != '') {
+                            errorMess.textContent = ''
+                            getDirections();
+                        }
+                        else {
+                            errorMess.textContent = 'Vui lòng không để trống'
+                        }
                     }
                 }
             }
-        }
         });
 
         // Đợi cho trang web được tải hoàn toàn
@@ -519,8 +587,8 @@
                 }
             }
         });
-    </script>
-    <script type='text/javascript'
-            src='https://www.bing.com/api/maps/mapcontrol?key=AsXqZAIwiXPz-BiqR_5COks2dHmzXxArTOTUbxvx4QOpOhqnOfClGu0Guk2Tt8yB&callback=loadMapScenario'
-            async defer></script>
-}
+        </script>
+        <script type='text/javascript'
+                src='https://www.bing.com/api/maps/mapcontrol?key=AsXqZAIwiXPz-BiqR_5COks2dHmzXxArTOTUbxvx4QOpOhqnOfClGu0Guk2Tt8yB&callback=loadMapScenario'
+                async defer></script>
+    }
