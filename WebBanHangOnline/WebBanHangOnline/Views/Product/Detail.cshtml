@@ -163,9 +163,18 @@
                     <!-- Tab Description -->
 
                     <div id="tab_1" class="tab_container active">
-                        <div class="row">
-                            @Html.Raw(Model.Detail)
-                        </div>
+                        @if (Model.Detail == null)
+                        {
+                            <div class="row text-center" style="justify-content: space-around;">
+                                <h6 class="text-danger">Sản phẩm hiện tại chưa mô tả</h6>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                @Html.Raw(Model.Detail)
+                            </div>
+                        }
                     </div>
 
                     <!-- Tab Additional Info -->
@@ -212,7 +221,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <h4 class="mb-3">Sản phẩm gợi ý theo danh mục</h4>
+                    <h3 class="mb-3">Sản phẩm cùng loại</h3>
                 </div>
                 @Html.Action("Partial_SanPhamGoiYTheoDanhMuc", "Product", new { categoryId = Model.ProductCategory.Id, productID = Model.Id })
             </div>
