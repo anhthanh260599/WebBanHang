@@ -3350,6 +3350,8 @@
     <Content Include="Content\clients\plugins\uplot\uPlot.iife.js" />
     <Content Include="Content\clients\plugins\uplot\uPlot.iife.min.js" />
     <Content Include="Content\clients\plugins\uplot\uPlot.min.css" />
+    <Content Include="Content\ExternalLoginLogo\Google_logo.png" />
+    <Content Include="Content\ExternalLoginLogo\Microsoft_logo.svg.png" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\template\avatar-mac-dinh.jpg" />
     <Content Include="Content\template\cod-logo.png" />
