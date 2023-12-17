@@ -2,50 +2,60 @@
 @using Microsoft.Owin.Security
 
 <style>
-    /* Tùy chỉnh nút đăng nhập Facebook */
-    .facebook-login {
-        background-color: #3b5998; /* Màu nền Facebook */
-        color: #fff; /* Màu chữ trắng */
-        padding: 10px 20px; /* Điều chỉnh kích thước nút */
-        border: none; /* Loại bỏ đường viền */
-        border-radius: 5px; /* Bo góc */
-        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
+
+    .button-external-login {
+        border-top-left-radius: 24px !important;
+        border-top-right-radius: 24px !important;
+        border-bottom-left-radius: 24px !important;
+        border-bottom-right-radius: 24px !important;
+        transition: background-color .3s, box-shadow .3s;
+        padding: 12px 16px 12px 42px;
+        border: 1px solid #757575;
+        border-radius: 3px;
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+        font-size: 14px;
+        font-weight: 500;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+        background-repeat: no-repeat;
+        background-position: 24px 11px;
+        background-size: 24px 24px;
     }
 
-        .facebook-login:hover {
-            background-color: #1877f2; /* Màu nền Facebook khi di chuột qua */
-            color: #fff; /* Màu chữ trắng */
+        .button-external-login:hover {
+            box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+            cursor: pointer;
         }
 
-    /* Tùy chỉnh nút đăng nhập Google */
-    .google-login {
-        background-color: #cf4332; /* Màu nền Google */
-        color: #fff; /* Màu chữ trắng */
-        padding: 10px 20px; /* Điều chỉnh kích thước nút */
-        border: none; /* Loại bỏ đường viền */
-        border-radius: 5px; /* Bo góc */
-        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
+        .button-external-login:focus {
+            outline: none;
+            box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25), 0 0 0 3px #c8dafc;
+        }
+
+        /*Google*/
+
+        .login-with-google-btn {
+            background-image: url("../../Content/ExternalLoginLogo/Google_logo.png");
+            background-color: white;
+            color: #757575;
+        }
+        .login-with-google-btn:hover {
+            background-color: #000000;
+            color:white;
+        }
+
+    /*Microsoft*/
+
+    .login-with-microsoft-btn {
+        background-image: url("../../Content/ExternalLoginLogo/Microsoft_logo.svg.png");
+        background-color: black;
+        color: white;
     }
 
-        .google-login:hover {
-            background-color: #cf4332; /* Màu nền Google khi di chuột qua */
-            opacity: 0.8;
-            color: #fff; /* Màu chữ trắng */
+        .login-with-microsoft-btn:hover {
+            background-color: #0078d4;
+            color: white;
         }
-    .microsoft-login {
-        background-color: #000000; /* Màu nền Microsoft */
-        color: #fff; /* Màu chữ trắng */
-        padding: 10px 20px; /* Điều chỉnh kích thước nút */
-        border: none; /* Loại bỏ đường viền */
-        border-radius: 5px; /* Bo góc */
-        margin: 5px; /* Điều chỉnh khoảng cách giữa các nút */
-    }
 
-        .microsoft-login:hover {
-            background-color: #000000; /* Màu nền Microsoft khi di chuột qua */
-            opacity: 0.8;
-            color: #fff; /* Màu chữ trắng */
-        }
 
 </style>
 <hr />
@@ -72,14 +82,14 @@
                         }
                         else if (p.AuthenticationType == "Google")
                         {
-                            providerClass = "google-login";
+                            providerClass = "login-with-google-btn";
                         }
                         else if (p.AuthenticationType == "Microsoft")
                         {
-                            providerClass = "microsoft-login";
+                            providerClass = "login-with-microsoft-btn";
                         }
 
-                        <button type="submit" class="btn btn-outline-dark w-100 @providerClass" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                        <button type="submit" class="btn @providerClass mt-2 button-external-login" style="width:300px;" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">Đăng nhập bằng @p.AuthenticationType</button>
                     }
                 </p>
             </div>
