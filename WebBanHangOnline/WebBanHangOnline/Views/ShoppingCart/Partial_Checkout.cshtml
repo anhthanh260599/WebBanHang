@@ -21,19 +21,28 @@
 
     <script>
         function OnBeginCO(res) {
-            if (res.Success == false && (res.Code == 111) || (res.Code == 123)) {
+            if (res.Success == false) {
+                if ((res.Code == 111) || (res.Code == 123)) {
+                    Swal.fire({
+                        title: "Đặt hàng thất bại",
+                        text: res.message,
+                        icon: "error",
+                        onClose: () => {
+                            location.href = 'gio-hang';
+                        }
+                    })
+                }
+            }
+            if (res.Success == false && res.Code == 000) {
                 Swal.fire({
                     title: "Đặt hàng thất bại",
                     text: res.message,
-                    icon: "error",
-                    onClose: () => {
-                        location.href = 'gio-hang';
-                    }
+                    icon: "error"
                 })
             }
             else {
-                $('#btnCheckOut').attr("disabled", "disabled");
-                $('#load_send').html('<h2>Đang đặt hàng....</h2>');
+                        $('#btnCheckOut').attr("disabled", "disabled");
+                        $('#load_send').html('<h2>Đang chuyển hướng....</h2>');
             }
         }
         function OnSuccessCO(res) {
@@ -47,16 +56,42 @@
                     localStorage.removeItem('cart');
                 }
             }
-            else {
-                Swal.fire({
-                    title: "Đặt hàng thất bại",
-                    text: res.message,
-                    icon: "error",
-                    onClose: () => {
-                        location.href = 'gio-hang';
-                    }
-                })
+            if (res.Success == false)
+            {
+                if (res.Code == 000) {
+                    Swal.fire({
+                        title: "Đặt hàng thất bại",
+                        text: res.message,
+                        icon: "error",
+                        onClose: () => {
+                            $('#btnCheckOut').removeAttr("disabled");
+                            $('#load_send').html('<p></p>');
+                        }
+                    })
+                }
             }
+            if (res.Success == false) {
+                if ((res.Code == 111) || (res.Code == 123)) {
+                    Swal.fire({
+                        title: "Đặt hàng thất bại",
+                        text: res.message,
+                        icon: "error",
+                        onClose: () => {
+                            location.href = 'gio-hang';
+                        }
+                    })
+                }
+            }
+            //else {
+            //    Swal.fire({
+            //        title: "Đặt hàng thất bại",
+            //        text: res.message,
+            //        icon: "error",
+            //        onClose: () => {
+            //            location.href = 'gio-hang';
+            //        }
+            //    })
+            //}
         }
     </script>
 
@@ -127,7 +162,8 @@
     <div class="form-group">
         <label>Hình thức thanh toán</label>
         <select class="form-control" name="TypePayment" id="drTypePayment">
-            <option value="1" selected>Ship COD</option>
+            <option value="-1" selected>---Chọn phương thức thanh toán ----</option>
+            <option value="1">Ship COD</option>
             <option value="2">Thanh toán VNPAY</option>
             <option value="3">Thanh toán PAYPAL</option>
         </select>
