@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using PayPal.Api;
 using WebBanHangOnline.Models;
@@ -245,6 +246,34 @@ namespace WebBanHangOnline.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
+            }
+            if(model.Password != null)
+            {
+                // Thêm thông báo lỗi cho các điều kiện PasswordValidator
+                if (!model.Password.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ số.");
+                }
+
+                if (!model.Password.Any(char.IsLower))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ thường.");
+                }
+
+                if (!model.Password.Any(char.IsUpper))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ hoa.");
+                }
+
+                if (model.Password.Any(char.IsLetterOrDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ký tự đặc biệt hoặc số.");
+                }
+
+                if (model.Password.Length < 8)
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải có ít nhất 8 ký tự.");
+                }
             }
 
             // If we got this far, something failed, redisplay form
