@@ -21,7 +21,7 @@
 
     <script>
         function OnBeginCO(res) {
-            if (res.Success == false && res.Code == 111) {
+            if (res.Success == false && (res.Code == 111) || (res.Code == 123)) {
                 Swal.fire({
                     title: "Đặt hàng thất bại",
                     text: res.message,
