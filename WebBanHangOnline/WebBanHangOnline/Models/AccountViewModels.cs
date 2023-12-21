@@ -138,12 +138,12 @@ namespace WebBanHangOnline.Models
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Vui lòng không để trống")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
         [Display(Name = "Email")]
         public string Email { get; set; }
         public DateTime CreatedDate { get; set; }
         [Required(ErrorMessage = "Vui lòng không để trống")]
-        [StringLength(100, ErrorMessage = "Mật khẩu phải lớn hơn {2} ký tự.", MinimumLength = 6)]
+        //[StringLength(100, ErrorMessage = "Mật khẩu phải lớn hơn {2} ký tự.", MinimumLength = 6)]
 
         [DataType(DataType.Password)]
         [Display(Name = "Mật khẩu")]
