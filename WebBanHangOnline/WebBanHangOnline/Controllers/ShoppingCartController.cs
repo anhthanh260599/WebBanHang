@@ -80,6 +80,7 @@ namespace WebBanHangOnline.Controllers
         // GET: ShoppingCart
         public ActionResult Index()
         {
+            var chuaDenGio = TempData["ChuaDenGioMuaHang"];
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null && cart.Items.Any())
             {
@@ -292,12 +293,21 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult Checkout()
         {
-            ShoppingCart cart = (ShoppingCart)Session["Cart"];
-            if (cart != null && cart.Items.Any())
+            int now = DateTime.Now.Hour;
+            if(now >= 22 || now <= 6)
             {
-                ViewBag.CheckCart = cart;
+                TempData["ChuaDenGioMuaHang"] = Message.OutTime.ToString();
+                return RedirectToAction("Index","ShoppingCart");
             }
-            return View();
+            else
+            {
+                ShoppingCart cart = (ShoppingCart)Session["Cart"];
+                if (cart != null && cart.Items.Any())
+                {
+                    ViewBag.CheckCart = cart;
+                }
+                return View();
+            }
         }
 
         public ActionResult Partial_Checkout()
@@ -324,6 +334,11 @@ namespace WebBanHangOnline.Controllers
             var code = new { Success = false, Code = -1, Url = "" };
             if (ModelState.IsValid)
             {
+                int now = DateTime.Now.Hour;
+                if (now >= 22 || now <= 6)
+                {
+                    return Json(new { Success = false, Code = 123, message = Message.OutTime.ToString() });
+                }
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
                 if (cart != null)
                 {
