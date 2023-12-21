@@ -293,7 +293,7 @@ namespace WebBanHangOnline.Controllers
 
         public ActionResult Checkout()
         {
-            int now = DateTime.Now.Hour;
+            int now = DateTime.Now.AddHours(15).Hour;
             if(now >= 22 || now <= 6)
             {
                 TempData["ChuaDenGioMuaHang"] = Message.OutTime.ToString();
@@ -339,7 +339,7 @@ namespace WebBanHangOnline.Controllers
                     return Json(new { Success = false, Code = 000, message = Message.ChooseTypePayment.ToString() });
                 }
 
-                int now = DateTime.Now.Hour;
+                int now = DateTime.Now.AddHours(15).Hour;
                 if (now >= 22 || now <= 6)
                 {
                     return Json(new { Success = false, Code = 123, message = Message.OutTime.ToString() });

@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Giỏ hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var chuaDenGio = TempData["ChuaDenGioMuaHang"] as string;
 }
 
 
@@ -53,4 +54,17 @@
 @section scripts {
     <script src="~/Content/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
     <script src="~/Content/assets/js/categories_custom.js"></script>
+    <script>
+        $(document).ready(function () {
+            var chuaDenGio = '@Html.Raw(chuaDenGio)';
+            if (chuaDenGio != '') {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Thông báo',
+                    text: chuaDenGio,
+                    showConfirmButton: true
+                });
+            }
+        })
+    </script>
 }
