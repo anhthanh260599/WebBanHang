@@ -27,6 +27,12 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4); /* Hiệu ứng bóng đổ */
         padding: 50px;
     }
+
+    .password-eye::before {
+        position: absolute;
+        top: 12px;
+        right: 300px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
 
@@ -69,15 +75,17 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.Password, new { @class = "col-md-12 mb-0", @style = "font-weight:400;" })
                             <div class="col-md-12">
-                                @Html.PasswordFor(m => m.Password, new { @class = "form-control w-75" })
-                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger w-75" })
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control w-75", @id = "passwordInput" })
+                                <span toggle="#passwordInput" class="fa fa-fw fa-eye field-icon password-eye toggle-password"></span>
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" , @style ="margin-left:-22px;" })
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12 mb-0", @style = "font-weight:400;" })
                             <div class="col-md-12">
-                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control w-75" })
-                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger w-75" })
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control w-75", @id = "confirmPasswordInput" })
+                                <span toggle="#confirmPasswordInput" class="fa fa-fw fa-eye field-icon password-eye toggle-password"></span>
+                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger", @style = "margin-left:-22px;" })
                             </div>
                         </div>
                         <div class="form-group">
@@ -95,4 +103,17 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $(".toggle-password").click(function () {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+                var input = $($(this).attr("toggle"));
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
+        });
+    </script>
 }
