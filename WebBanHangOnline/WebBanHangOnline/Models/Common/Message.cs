@@ -41,7 +41,7 @@ namespace WebBanHangOnline.Models.Common
         public static IHtmlString SuccessReview { get; } = new HtmlString("Gửi đánh giá thành công, đánh giá của bạn sẽ hiển thị nếu được duyệt");
         public static IHtmlString PleaseDontUseBadWord { get; } = new HtmlString("Vui lòng không sử dụng từ ngữ tiêu cực");
         public static IHtmlString SuccessAddWishList { get; } = new HtmlString("Thêm vào danh sách yêu thích thành công");
-
+        public static IHtmlString OutTime { get; } = new HtmlString("Chưa đến giờ mua hàng, vui lòng quay lại từ 6:00 - 22:00");
 
     }
 }
