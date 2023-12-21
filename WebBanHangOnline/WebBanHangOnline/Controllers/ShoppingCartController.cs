@@ -330,10 +330,15 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(OrderViewModel request)
         {
-
             var code = new { Success = false, Code = -1, Url = "" };
             if (ModelState.IsValid)
             {
+
+                if(request.TypePayment == -1)
+                {
+                    return Json(new { Success = false, Code = 000, message = Message.ChooseTypePayment.ToString() });
+                }
+
                 int now = DateTime.Now.Hour;
                 if (now >= 22 || now <= 6)
                 {
@@ -471,46 +476,55 @@ namespace WebBanHangOnline.Controllers
                     int logic = 0;
                     var reDetail = db.RecipeDetails.ToList();
                     int temp = 0;
-                    for (int i = 0; i < cart.Items.Count; i++)
+                    try
                     {
-                        count = cart.Items[i].Quantity;
-                        proID = cart.Items[i].ProductId;
-                        recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
-                        reID = recipe[0].ID;
-                        reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
-                        for (int j = 0; j < reDetail.Count; j++)
+                        for (int i = 0; i < cart.Items.Count; i++)
                         {
-                            matID = reDetail[j].MatterialID;
-                            currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
-                            currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
-                            count = count + currentStorage[0].UseCount;
-                            //Lấy logic trừ 
-                            if (currentMat[0].Packing == "Kg")
-                            {
-                                logic = 30;
-                            }
-                            if (currentMat[0].Packing == "Hộp")
-                            {
-                                logic = 5;
-                            }
-                            if (count >= logic)
-                            {
-                                //temp là số lượng NVL cần dùng
-                                temp = (count - (count % logic)) / logic;
-                                if (currentStorage[0].Quantity <= temp)
-                                {
-                                    var errorMessage = $"Cửa hàng này không có đủ sản phẩm {cart.Items[i].ProductName}";
-                                    return Json(new { Success = false, Code = 111, message = errorMessage });
-                                }
-                                //currentStorage[0].UseCount = count % logic;
-                                //currentStorage[0].Quantity -= temp;
-                            }
-                            else
-                            {
-                                //currentStorage[0].UseCount = count;
-                            }
                             count = cart.Items[i].Quantity;
+                            proID = cart.Items[i].ProductId;
+                            recipe = db.Recipes.Where(x => x.ProductID == proID).ToList();
+                            reID = recipe[0].ID;
+                            reDetail = db.RecipeDetails.Where(x => x.RecipeID == reID).ToList();
+                            for (int j = 0; j < reDetail.Count; j++)
+                            {
+                                matID = reDetail[j].MatterialID;
+                                currentMat = db.Matterials.Where(x => x.Id == matID).ToList();
+                                currentStorage = storage.Where(x => x.MaterialID == matID).ToList();
+                                count = count + currentStorage[0].UseCount;
+                                //Lấy logic trừ 
+                                if (currentMat[0].Packing == "Kg")
+                                {
+                                    logic = 30;
+                                }
+                                if (currentMat[0].Packing == "Hộp")
+                                {
+                                    logic = 5;
+                                }
+                                if (count >= logic)
+                                {
+                                    //temp là số lượng NVL cần dùng
+                                    temp = (count - (count % logic)) / logic;
+                                    if (currentStorage[0].Quantity <= temp)
+                                    {
+                                        var errorMessage = $"Cửa hàng này không có đủ sản phẩm {cart.Items[i].ProductName}";
+                                        return Json(new { Success = false, Code = 111, message = errorMessage });
+                                    }
+                                    //currentStorage[0].UseCount = count % logic;
+                                    //currentStorage[0].Quantity -= temp;
+                                }
+                                else
+                                {
+                                    //currentStorage[0].UseCount = count;
+                                }
+                                count = cart.Items[i].Quantity;
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Xử lý ngoại lệ và trả về một thông báo lỗi có ý nghĩa
+                        var errorMessage = $"Cửa hàng chưa có nguyên liệu của các sản phẩm trên, vui lòng chọn cửa hàng khác";
+                        return Json(new { Success = false, Code = 111, message = errorMessage });
                     }
                     //db.Entry(currentStorage).State = System.Data.Entity.EntityState.Modified;
 
