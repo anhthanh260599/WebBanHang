@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -76,13 +77,30 @@ namespace WebBanHangOnline.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateProfile(CreateAccountrViewModel request)
+        public async Task<ActionResult> UpdateProfile(CreateAccountrViewModel request, HttpPostedFileBase AvatarFile)
         {
             var user = await UserManager.FindByEmailAsync(request.Email);
             user.FullName = request.FullName;
             user.Phone = request.Phone;
             user.Address = request.Address;
-            user.Avatar = request.Avatar;
+            //user.Avatar = request.Avatar;
+
+            // Kiểm tra xem người dùng đã chọn file Avatar mới hay chưa
+            if (AvatarFile != null && AvatarFile.ContentLength > 0)
+            {
+                // Lưu file vào đường dẫn mong muốn
+                string fileName = Path.GetFileName(AvatarFile.FileName);
+                string path = Path.Combine(Server.MapPath("~/Content/UserAvatar/"), fileName);
+                AvatarFile.SaveAs(path);
+
+                // Cập nhật đường dẫn Avatar trong đối tượng user
+                user.Avatar = "/Content/UserAvatar/" + fileName;
+            }
+            else
+            {
+                user.Avatar = user.Avatar;
+            }
+
             var result = await UserManager.UpdateAsync(user);
             if (result.Succeeded)
             {

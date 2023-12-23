@@ -3363,6 +3363,9 @@
     <Content Include="Content\template\sendMailKhachHang_Offline.html" />
     <Content Include="Content\template\sendMailSubscribeKH.html" />
     <Content Include="Content\template\VNPAY_Logo.png" />
+    <Content Include="Content\UserAvatar\e12c07089e6070061ac62f1d65702193.jpg" />
+    <Content Include="Content\UserAvatar\jennie5.jpg" />
+    <Content Include="Content\UserAvatar\jennie9.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
