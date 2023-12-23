@@ -141,6 +141,7 @@ namespace WebBanHangOnline.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("Password", Message.WrongUserNameOrPassword.ToString());
                 return View(model);
             }
 
@@ -157,7 +158,7 @@ namespace WebBanHangOnline.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", Message.WrongUserNameOrPassword.ToString());
+                    ModelState.AddModelError("Password", Message.WrongUserNameOrPassword.ToString());
                     return View(model);
             }
         }
@@ -245,9 +246,9 @@ namespace WebBanHangOnline.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                //AddErrors(result);
             }
-            if(model.Password != null)
+            if (model.Password != null)
             {
                 // Thêm thông báo lỗi cho các điều kiện PasswordValidator
                 if (!model.Password.Any(char.IsDigit))
@@ -267,7 +268,7 @@ namespace WebBanHangOnline.Controllers
 
                 if (model.Password.Any(char.IsLetterOrDigit))
                 {
-                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ký tự đặc biệt hoặc số.");
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ký tự đặc biệt.");
                 }
 
                 if (model.Password.Length < 8)
@@ -275,6 +276,7 @@ namespace WebBanHangOnline.Controllers
                     ModelState.AddModelError("Password", "Mật khẩu phải có ít nhất 8 ký tự.");
                 }
             }
+
 
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -376,7 +378,6 @@ namespace WebBanHangOnline.Controllers
             {
                 return View(model);
             }
-
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
@@ -388,7 +389,36 @@ namespace WebBanHangOnline.Controllers
                 return RedirectToAction("ChangePasswordConfirmation");
             }
 
-            AddErrors(result);
+            //AddErrors(result);
+
+            if (model.NewPassword != null)
+            {
+                // Thêm thông báo lỗi cho các điều kiện PasswordValidator
+                if (!model.NewPassword.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ số.");
+                }
+
+                if (!model.NewPassword.Any(char.IsLower))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ thường.");
+                }
+
+                if (!model.NewPassword.Any(char.IsUpper))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ hoa.");
+                }
+
+                if (model.NewPassword.Any(char.IsLetterOrDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ký tự đặc biệt.");
+                }
+
+                if (model.NewPassword.Length < 8)
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải có ít nhất 8 ký tự.");
+                }
+            }
             return View(model);
         }
 
@@ -429,7 +459,36 @@ namespace WebBanHangOnline.Controllers
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            AddErrors(result);
+            //AddErrors(result);
+
+            if (model.Password != null)
+            {
+                // Thêm thông báo lỗi cho các điều kiện PasswordValidator
+                if (!model.Password.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ số.");
+                }
+
+                if (!model.Password.Any(char.IsLower))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ thường.");
+                }
+
+                if (!model.Password.Any(char.IsUpper))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ít nhất một chữ hoa.");
+                }
+
+                if (model.Password.Any(char.IsLetterOrDigit))
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải chứa ký tự đặc biệt.");
+                }
+
+                if (model.Password.Length < 8)
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu phải có ít nhất 8 ký tự.");
+                }
+            }
             return View();
         }
 
