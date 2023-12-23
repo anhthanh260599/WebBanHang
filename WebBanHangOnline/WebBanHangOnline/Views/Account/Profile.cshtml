@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    @using (Html.BeginForm("UpdateProfile", "Account"))
+    @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(false)
         @Html.AntiForgeryToken()
@@ -86,12 +86,18 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Ảnh đại diện</label>
+                    @*<div class="input-group" style="width:100%;">
+                            <div class="custom-file">
+                                <input type="text" id="txtImage" style="width:100%" name="Avatar" value="@Model.Avatar" placeholder="Chọn ảnh từ máy tính" />
+                            </div>
+                            <div class="input-group-append">
+                                <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                            </div>
+                        </div>*@
+
                     <div class="input-group" style="width:100%;">
                         <div class="custom-file">
-                            <input type="text" id="txtImage" style="width:100%" name="Avatar" value="@Model.Avatar" placeholder="Chọn ảnh từ máy tính" />
-                        </div>
-                        <div class="input-group-append">
-                            <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                            <input type="file" id="fileImage" style="width:100%" name="AvatarFile" />
                         </div>
                     </div>
                 </div>
@@ -109,12 +115,22 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 <script>
-        function BrowseServer(field) {
-            var finder = new CKFinder();
-            finder.selectActionFunction = function (fieldUrl) {
-                document.getElementById(field).value = fieldUrl;
-            };
-            finder.popup();
-        }
+    //function BrowseServer(field) {
+    //    var finder = new CKFinder();
+    //    finder.selectActionFunction = function (fieldUrl) {
+    //        document.getElementById(field).value = fieldUrl;
+    //    };
+    //    finder.popup();
+    //}
+
+        // Hàm xử lý khi người dùng chọn ảnh
+        document.getElementById('fileImage').addEventListener('change', function () {
+        var input = this;
+        var imgPath = input.value;
+        var imgName = imgPath.split('\\').pop(); // Lấy tên file ảnh
+        console.log(imgName); // In ra tên file để kiểm tra
+        document.getElementById('txtImage').value = imgName;
+    });
+
 </script>
 }
