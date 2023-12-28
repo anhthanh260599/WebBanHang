@@ -295,6 +295,8 @@
     <Compile Include="Models\EF\ThongKe.cs" />
     <Compile Include="Models\EF\ToxicWord.cs" />
     <Compile Include="Models\EF\WishList.cs" />
+    <Compile Include="Models\ExchangeCurrency\ExchangeRate.cs" />
+    <Compile Include="Models\ExchangeCurrency\Rates.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MaterialQuantityViewModel.cs" />
@@ -3866,7 +3868,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\List_API.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -3948,6 +3950,7 @@
     <Content Include="Views\Product\Partial_ProductHot.cshtml" />
     <Content Include="Views\Menu\_StoresInProvince.cshtml" />
     <Content Include="Views\Product\Partial_ProductListNearestStoreId.cshtml" />
+    <Content Include="Views\ShoppingCart\Partial_CurrencyRates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
