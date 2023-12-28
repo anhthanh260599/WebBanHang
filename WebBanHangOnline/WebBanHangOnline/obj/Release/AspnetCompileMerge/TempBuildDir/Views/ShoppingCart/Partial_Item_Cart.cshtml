@@ -35,7 +35,7 @@
                     <td><input type="number" min="1" class="form-control" id="soLuong_product_@item.ProductId" value="@item.Quantity" /></td>
                     <td>@Common.FormatNumber(item.TotalPrice, 0)</td>
                     <td>
-                        <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-primary btnUpdateCartItem"> Cập nhật </a>
+                        @*<a href="#" data-id="@item.ProductId" class="btn btn-sm btn-primary btnUpdateCartItem"> Cập nhật </a>*@
                         <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDeleteCartItem"> Xoá </a>
                     </td>
                 </tr>

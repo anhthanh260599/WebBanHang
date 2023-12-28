@@ -1,4 +1,5 @@
 ﻿@model WebBanHangOnline.Models.OrderViewModel
+@using WebBanHangOnline.Models.Common
 
 @{
     if (ViewBag.User != null)
@@ -6,6 +7,9 @@
         var user = (WebBanHangOnline.Models.ApplicationUser)ViewBag.User;
     }
 
+    var USDtoVND = Session["USDtoVND"];
+    var TimeLastUpdateUtcCurrencyExchange = Session["TimeLastUpdateUtcCurrencyExchange"];
+    var ProviderCurrencyExchange = Session["ProviderCurrencyExchange"];
 }
 
 @using (Ajax.BeginForm("Checkout", "ShoppingCart", new AjaxOptions
@@ -41,8 +45,8 @@
                 })
             }
             else {
-                        $('#btnCheckOut').attr("disabled", "disabled");
-                        $('#load_send').html('<h2>Đang chuyển hướng....</h2>');
+                $('#btnCheckOut').attr("disabled", "disabled");
+                $('#load_send').html('<h2>Đang chuyển hướng....</h2>');
             }
         }
         function OnSuccessCO(res) {
@@ -56,8 +60,7 @@
                     localStorage.removeItem('cart');
                 }
             }
-            if (res.Success == false)
-            {
+            if (res.Success == false) {
                 if (res.Code == 000) {
                     Swal.fire({
                         title: "Đặt hàng thất bại",
@@ -96,7 +99,9 @@
     </script>
 
     <h6 class="text-danger">Lưu ý: Khi thanh toán bằng Paypal, giao dịch sẽ sử dụng đơn vị tiền tệ là USD.</h6>
-    <p class="text-info">Tỉ giá: 1 USD = 25.000 VND</p>
+    <p class="text-info">  Tỉ giá: <strong> 1 USD = @Common.FormatNumber(USDtoVND, 0) VNĐ </strong>  <span class="font-italic"> (Cập nhật lần cuối: @TimeLastUpdateUtcCurrencyExchange) </span> </p>
+    <p class="text-info">Được cung cấp bởi: <a class="font-italic" href="@ProviderCurrencyExchange">@ProviderCurrencyExchange</a>  </p>
+
 
     @Html.AntiForgeryToken()
     <h4>Thông tin khách hàng</h4>
