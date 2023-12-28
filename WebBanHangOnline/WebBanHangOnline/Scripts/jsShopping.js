@@ -205,13 +205,21 @@
     //    }
 
     //});
-
-    $('body').on('click', '.btnUpdateCartItem', function (e) { // Sử dụng hàm update cart item
+    $('body').on('change', 'input[id^="soLuong_product_"]', function (e) {
         e.preventDefault();
-        var id = $(this).data("id")
-        var quantity = $('#soLuong_product_' + id).val();
-        UpdateQuantityCartItem(id, quantity);
-    });
+        // Lấy id bằng cách bỏ soLuong_product_ ở phía đầu
+        var id = $(this).attr("id").replace("soLuong_product_", "");
+        var quantiy = $(this).val();
+        UpdateQuantityCartItem(id, quantiy);
+
+    })
+
+    //$('body').on('click', '.btnUpdateCartItem', function (e) { // Sử dụng hàm update cart item
+    //    e.preventDefault();
+    //    var id = $(this).data("id")
+    //    var quantity = $('#soLuong_product_' + id).val();
+    //    UpdateQuantityCartItem(id, quantity);
+    //});
 
 })
 
