@@ -11,3 +11,10 @@
 /.gitignore
 /WebBanHangOnline/.vs/WebBanHangOnline
 /.vs
+/WebBanHangOnline/WebBanHangOnline/bin/WebBanHangOnline.dll
+/WebBanHangOnline/WebBanHangOnline/bin/WebBanHangOnline.pdb
+/WebBanHangOnline/WebBanHangOnline/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/WebBanHangOnline/WebBanHangOnline/obj/Release/WebBanHangOnline.csproj.AssemblyReference.cache
+/WebBanHangOnline/WebBanHangOnline/obj/Release/WebBanHangOnline.csproj.CoreCompileInputs.cache
+/WebBanHangOnline/WebBanHangOnline/obj/Release/WebBanHangOnline.dll
+/WebBanHangOnline/WebBanHangOnline/obj/Release/WebBanHangOnline.pdb

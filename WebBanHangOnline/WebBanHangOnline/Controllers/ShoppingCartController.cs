@@ -21,6 +21,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.EnterpriseServices.CompensatingResourceManager;
 using WebBanHangOnline.Models.MySingleton;
 using Newtonsoft.Json;
+using WebBanHangOnline.Models.ExchangeCurrency;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace WebBanHangOnline.Controllers
 {
@@ -37,12 +40,61 @@ namespace WebBanHangOnline.Controllers
 
         private OrderViewModel _orderViewModel;
 
+        // Quy đổi tiền tệ
+        private const string CurrencyExchangeApiUrl = "https://open.er-api.com/v6/latest/USD";
+        public ExchangeRate exchangeRate;
+        public static double USDtoVND;
+        public static string TimeLastUpdateUtcCurrencyExchange;
+        public static string ProviderCurrencyExchange;
+        // End Quy đổi tiền tệ
+        
+        private bool isInitialized = false; // Dùng để khởi tạo các bất đồng bộ
+
         public ShoppingCartController()
         {
             phiShip = db.ShippingFees.Select(x => x.Value).FirstOrDefault();
             if (phiShip == null)
             {
                 phiShip = 0;
+            }
+            Initialize();
+        }
+
+        // Phương thức để khởi tạo các giá trị bất đồng bộ
+        private async Task Initialize()
+        {
+            await Partial_CurrencyRates();
+            Session["USDtoVND"] = USDtoVND;
+            Session["TimeLastUpdateUtcCurrencyExchange"] = TimeLastUpdateUtcCurrencyExchange;
+            Session["ProviderCurrencyExchange"] = ProviderCurrencyExchange;
+            isInitialized = true;
+        }
+
+        // Quy đổi tiền tệ
+
+        public async Task<ActionResult> Partial_CurrencyRates()
+        {
+            exchangeRate = await GetExchangeRateAsync();
+            USDtoVND = exchangeRate.Rates.VND;
+            TimeLastUpdateUtcCurrencyExchange = exchangeRate.Time_Last_Update_Utc.ToString("dd/MM/yyyy HH:mm:ss");
+            ProviderCurrencyExchange = exchangeRate.Provider;
+            return PartialView(exchangeRate);
+        }
+
+        public async Task<ExchangeRate> GetExchangeRateAsync()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(CurrencyExchangeApiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonContent = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<ExchangeRate>(jsonContent);
+                }
+                else
+                {
+                    throw new Exception($"Lỗi: {response.StatusCode} - {response.ReasonPhrase}");
+                }
             }
         }
 
@@ -318,6 +370,9 @@ namespace WebBanHangOnline.Controllers
                 ViewBag.User = user;
             }
 
+            var USDtoVND = Session["USDtoVND"];
+            var TimeLastUpdateUtcCurrencyExchange = Session["TimeLastUpdateUtcCurrencyExchange"];
+            var ProviderCurrencyExchange = Session["ProviderCurrencyExchange"];
             // Ứng dụng Singleton
             int storeID = StoreSingleton.Instance.Id;
             var itemStore = db.Stores.Where(s => s.Id == storeID).FirstOrDefault();
@@ -1393,16 +1448,15 @@ namespace WebBanHangOnline.Controllers
         }
         private Payment CreatePayment(APIContext apiContext, string redirectUrl)
         {
-
             var currentOrder = (dynamic)Session["CurrentOrder"];
             var orderCode = currentOrder.OrderCode;
             var totalAmount = currentOrder.Total;
             var subTotal = currentOrder.SubTotal;
 
-            phiShip = Math.Round(phiShip / 25000, 2);
+            phiShip = Math.Round(phiShip / (decimal)USDtoVND, 2);
 
             var order = db.Orders.ToList().Where(x => x.Code == orderCode).FirstOrDefault();
-            var subtotalValue = (phiShip + Math.Round(order.TotalAmount / 25000, 2)).ToString();
+            var subtotalValue = (phiShip + Math.Round(order.TotalAmount / (decimal)USDtoVND, 2)).ToString();
 
             TempData["OrderCodePayPal"] = order.Code;
             TempData["EmailCustomerPaypal"] = order.Email;

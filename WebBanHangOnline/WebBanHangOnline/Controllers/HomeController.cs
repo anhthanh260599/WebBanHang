@@ -18,6 +18,11 @@ namespace WebBanHangOnline.Controllers
             return View();
         }
 
+        public ActionResult List_API()
+        {
+            return View();
+        }
+
         public ActionResult Partial_HomeSlider()
         {
             var items = db.Sliders.ToList();
@@ -156,4 +161,4 @@ namespace WebBanHangOnline.Controllers
             return PartialView(item);
         }
     }
-}
+}   

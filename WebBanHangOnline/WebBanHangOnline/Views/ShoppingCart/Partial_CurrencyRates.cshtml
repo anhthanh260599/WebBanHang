@@ -1,0 +1,14 @@
+﻿@model WebBanHangOnline.Models.ExchangeCurrency.ExchangeRate
+@using WebBanHangOnline.Models.Common
+
+<!-- Mục đích tạo view này để xem giá trị chuyển dổi tiền tệ thì USD -->
+
+<h2>Thông tin tỷ giá</h2>
+<p>Kết quả: @Model.Result</p>
+<p>Nơi cung cấp API: @Model.Provider</p>
+<p>Tài liệu: @Model.Documentation</p>
+<!-- Thêm các trường dữ liệu khác nếu cần hiển thị -->
+
+<h3>Tỷ giá chuyển đổi</h3>
+<p>USD to VND: @Common.FormatNumber(Model.Rates.VND, 0)</p>
+<!-- Thêm các tỷ giá chuyển đổi khác nếu cần hiển thị -->
