@@ -14,52 +14,28 @@ namespace WebBanHangOnline.Controllers
     {
         ApplicationDbContext db = new ApplicationDbContext();
         // GET: News
-        public ActionResult Index(int? page, int? pageSize)
+        public ActionResult Index()
         {
-            //var pageSize = 1;
-            //if (page == null)
-            //{
-            //    page = 1;
-            //}
-            //IEnumerable<News>items = db.News.OrderByDescending(x=>x.Id).Where(x=>x.IsActive).ToList();
-            //var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            //items = items.ToPagedList(pageIndex, pageSize);
-            //ViewBag.PageSize = pageSize;
-            //ViewBag.Page = page;
-            //return View(items);
+            return View();
+        }
 
-            // Test
-            int defaultPageSize = 5; // Giá trị mặc định
+        public ActionResult GetData()
+        {
+            var items = db.News
+                .OrderByDescending(x => x.Id)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Alias = x.Alias,
+                    Image = x.Image,
+                    CreateBy = x.CreateBy,
+                    CreateDate = x.CreateDate,
+                    Description = x.Description
+                })
+                .ToList();
 
-            if (Session["pageSize"] != null)
-            {
-                defaultPageSize = (int)Session["pageSize"];
-            }
-            else
-            {
-                // Nếu không có giá trị trong Session, lưu giá trị mặc định vào Session
-                Session["pageSize"] = defaultPageSize;
-            }
-
-            var pageIndex = page ?? 1;
-            IEnumerable<News> items = db.News.OrderByDescending(x => x.Id).Where(x => x.IsActive).ToList();
-
-            // Tính toán số lượng trang tối đa dựa trên số lượng items và pageSize
-            int maxPageIndex = (int)Math.Ceiling((double)items.Count() / defaultPageSize);
-
-            // Kiểm tra và cập nhật lại số trang nếu cần
-            if (pageIndex > maxPageIndex)
-            {
-                pageIndex = maxPageIndex;
-            }
-
-            items = items.ToPagedList(pageIndex, defaultPageSize);
-
-            ViewBag.PageSize = defaultPageSize;
-            ViewBag.Page = pageIndex;
-
-            return View(items);
-
+            return Json(items, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

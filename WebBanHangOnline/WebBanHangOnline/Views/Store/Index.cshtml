@@ -15,7 +15,7 @@
     }
 </style>
 
-<div class="container contact_container">
+<div class="container contact_container" ng-app="storeApp" ng-controller="storeController">
     <div class="row">
         <div class="col-12">
             <!-- Breadcrumbs -->
@@ -28,96 +28,85 @@
         </div>
     </div>
 
-    <div class="row mb-5">
-        <div class="col-5">
-            <input type="text" name="searchString" id="search" class="form-control" placeholder="Nhập tên Quán/Phường/Quận gần nơi bạn sinh sống">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" ng-model="searchQuery" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" ng-click="searchStore()">Tìm kiếm</button>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-4 mb-5" ng-repeat="item in storeList">
+            <a href="/cua-hang/chi-tiet/{{item.Alias}}-s{{item.Id}}">
+                <div class="card">
+                    <img class="card-img-top" style="height:200px;" src="{{item.Image}}" />
+                    <div class="card-body">
+                        <h5 class="card-title" style="font-weight:bold">{{item.Name}}</h5>
+                        <a href="{{item.LinkMap}}" style="width:100%" class="btn btn-outline-dark">Xem bản đồ</a>
+                        <hr />
+                        <p class="card-text card-address">{{item.Address}}, {{item.Ward}}, {{item.District}}, {{item.Province}} </p>
+                        <p class="card-text"> 06:30 - 22:00 </p>
+                        <div class="row" style="font-size: 13px">
+                            <div class="col-6">
+                                <i class="fa-solid fa-car"></i> Có chỗ đậu xe hơi
+                            </div>
+                            <div class="col-6">
+                                <i class="fa-solid fa-bag-shopping"></i> Mua mang đi
+                            </div>
+                        </div>
+                        <div class="row" style="font-size: 13px">
+                            <div class="col-6">
+                                <i class="fa-solid fa-store"></i> Phục vụ tại chỗ
+                            </div>
+                            <div class="col-6">
+                                <i class="fa-regular fa-face-smile-beam"></i> Thân thiện
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 
-    <div class="row" id="originalProductList">
-
-        @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                <div class="col-4 mb-5">
-                    <a href="/cua-hang/chi-tiet/@item.Alias-s@(item.Id)">
-                        <div class="card">
-                            <img class="card-img-top" style="height:200px;" src="@item.Image" />
-                            <div class="card-body">
-                                <h5 class="card-title" style="font-weight:bold">@item.Name</h5>
-                                <a href="@item.LinkMap" style="width:100%" class="btn btn-outline-dark">Xem bản đồ</a>
-                                <hr />
-                                <p class="card-text card-address">@item.Address, @item.Ward, @item.District, @item.Province </p>
-                                <p class="card-text"> 06:30 - 22:00 </p>
-                                <div class="row" style="font-size: 13px">
-                                    <div class="col-6">
-                                        <i class="fa-solid fa-car"></i> Có chỗ đậu xe hơi
-                                    </div>
-                                    <div class="col-6">
-                                        <i class="fa-solid fa-bag-shopping"></i> Mua mang đi
-                                    </div>
-                                </div>
-                                <div class="row" style="font-size: 13px">
-                                    <div class="col-6">
-                                        <i class="fa-solid fa-store"></i> Phục vụ tại chỗ
-                                    </div>
-                                    <div class="col-6">
-                                        <i class="fa-regular fa-face-smile-beam"></i> Thân thiện
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            }
-        }
-    </div>
-    <div class="row" id="filteredProductList" style="display: none;">
-        <!-- Danh sách sản phẩm sau khi tìm kiếm -->
-    </div>
-
 </div>
-    @section scripts
+@section scripts
 {
-        <script>
-            $(document).ready(function () {
-                var originalProductList = $('#originalProductList');
-                var filteredProductList = $('#filteredProductList');
-                var searchString = '';
+    <script>
+        var app = angular.module('storeApp', []);
+        app.controller('storeController', function ($scope, $http) {
+            $scope.loadData = function () {
+                $http.get('/Store/GetData')
+                    .then(function (response) {
+                        //$scope.storeList = response.data;
+                        $scope.allStores = response.data; // Lưu tất cả cửa hàng trong biến allStores
+                        $scope.storeList = angular.copy($scope.allStores); // Sao chép để giữ nguyên danh sách khi tìm kiếm
+                    });
+            }
+            $scope.loadData();
 
-                $('#search').on('input', function () {
-                    searchString = $(this).val().toLowerCase();
-                    filterProducts();
-                });
+            $scope.searchStore = function () {
+                var query = $scope.searchQuery.toLowerCase();
 
-                function filterProducts() {
-                    if (searchString.trim() === '') {
-                        // Nếu ô tìm kiếm trống, hiển thị danh sách sản phẩm ban đầu và ẩn danh sách sau khi tìm kiếm
-                        originalProductList.show();
-                        filteredProductList.hide();
-                    } else {
-                        // Tìm kiếm sản phẩm và hiển thị kết quả
-                        originalProductList.hide();
-                        filteredProductList.empty();
+                $http.get('/Store/GetData')
+                    .then(function (response) {
+                        $scope.allStores = response.data;
+                        $scope.storeList = $scope.allStores.filter(function (item) {
+                            return (
+                                (item.Name && typeof item.Name === 'string' && item.Name.toLowerCase().includes(query)) ||
+                                (item.Province && typeof item.Province === 'string' && item.Province.toLowerCase().includes(query)) ||
+                                (item.District && typeof item.District === 'string' && item.District.toLowerCase().includes(query)) ||
+                                (item.Ward && typeof item.Ward === 'string' && item.Ward.toLowerCase().includes(query)) ||
+                                (item.Address && typeof item.Address === 'string' && item.Address.toLowerCase().includes(query))
 
-                        originalProductList.find('.col-4').each(function () {
-                            var productHtml = $(this).clone();
-                            var productName = productHtml.find('.card-title').text().toLowerCase();
-                            var productAddressText = productHtml.find('.card-address').text().toLowerCase();
-
-                            if (productName.includes(searchString) || productAddressText.includes(searchString)) {
-                                filteredProductList.append(productHtml);
-                            }
+                            );
                         });
+                    });
+            };
+        });
 
-                        if (filteredProductList.children().length > 0) {
-                            filteredProductList.show();
-                        } else {
-                            filteredProductList.hide();
-                        }
-                    }
-                }
-            });
-        </script>
-    }
+    </script>
+}
