@@ -14,7 +14,7 @@ Account đăng nhập trang admin:
     - fourcthatson / 123456 (Account cửa hàng)
 
 Các công nghệ chính:
- - Front-End:  HTML5, CSS3, JavaScript, ECMA Script, Jquery, Bootstrap, AJAX, JSON.
+ - Front-End:  AngularJS, HTML5, CSS3, JavaScript, ECMA Script, Jquery, Bootstrap, AJAX, JSON.
  - Back-end:  Mô hình kiến trúc Model-View-Controller (MVC) HTML Razor. Model kết nối với cơ sở dữ liệu Microsoft SQL Server thông qua ORM phổ biến dành cho ASP.NET là Entity Framework EF6. Controller là nơi trung gian thực hiện các yêu cầu của người dùng khi họ request một URL từ đó ta sẽ định nghĩa các chức năng tương ứng với request. Ngoài ra còn có các Stored Procedure
  - Payment: VNPAY, PayPal
  - API được sử dụng: ProvinceAPI, CurrencyExchangeAPI
