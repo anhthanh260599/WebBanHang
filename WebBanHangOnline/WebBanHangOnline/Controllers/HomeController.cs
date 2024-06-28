@@ -90,22 +90,17 @@ namespace WebBanHangOnline.Controllers
                 ViewBag.RequestType = new SelectList(db.RequestTypes.ToList(), "Id", "RequestTypeName");
                 if (model.RequestType != null) 
                 {
-                    if (User.IsInRole("Admin"))
+                    db.CustomerRequests.Add(new CustomerRequest
                     {
-                        CommonAbstract strategy = new StrategyForAdmin();
-                        ContextStrategy contextStrategy = new ContextStrategy(strategy);
-                        contextStrategy.ExecuteCreate();
-                        model.CreateBy = contextStrategy.CreateBy;
-                    }
-                    else
-                    {
-                        CommonAbstract strategy = new StrategyForEmployee();
-                        ContextStrategy contextStrategy = new ContextStrategy(strategy);
-                        contextStrategy.ExecuteCreate();
-                        model.CreateBy = contextStrategy.CreateBy;
-                    }
-                    model.SetCreated();
-                    db.CustomerRequests.Add(model);
+                        CustomerName = model.CustomerName,
+                        Email = model.Email,
+                        PhoneNumber = model.PhoneNumber,
+                        CreatedDate = DateTime.Now,
+                        RequestTitle = model.RequestTitle,
+                        RequestContent = model.RequestContent,
+                        RequestTypeId = model.RequestType.Id,
+                        IsResolve = false
+                    });
                     db.SaveChanges();
                 }
                 return RedirectToAction("CustomerRequest_SuccessSend", "Home");

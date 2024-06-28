@@ -47,21 +47,6 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (item != null)
             {
                 item.IsResolve = !item.IsResolve;
-                if (User.IsInRole("Admin"))
-                {
-                    CommonAbstract strategy = new StrategyForAdmin();
-                    ContextStrategy contextStrategy = new ContextStrategy(strategy);
-                    contextStrategy.ExecuteModify();
-                    item.ModifierBy = contextStrategy.ModifierBy;
-                }
-                else
-                {
-                    CommonAbstract strategy = new StrategyForEmployee();
-                    ContextStrategy contextStrategy = new ContextStrategy(strategy);
-                    contextStrategy.ExecuteModify();
-                    item.ModifierBy = contextStrategy.ModifierBy;
-                }
-
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { success = true, IsResolve = item.IsResolve });
